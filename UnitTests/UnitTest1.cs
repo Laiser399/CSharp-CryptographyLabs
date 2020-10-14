@@ -616,17 +616,87 @@ namespace UnitTests
 
             var insideEncrTrans = new DESCryptoTransform(key, CryptoMode.Encrypt);
             var insideDecrTrans = new DESCryptoTransform(key, CryptoMode.Decrypt);
-            var cbcEncrTrans = new CipherBlockChainingTransform(insideEncrTrans);
-            var cbcDecrTrans = new CipherBlockChainingTransform(insideDecrTrans, false);
+            var encrTrans = new CipherBlockChainingTransform(insideEncrTrans, CryptoMode.Encrypt);
+            var decrTrans = new CipherBlockChainingTransform(insideDecrTrans, CryptoMode.Decrypt);
 
             byte[] encr = new byte[byteSize];
-            cbcEncrTrans.TransformBlock(text, 0, byteSize, encr, 0);
+            encrTrans.TransformBlock(text, 0, byteSize, encr, 0);
             byte[] decr = new byte[byteSize];
-            cbcDecrTrans.TransformBlock(encr, 0, byteSize, decr, 0);
+            decrTrans.TransformBlock(encr, 0, byteSize, decr, 0);
 
             for (int i = 0; i < byteSize; ++i)
                 Assert.AreEqual(text[i], decr[i], $"{i}");
         }
 
+        [TestMethod]
+        public void Test3_CFB()
+        {
+            Random random = new Random(123);
+            int byteSize = 800000;
+            byte[] text = new byte[byteSize];
+            random.NextBytes(text);
+            byte[] keyTm = new byte[8];
+            random.NextBytes(keyTm);
+            ulong key = BitConverter.ToUInt64(keyTm, 0);
+
+            var insideEncrTrans = new DESCryptoTransform(key, CryptoMode.Encrypt);
+            var encrTrans = new CipherFeedbackTransform(insideEncrTrans, CryptoMode.Encrypt);
+            var decrTrans = new CipherFeedbackTransform(insideEncrTrans, CryptoMode.Decrypt);
+
+            byte[] encr = new byte[byteSize];
+            encrTrans.TransformBlock(text, 0, byteSize, encr, 0);
+            byte[] decr = new byte[byteSize];
+            decrTrans.TransformBlock(encr, 0, byteSize, decr, 0);
+
+            for (int i = 0; i < byteSize; ++i)
+                Assert.AreEqual(text[i], decr[i], $"{i}");
+        }
+
+        [TestMethod]
+        public void Test4_OFB()
+        {
+            Random random = new Random(123);
+            int byteSize = 800000;
+            byte[] text = new byte[byteSize];
+            random.NextBytes(text);
+            byte[] keyTm = new byte[8];
+            random.NextBytes(keyTm);
+            ulong key = BitConverter.ToUInt64(keyTm, 0);
+
+            var insideEncrTrans = new DESCryptoTransform(key, CryptoMode.Encrypt);
+            var encrTrans = new OutputFeedbackTransform(insideEncrTrans);
+
+            byte[] encr = new byte[byteSize];
+            encrTrans.TransformBlock(text, 0, byteSize, encr, 0);
+            byte[] decr = new byte[byteSize];
+            encrTrans.TransformBlock(encr, 0, byteSize, decr, 0);
+
+            for (int i = 0; i < byteSize; ++i)
+                Assert.AreEqual(text[i], decr[i], $"{i}");
+        }
+
+        [TestMethod]
+        public void Test5_CTR()
+        {
+            Random random = new Random(123);
+            int byteSize = 800000;
+            byte[] text = new byte[byteSize];
+            random.NextBytes(text);
+            byte[] keyTm = new byte[8];
+            random.NextBytes(keyTm);
+            ulong key = BitConverter.ToUInt64(keyTm, 0);
+
+            var insideEncrTrans = new DESCryptoTransform(key, CryptoMode.Encrypt);
+            var encrTrans = new CounterModeTransofrm(insideEncrTrans);
+            var decrTrans = new CounterModeTransofrm(insideEncrTrans);
+
+            byte[] encr = new byte[byteSize];
+            encrTrans.TransformBlock(text, 0, byteSize, encr, 0);
+            byte[] decr = new byte[byteSize];
+            decrTrans.TransformBlock(encr, 0, byteSize, decr, 0);
+
+            for (int i = 0; i < byteSize; ++i)
+                Assert.AreEqual(text[i], decr[i], $"{i}");
+        }
     }
 }
