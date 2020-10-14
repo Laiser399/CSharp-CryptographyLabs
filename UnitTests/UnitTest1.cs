@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Crypto;
 using ConsoleTests;
 using CryptographyLabs;
+using System.Reflection;
 
 namespace UnitTests
 {
@@ -427,7 +428,6 @@ namespace UnitTests
         [TestMethod]
         public void Test1_IPPermutation()
         {
-            PrivateType pType = new PrivateType(typeof(DESCryptoTransform));
             byte[] IPPermutation = new byte[64]
             {
                 57, 49, 41, 33, 25, 17, 9, 1,   59, 51, 43, 35, 27, 19, 11, 3,
@@ -435,8 +435,9 @@ namespace UnitTests
                 56, 48, 40, 32, 24, 16, 8, 0,   58, 50, 42, 34, 26, 18, 10, 2,
                 60, 52, 44, 36, 28, 20, 12, 4,  62, 54, 46, 38, 30, 22, 14, 6
             };
-            ulong[] masks = (ulong[])pType.GetStaticField("_IPPermMasks");
-
+            Type DESCrTransType = typeof(DES).GetNestedType("DESCryptoTransform", BindingFlags.NonPublic);
+            ulong[] masks = (ulong[])DESCrTransType.GetField("_IPPermMasks", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+            
             Random random = new Random(123);
             byte[] buf = new byte[8];
             for (int i = 0; i < 1000; ++i)
@@ -453,7 +454,6 @@ namespace UnitTests
         [TestMethod]
         public void Test2_IPInvPermutation()
         {
-            PrivateType pType = new PrivateType(typeof(DESCryptoTransform));
             byte[] IPInvPermutation = new byte[64]
             {
                 39, 7, 47, 15, 55, 23, 63, 31, 38, 6, 46, 14, 54, 22, 62, 30,
@@ -461,7 +461,8 @@ namespace UnitTests
                 35, 3, 43, 11, 51, 19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26,
                 33, 1, 41, 9, 49, 17, 57, 25, 32, 0, 40, 8, 48, 16, 56, 24
             };
-            ulong[] masks = (ulong[])pType.GetStaticField("_IPInvPermMasks");
+            Type DESCrTransType = typeof(DES).GetNestedType("DESCryptoTransform", BindingFlags.NonPublic);
+            ulong[] masks = (ulong[])DESCrTransType.GetField("_IPInvPermMasks", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 
             Random random = new Random(123);
             byte[] buf = new byte[8];
@@ -479,13 +480,13 @@ namespace UnitTests
         [TestMethod]
         public void Test3_C0Permutation()
         {
-            PrivateType pType = new PrivateType(typeof(DESCryptoTransform));
             byte[] C0Permutation = new byte[28]
             {
                 56, 48, 40, 32, 24, 16,8, 0, 57, 49, 41, 33, 25, 17,
                 9, 1, 58, 50, 42, 34, 26, 18, 10, 2, 59, 51, 43, 35
             };
-            ulong[] masks = (ulong[])pType.GetStaticField("_C0PermMasks");
+            Type DESCrTransType = typeof(DES).GetNestedType("DESCryptoTransform", BindingFlags.NonPublic);
+            ulong[] masks = (ulong[])DESCrTransType.GetField("_C0PermMasks", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 
             Random random = new Random(123);
             byte[] buf = new byte[8];
@@ -503,13 +504,13 @@ namespace UnitTests
         [TestMethod]
         public void Test4_D0Permutation()
         {
-            PrivateType pType = new PrivateType(typeof(DESCryptoTransform));
             byte[] D0Permutation = new byte[28]
             {
                 62, 54, 46, 38, 30, 22, 14, 6, 61, 53, 45, 37, 29, 21,
                 13, 5, 60, 52, 44, 36, 28, 20, 12, 4, 27, 19, 11, 3
             };
-            ulong[] masks = (ulong[])pType.GetStaticField("_D0PermMasks");
+            Type DESCrTransType = typeof(DES).GetNestedType("DESCryptoTransform", BindingFlags.NonPublic);
+            ulong[] masks = (ulong[])DESCrTransType.GetField("_D0PermMasks", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 
             Random random = new Random(123);
             byte[] buf = new byte[8];
@@ -527,14 +528,14 @@ namespace UnitTests
         [TestMethod]
         public void Test5_KeyFinalPermutation()
         {
-            PrivateType pType = new PrivateType(typeof(DESCryptoTransform));
             byte[] keyFinalPermutation = new byte[48]
             {
                 13, 16, 10, 23, 0, 4, 2, 27, 14, 5, 20, 9, 22, 18, 11, 3,
                 25, 7, 15, 6, 26, 19, 12, 1, 40, 51, 30, 36, 46, 54, 29, 39,
                 50, 44, 32, 47, 43, 48, 38, 55, 33, 52, 45, 41, 49, 35, 28, 31
             };
-            ulong[] masks = (ulong[])pType.GetStaticField("_keyFinalPermMasks");
+            Type DESCrTransType = typeof(DES).GetNestedType("DESCryptoTransform", BindingFlags.NonPublic);
+            ulong[] masks = (ulong[])DESCrTransType.GetField("_keyFinalPermMasks", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 
             Random random = new Random(123);
             byte[] buf = new byte[8];
@@ -552,7 +553,6 @@ namespace UnitTests
         [TestMethod]
         public void Test6_PPermutation()
         {
-            PrivateType pType = new PrivateType(typeof(DESCryptoTransform));
             byte[] PPermutation = new byte[32]
             {
                 15, 6, 19, 20, 28, 11, 27, 16,
@@ -560,7 +560,9 @@ namespace UnitTests
                 1, 7, 23, 13, 31, 26, 2, 8,
                 18, 12, 29, 5, 21, 10, 3, 24
             };
-            ulong[] masks = (ulong[])pType.GetStaticField("_PPermMasks");
+            Type DESCrTransType = typeof(DES).GetNestedType("DESCryptoTransform", BindingFlags.NonPublic);
+            ulong[] masks = (ulong[])DESCrTransType.GetField("_PPermMasks", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+
 
             Random random = new Random(123);
             byte[] buf = new byte[8];
@@ -592,8 +594,8 @@ namespace UnitTests
             random.NextBytes(keyTm);
             ulong key = BitConverter.ToUInt64(keyTm, 0);
 
-            var encrTrans = new DESCryptoTransform(key, CryptoMode.Encrypt);
-            var decrTrans = new DESCryptoTransform(key, CryptoMode.Decrypt);
+            var encrTrans = DES.ECBTransform(key, CryptoMode.Encrypt);
+            var decrTrans = DES.ECBTransform(key, CryptoMode.Decrypt);
 
             byte[] encr = new byte[byteSize];
             encrTrans.TransformBlock(text, 0, byteSize, encr, 0);
@@ -615,10 +617,8 @@ namespace UnitTests
             random.NextBytes(keyTm);
             ulong key = BitConverter.ToUInt64(keyTm, 0);
 
-            var insideEncrTrans = new DESCryptoTransform(key, CryptoMode.Encrypt);
-            var insideDecrTrans = new DESCryptoTransform(key, CryptoMode.Decrypt);
-            var encrTrans = new CipherBlockChainingTransform(insideEncrTrans, CryptoMode.Encrypt);
-            var decrTrans = new CipherBlockChainingTransform(insideDecrTrans, CryptoMode.Decrypt);
+            var encrTrans = DES.CBCTransform(key, CryptoMode.Encrypt);
+            var decrTrans = DES.CBCTransform(key, CryptoMode.Decrypt);
 
             byte[] encr = new byte[byteSize];
             encrTrans.TransformBlock(text, 0, byteSize, encr, 0);
@@ -640,9 +640,8 @@ namespace UnitTests
             random.NextBytes(keyTm);
             ulong key = BitConverter.ToUInt64(keyTm, 0);
 
-            var insideEncrTrans = new DESCryptoTransform(key, CryptoMode.Encrypt);
-            var encrTrans = new CipherFeedbackTransform(insideEncrTrans, CryptoMode.Encrypt);
-            var decrTrans = new CipherFeedbackTransform(insideEncrTrans, CryptoMode.Decrypt);
+            var encrTrans = DES.CFBTransform(key, CryptoMode.Encrypt);
+            var decrTrans = DES.CFBTransform(key, CryptoMode.Decrypt);
 
             byte[] encr = new byte[byteSize];
             encrTrans.TransformBlock(text, 0, byteSize, encr, 0);
@@ -664,8 +663,7 @@ namespace UnitTests
             random.NextBytes(keyTm);
             ulong key = BitConverter.ToUInt64(keyTm, 0);
 
-            var insideEncrTrans = new DESCryptoTransform(key, CryptoMode.Encrypt);
-            var encrTrans = new OutputFeedbackTransform(insideEncrTrans);
+            var encrTrans = DES.OFBTransform(key);
 
             byte[] encr = new byte[byteSize];
             encrTrans.TransformBlock(text, 0, byteSize, encr, 0);
@@ -687,9 +685,8 @@ namespace UnitTests
             random.NextBytes(keyTm);
             ulong key = BitConverter.ToUInt64(keyTm, 0);
 
-            var insideEncrTrans = new DESCryptoTransform(key, CryptoMode.Encrypt);
-            var encrTrans = new CounterModeTransofrm(insideEncrTrans);
-            var decrTrans = new CounterModeTransofrm(insideEncrTrans);
+            var encrTrans = DES.CTRTransform(key);
+            var decrTrans = DES.CTRTransform(key);
 
             byte[] encr = new byte[byteSize];
             encrTrans.TransformBlock(text, 0, byteSize, encr, 0);

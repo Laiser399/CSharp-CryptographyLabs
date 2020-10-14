@@ -43,7 +43,7 @@ namespace Crypto
 
         public void Dispose()
         {
-
+            _insideCryptoTransform.Dispose();
         }
 
         public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
@@ -106,7 +106,10 @@ namespace Crypto
                 _transformFunc = DecryptBlock;
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            _insideEncryptTransform.Dispose();
+        }
 
         public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
         {
@@ -162,7 +165,10 @@ namespace Crypto
                 _prevBlock[i] = 0;
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            _insideEncryptTransform.Dispose();
+        }
 
         public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
         {
@@ -214,7 +220,10 @@ namespace Crypto
                 _transformFunc = TransformSimpleBlockShort;
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            _insideEncryptTransform.Dispose();
+        }
 
         public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
         {

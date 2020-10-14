@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Crypto;
 using System.IO;
+using System.Reflection;
 
 namespace ConsoleTests
 {
@@ -121,14 +122,11 @@ namespace ConsoleTests
     {
         static void Main(string[] args)
         {
-            //DESTest();
-            byte[] aga = new byte[8];
-            for (int i = 0; i < 8; ++i)
-                aga[i] = (byte)i;
-
-            Array.Resize(ref aga, 12);
-            foreach (var value in aga)
-                Console.WriteLine(value);
+            Type DESCrTransType = typeof(Crypto.DES).GetNestedType("DESCryptoTransform", BindingFlags.NonPublic);
+            ulong[] masks = (ulong[])DESCrTransType.GetField("_IPPermMasks",
+                BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+            foreach (ulong mask in masks)
+                Console.WriteLine("{0:X}", mask);
 
             Console.WriteLine();
             Console.WriteLine("Press...");
@@ -210,7 +208,8 @@ namespace ConsoleTests
             // encryption
             using (FileStream inStream = new FileStream(inFilename, FileMode.Open, FileAccess.Read))
             using (FileStream outStream = new FileStream(encryptedFilename, FileMode.OpenOrCreate, FileAccess.Write))
-            using (CryptoStream outCrStream = new CryptoStream(outStream, new DESCryptoTransform(key, CryptoMode.Encrypt), CryptoStreamMode.Write))
+            using (ICryptoTransform transform = Crypto.DES.ECBTransform(key, CryptoMode.Encrypt))
+            using (CryptoStream outCrStream = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
             {
                 int bytesCount = 80000;
                 byte[] buf = new byte[bytesCount];
@@ -227,7 +226,8 @@ namespace ConsoleTests
             // decryption
             using (FileStream inStream = new FileStream(encryptedFilename, FileMode.Open, FileAccess.Read))
             using (FileStream outStream = new FileStream(decryptedFilename, FileMode.OpenOrCreate, FileAccess.Write))
-            using (CryptoStream outCrStream = new CryptoStream(outStream, new DESCryptoTransform(key, CryptoMode.Decrypt), CryptoStreamMode.Write))
+            using (ICryptoTransform transform = Crypto.DES.ECBTransform(key, CryptoMode.Decrypt))
+            using (CryptoStream outCrStream = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
             {
                 int bytesCount = 80000;
                 byte[] buf = new byte[bytesCount];
