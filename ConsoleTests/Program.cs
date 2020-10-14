@@ -122,11 +122,9 @@ namespace ConsoleTests
     {
         static void Main(string[] args)
         {
-            Type DESCrTransType = typeof(Crypto.DES).GetNestedType("DESCryptoTransform", BindingFlags.NonPublic);
-            ulong[] masks = (ulong[])DESCrTransType.GetField("_IPPermMasks",
-                BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
-            foreach (ulong mask in masks)
-                Console.WriteLine("{0:X}", mask);
+            Console.WriteLine(0b10u >> 1);
+            uint res = Bitops.SwapBits(0b10, 0, 1);
+            Console.WriteLine(res);
 
             Console.WriteLine();
             Console.WriteLine("Press...");

@@ -25,7 +25,7 @@ namespace UnitTests
 
             for (int i = 0; i < indices.Length; ++i)
             {
-                Assert.AreEqual(expected[i], Bitops.Task11(value, indices[i]));
+                Assert.AreEqual(expected[i], Bitops.GetKthBit(value, indices[i]));
             }
         }
 
@@ -34,10 +34,10 @@ namespace UnitTests
         {
             uint value = 0b1100_1001;
 
-            Assert.AreEqual(0b1110_1001u, Bitops.Task12(value, 5, true));
-            Assert.AreEqual(0b1100_1001u, Bitops.Task12(value, 0, true));
-            Assert.AreEqual(0b1100_1000u, Bitops.Task12(value, 0, false));
-            Assert.AreEqual(0b0100_1001u, Bitops.Task12(value, 7, false));
+            Assert.AreEqual(0b1110_1001u, Bitops.SwitchKthBit(value, 5, true));
+            Assert.AreEqual(0b1100_1001u, Bitops.SwitchKthBit(value, 0, true));
+            Assert.AreEqual(0b1100_1000u, Bitops.SwitchKthBit(value, 0, false));
+            Assert.AreEqual(0b0100_1001u, Bitops.SwitchKthBit(value, 7, false));
         }
 
         [TestMethod]
@@ -45,11 +45,11 @@ namespace UnitTests
         {
             uint value = 0b1100_1001;
 
-            Assert.AreEqual(0b1100_1010u, Bitops.Task13(value, 0, 1));
-            Assert.AreEqual(0b1100_1001u, Bitops.Task13(value, 1, 2));
-            Assert.AreEqual(0b1110_1000u, Bitops.Task13(value, 0, 5));
-            Assert.AreEqual(0b1110_1000u, Bitops.Task13(value, 5, 0));
-            Assert.AreEqual(0b1100_1001u, Bitops.Task13(value, 0, 7));
+            Assert.AreEqual(0b1100_1010u, Bitops.SwapBits(value, 0, 1), "0");
+            Assert.AreEqual(0b1100_1001u, Bitops.SwapBits(value, 1, 2));
+            Assert.AreEqual(0b1110_1000u, Bitops.SwapBits(value, 0, 5));
+            Assert.AreEqual(0b1110_1000u, Bitops.SwapBits(value, 5, 0));
+            Assert.AreEqual(0b1100_1001u, Bitops.SwapBits(value, 0, 7));
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@ namespace UnitTests
 
             for (int i = 0; i < values.Length; ++i)
             {
-                Assert.AreEqual(expected[i], Bitops.Task14(values[i], m[i]));
+                Assert.AreEqual(expected[i], Bitops.NullifyMLowBits(values[i], m[i]));
             }
         }
 
@@ -110,7 +110,7 @@ namespace UnitTests
 
             for (int j = 0; j < value.Length; ++j)
             {
-                Assert.AreEqual(expected[j], Bitops.Task21(value[j], len[j], i[j]));
+                Assert.AreEqual(expected[j], Bitops.ConcatExtremeBits(value[j], len[j], i[j]));
             }
         }
 
@@ -152,7 +152,7 @@ namespace UnitTests
 
             for (int j = 0; j < value.Length; ++j)
             {
-                Assert.AreEqual(expected[j], Bitops.Task22(value[j], len[j], i[j]), $"test #{j}");
+                Assert.AreEqual(expected[j], Bitops.GetCentralBits(value[j], len[j], i[j]), $"test #{j}");
             }
 
         }
@@ -163,22 +163,22 @@ namespace UnitTests
             uint value = 0b11001010_10001000_11101111_11110000;
             byte[][] indices = new byte[][]
             {
-                new byte[] {0, 2, 1, 3},
-                new byte[] {3, 2, 1, 0},
-                new byte[] {0, 0, 0, 1},
-                new byte[] {0, 1, 2, 3}
+                new byte[] { 0, 2, 1, 3 },
+                new byte[] { 3, 2, 1, 0 },
+                new byte[] { 0, 0, 0, 1 },
+                new byte[] { 0, 1, 2, 3 }
             };
             uint[] expected = new uint[]
             {
-                0b11001010_11101111_10001000_11110000,
-                0b11110000_11101111_10001000_11001010,
-                0b11101111_11110000_11110000_11110000,
-                0b11001010_10001000_11101111_11110000
+                0b11110000_10001000_11101111_11001010,
+                0b11001010_10001000_11101111_11110000,
+                0b11110000_11110000_11110000_11101111,
+                0b11110000_11101111_10001000_11001010
             };
 
             for (int i = 0; i < indices.Length; ++i)
             {
-                Assert.AreEqual(expected[i], Bitops.Task3(value, indices[i]), $"test #{i}");
+                Assert.AreEqual(expected[i], Bitops.ByteSwap(value, indices[i]), $"test #{i}");
             }
         }
 
@@ -202,7 +202,7 @@ namespace UnitTests
 
             for (int i = 0; i < a.Length; ++i)
             {
-                Assert.AreEqual(expected[i], Bitops.Task4(a[i]));
+                Assert.AreEqual(expected[i], Bitops.LeaveRightNotNullBit(a[i]));
             }
 
         }

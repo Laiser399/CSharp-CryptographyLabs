@@ -39,7 +39,8 @@ namespace Crypto
 
         // TODO name every task function
         // simple tasks
-        public static bool Task11(uint a, int k)
+        // Task11
+        public static bool GetKthBit(uint a, int k)
         {
             // возврат k-го бита из числа a
             if (k > 31 || k < 0)
@@ -47,7 +48,8 @@ namespace Crypto
             return ((a >> k) & 1) == 1;
         }
 
-        public static uint Task12(uint a, int k, bool isSet)
+        // Task12
+        public static uint SwitchKthBit(uint a, int k, bool isSet)
         {
             // установить/снять k-й бит числа a
             if (k > 31 || k < 0)
@@ -58,23 +60,22 @@ namespace Crypto
                 return a & ~(1u << k);
         }
 
-        public static uint Task13(uint a, int i, int j)
+        // Task13
+        public static uint SwapBits(uint a, int i, int j)
         {
-            // TODO knut
             // поменять i-й и j-й биты местами
             if (i < 0 || i > 31 || j < 0 || j > 31)
                 throw new ArgumentException("i and j must be in range 0 to 31.");
-
-            if (i == j)
-                return a;
-
-            if (((a >> i) & 1) == ((a >> j) & 1))
-                return a;
+            
+            uint tm = ((a >> i) ^ (a >> j)) & 1;
+            if (tm != 0)
+                return a ^ (tm << i) ^ (tm << j);
             else
-                return a ^ ((1u << i) | (1u << j));
+                return a;
         }
 
-        public static uint Task14(uint a, int m)
+        // Task14
+        public static uint NullifyMLowBits(uint a, int m)
         {
             // обнуляет m младших бит числа a
             if (m < 0 || m > 32)
@@ -82,7 +83,8 @@ namespace Crypto
             return a >> m << m;
         }
 
-        public static uint Task21(uint a, int len, int i)
+        // Task21
+        public static uint ConcatExtremeBits(uint a, int len, int i)
         {
             // склеивает первые i бит с последними
             if (len < 2 || len > 32)
@@ -90,10 +92,11 @@ namespace Crypto
             if (i < 1 || i > 16 || i > len)
                 throw new ArgumentException("i must be in range 1 to 16 and <= len.");
 
-            return a >> (len - i) << i | (a & (1u << i) - 1);
+            return (a >> (len - i) << i) | (a & (1u << i) - 1);
         }
 
-        public static uint Task22(uint a, int len, int i)
+        // Task22
+        public static uint GetCentralBits(uint a, int len, int i)
         {
             // получает биты, находящиеся между первыми и последними i битами
             if (len < 1 || len > 32)
@@ -104,9 +107,12 @@ namespace Crypto
             return a >> i & ((1u << len - 2 * i) - 1);
         }
 
-        public static uint Task3(uint a, byte[] indices)
+        // Task3
+        public static uint ByteSwap(uint a, byte[] indices)
         {
             // поменять местами байты в соответствии с заданной перестановкой
+            // indices[i] = 0   соответствует младшему байту исходного числа
+            // indices[0]   соответствует старшему байту результата
             if (indices.Length != 4)
                 throw new ArgumentException("Length of indices must be 4.");
             foreach (byte index in indices)
@@ -116,17 +122,19 @@ namespace Crypto
             byte[] aBytes = BitConverter.GetBytes(a);
             byte[] result = new byte[4];
             for (int i = 0; i < 4; ++i)
-                result[i] = aBytes[indices[i]];
+                result[i] = aBytes[indices[3 - i]];
 
             return BitConverter.ToUInt32(result, 0);
         }
 
-        public static uint Task4(uint a)
+        // Task4
+        public static uint LeaveRightNotNullBit(uint a)
         {
             // максимальная степень 2, на которую делится число a
             return a & (~a + 1);
         }
 
+        // Task5
         public static int Task5(uint x)
         {
             // находит показатель p степени 2 такой, что 2^p <= x <= 2^{p+1}
