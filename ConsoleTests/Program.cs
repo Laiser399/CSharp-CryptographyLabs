@@ -122,12 +122,13 @@ namespace ConsoleTests
         static void Main(string[] args)
         {
             //DESTest();
-            byte[] key = new byte[]
-            {
-                1, 0, 0, 0, 0, 0, 0, 0
-            };
-            ulong aga = BitConverter.ToUInt64(key, 0);
-            Console.WriteLine(aga);
+            byte[] aga = new byte[8];
+            for (int i = 0; i < 8; ++i)
+                aga[i] = (byte)i;
+
+            Array.Resize(ref aga, 12);
+            foreach (var value in aga)
+                Console.WriteLine(value);
 
             Console.WriteLine();
             Console.WriteLine("Press...");
