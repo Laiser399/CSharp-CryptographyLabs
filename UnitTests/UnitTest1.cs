@@ -18,9 +18,9 @@ namespace UnitTests
             {
                 0, 1, 4, 7, 24
             };
-            bool[] expected = new bool[]
+            byte[] expected = new byte[]
             {
-                true, false, false, true, false
+                1, 0, 0, 1, 0
             };
 
             for (int i = 0; i < indices.Length; ++i)
@@ -178,7 +178,7 @@ namespace UnitTests
 
             for (int i = 0; i < indices.Length; ++i)
             {
-                Assert.AreEqual(expected[i], Bitops.ByteSwap(value, indices[i]), $"test #{i}");
+                Assert.AreEqual(expected[i], Bitops.BytePermutation(value, indices[i]), $"test #{i}");
             }
         }
 
@@ -202,7 +202,7 @@ namespace UnitTests
 
             for (int i = 0; i < a.Length; ++i)
             {
-                Assert.AreEqual(expected[i], Bitops.LeaveRightNotNullBit(a[i]));
+                Assert.AreEqual(expected[i], Bitops.Task4(a[i]));
             }
 
         }
@@ -241,7 +241,8 @@ namespace UnitTests
                 0b11001010_10001000_11101111_11110000,
                 0b1,
                 0b10101000_11010100,
-                0b1
+                0b1,
+                0b1010101
             };
             byte[] p = new byte[]
             {
@@ -249,7 +250,8 @@ namespace UnitTests
                 5,
                 0,
                 3,
-                1
+                1,
+                0
             };
             byte[] expected = new byte[]
             {
@@ -257,6 +259,7 @@ namespace UnitTests
                 1,
                 1,
                 0,
+                1,
                 1
             };
 

@@ -55,8 +55,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extended.cs" />
     <Compile Include="GUI\BaseViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\MainWindowViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task11ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task12ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task13ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task14ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task21ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task22ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task3ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task4ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task5ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task6ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task7ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\Task8ViewModel.cs" />
     <Compile Include="GUI\RelayCommand.cs" />
     <Compile Include="RC4.cs" />
     <Compile Include="Vernam.cs" />
