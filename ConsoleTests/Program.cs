@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using Crypto;
 using System.IO;
 using System.Reflection;
+using System.Globalization;
 
 namespace ConsoleTests
 {
@@ -122,9 +123,9 @@ namespace ConsoleTests
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(0b10u >> 1);
-            uint res = Bitops.SwapBits(0b10, 0, 1);
-            Console.WriteLine(res);
+            string str = "10_10";
+            ulong value = Convert.ToUInt64(str.Replace("_", ""), 2);
+            Console.WriteLine(value);
 
             Console.WriteLine();
             Console.WriteLine("Press...");
