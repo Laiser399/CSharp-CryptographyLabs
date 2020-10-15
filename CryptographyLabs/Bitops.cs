@@ -40,12 +40,12 @@ namespace Crypto
         // TODO name every task function
         // simple tasks
         // Task11
-        public static bool GetKthBit(uint a, int k)
+        public static byte GetKthBit(uint a, int k)
         {
             // возврат k-го бита из числа a
             if (k > 31 || k < 0)
                 throw new ArgumentException("k must be in range 0 to 31.");
-            return ((a >> k) & 1) == 1;
+            return (byte)((a >> k) & 1);
         }
 
         // Task12
@@ -89,8 +89,8 @@ namespace Crypto
             // склеивает первые i бит с последними
             if (len < 2 || len > 32)
                 throw new ArgumentException("len must be in range 2 to 32.");
-            if (i < 1 || i > 16 || i > len)
-                throw new ArgumentException("i must be in range 1 to 16 and <= len.");
+            if (i < 0 || i > 16 || i > len)
+                throw new ArgumentException("i must be in range 0 to 16 and <= len.");
 
             return (a >> (len - i) << i) | (a & (1u << i) - 1);
         }
@@ -108,7 +108,7 @@ namespace Crypto
         }
 
         // Task3
-        public static uint ByteSwap(uint a, byte[] indices)
+        public static uint BytePermutation(uint a, byte[] indices)
         {
             // поменять местами байты в соответствии с заданной перестановкой
             // indices[i] = 0   соответствует младшему байту исходного числа
@@ -128,7 +128,7 @@ namespace Crypto
         }
 
         // Task4
-        public static uint LeaveRightNotNullBit(uint a)
+        public static uint Task4(uint a)
         {
             // максимальная степень 2, на которую делится число a
             return a & (~a + 1);
