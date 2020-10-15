@@ -317,3 +317,322 @@
         </TabItem>
     </TabControl>
 </Window>
+<Window x:Class="CryptographyLabs.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CryptographyLabs"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <TabControl>
+        <TabItem Header="Tasks 1-8">
+            <ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Text="Task11"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="k="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                    </Grid>
+                    <Separator Grid.Row="1" Margin="10"/>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Text="Task12"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="k="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <CheckBox Grid.Row="1" Grid.Column="4" Content="isSet"/>
+                        <TextBlock Grid.Row="1" Grid.Column="5" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="6"/>
+                    </Grid>
+                    <Separator Grid.Row="3" Margin="10"/>
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task13"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="i="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="4" Text="j="/>
+                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="7"/>
+                    </Grid>
+                    <Separator Grid.Row="5" Margin="10"/>
+                    <Grid Grid.Row="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Text="Task14"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="m="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                    </Grid>
+                    <Separator Grid.Row="7" Margin="10"/>
+                    <Grid Grid.Row="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task2a"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="4" Text="i="/>
+                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="7"/>
+                    </Grid>
+                    <Separator Grid.Row="9" Margin="10"/>
+                    <Grid Grid.Row="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task2b"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="4" Text="i="/>
+                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="7"/>
+                    </Grid>
+                    <Separator Grid.Row="11" Margin="10"/>
+                    <Grid Grid.Row="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="permutation="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                    </Grid>
+                    <Separator Grid.Row="13" Margin="10"/>
+                    <Grid Grid.Row="14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task4"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                    </Grid>
+                    <Separator Grid.Row="15" Margin="10"/>
+                    <Grid Grid.Row="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task5"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                    </Grid>
+                    <Separator Grid.Row="17" Margin="10"/>
+                    <Grid Grid.Row="18">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task6"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="p="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                    </Grid>
+                    <Separator Grid.Row="19" Margin="10"/>
+                    <Grid Grid.Row="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task7"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="4" Text="n="/>
+                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="7"/>
+                    </Grid>
+                    <Separator Grid.Row="21" Margin="10"/>
+                    <Grid Grid.Row="22">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task8"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
+                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="permutation="/>
+                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
+                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+    </TabControl>
+</Window>
