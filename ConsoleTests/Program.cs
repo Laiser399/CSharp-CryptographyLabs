@@ -123,6 +123,7 @@ namespace ConsoleTests
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("ag");
             string str = "10_10";
             ulong value = Convert.ToUInt64(str.Replace("_", ""), 2);
             Console.WriteLine(value);
