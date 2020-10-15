@@ -16,25 +16,25 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
-                        
+
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
-                        
+
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
-                        
+
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
-                        
+
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -54,11 +54,11 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Text="Task11"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SomeProp, Mode=TwoWay}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task11VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="k="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task11VM.K, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="5" IsReadOnly="True" Text="{Binding Task11VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="1" Margin="10"/>
                     <Grid Grid.Row="2">
@@ -77,12 +77,12 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Text="Task12"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task12VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="k="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
-                        <CheckBox Grid.Row="1" Grid.Column="4" Content="isSet"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task12VM.K, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                        <CheckBox Grid.Row="1" Grid.Column="4" Content="isSet" IsChecked="{Binding Task12VM.IsSet, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="5" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="6"/>
+                        <TextBox Grid.Row="1" Grid.Column="6" Text="{Binding Task12VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="3" Margin="10"/>
                     <Grid Grid.Row="4">
@@ -102,13 +102,13 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task13"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task13VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="i="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task13VM.I, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="j="/>
-                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task13VM.J, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="7"/>
+                        <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task13VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="5" Margin="10"/>
                     <Grid Grid.Row="6">
@@ -126,11 +126,11 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Text="Task14"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task14VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="m="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task14VM.M, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task14VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="7" Margin="10"/>
                     <Grid Grid.Row="8">
@@ -150,13 +150,13 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task2a"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task21VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task21VM.Len, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="i="/>
-                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task21VM.I, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="7"/>
+                        <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task21VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="9" Margin="10"/>
                     <Grid Grid.Row="10">
@@ -176,13 +176,13 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task2b"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task22VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task22VM.Len, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="i="/>
-                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task22VM.I, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="7"/>
+                        <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task22VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="11" Margin="10"/>
                     <Grid Grid.Row="12">
@@ -200,11 +200,11 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task3"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task3VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="permutation="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task3VM.Permutation, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task3VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="13" Margin="10"/>
                     <Grid Grid.Row="14">
@@ -220,9 +220,9 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task4"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task4VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task4VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="15" Margin="10"/>
                     <Grid Grid.Row="16">
@@ -238,9 +238,9 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task5"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task5VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task5VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="17" Margin="10"/>
                     <Grid Grid.Row="18">
@@ -258,11 +258,11 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task6"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task6VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="p="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task6VM.P, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task6VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="19" Margin="10"/>
                     <Grid Grid.Row="20">
@@ -282,13 +282,13 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task7"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task7VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task7VM.Len, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="n="/>
-                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task7VM.N, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="7"/>
+                        <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task7VM.Result, Mode=OneWay}"/>
                     </Grid>
                     <Separator Grid.Row="21" Margin="10"/>
                     <Grid Grid.Row="22">
@@ -306,11 +306,11 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task8"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task8VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="permutation="/>
-                        <TextBox Grid.Row="1" Grid.Column="3"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task8VM.Permutation, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="5"/>
+                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task8VM.Result, Mode=OneWay}"/>
                     </Grid>
                 </Grid>
             </ScrollViewer>
