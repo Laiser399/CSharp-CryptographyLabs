@@ -6,6 +6,15 @@
         xmlns:local="clr-namespace:CryptographyLabs"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <CollectionViewSource x:Key="ViewSource1" Source="{Binding Col1}"/>
+        <CollectionViewSource x:Key="ViewSource2" Source="{Binding Col2}"/>
+        <CompositeCollection x:Key="compColl">
+            <CollectionContainer Collection="{Binding Source={StaticResource ViewSource1}}"/>
+            <CollectionContainer Collection="{Binding Source={StaticResource ViewSource2}}"/>
+        </CompositeCollection>
+        
+    </Window.Resources>
     <TabControl>
         <TabItem Header="Tasks 1-8">
             <ScrollViewer>
@@ -314,6 +323,186 @@
                     </Grid>
                 </Grid>
             </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Encrypt\Decrypt" IsSelected="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TabControl Grid.Row="0">
+                    <TabItem Header="Vernam">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <RadioButton Grid.Column="0" GroupName="VernamCryptoDirection" Content="Encrypt" IsChecked="True"/>
+                                <RadioButton Grid.Column="1" GroupName="VernamCryptoDirection" Content="Decrypt"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Filename: "/>
+                                <TextBox Grid.Column="1"/>
+                                <Button Grid.Column="2" Content="..." Width="30px"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Key filename: "/>
+                                <TextBox Grid.Column="1"/>
+                                <Button Grid.Column="2" Content="..." Width="30"/>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.Column="0" Content="delete file after"/>
+                                <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="DES">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <RadioButton Grid.Column="0" GroupName="DESDirection" Content="Encrypt" IsChecked="True"/>
+                                <RadioButton Grid.Column="1" GroupName="DESDirection" Content="Decrypt"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Mode: "/>
+                                <RadioButton Grid.Column="1" GroupName="DESMode" Content="ECB" IsChecked="True"/>
+                                <RadioButton Grid.Column="2" GroupName="DESMode" Content="CBC"/>
+                                <RadioButton Grid.Column="3" GroupName="DESMode" Content="CFB"/>
+                                <RadioButton Grid.Column="4" GroupName="DESMode" Content="OFB"/>
+                                <RadioButton Grid.Column="5" GroupName="DESMode" Content="CTR"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Filename: "/>
+                                <TextBox Grid.Column="1"/>
+                                <Button Grid.Column="2" Content="..." Width="30"/>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Key: "/>
+                                <TextBox Grid.Column="1"/>
+                            </Grid>
+                            <Grid Grid.Row="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.Column="0" Content="delete file after"/>
+                                <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="RC4">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Filename: "/>
+                                <TextBox Grid.Column="1"/>
+                                <Button Grid.Column="2" Content="..." Width="30"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Key: "/>
+                                <TextBox Grid.Column="1"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.Column="0" Content="delete file after"/>
+                                <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                <ScrollViewer Grid.Row="1">
+                    <ItemsControl ItemsSource="{Binding Items}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0 4">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Text="{Binding Filename, StringFormat=Filename: {0}}"/>
+                                    <TextBlock Grid.Row="1" Text="{Binding StatusString, StringFormat=Status: {0}}"/>
+                                    <ProgressBar Grid.Row="2" Value="{Binding CryptoProgress}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Test" IsSelected="False">
+            <ItemsControl ItemsSource="{Binding Source={StaticResource compColl}}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </TabItem>
     </TabControl>
 </Window>
