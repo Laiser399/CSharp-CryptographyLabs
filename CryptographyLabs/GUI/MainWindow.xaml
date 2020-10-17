@@ -4,16 +4,32 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptographyLabs"
+        xmlns:gui="clr-namespace:CryptographyLabs.GUI"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
-        <CollectionViewSource x:Key="ViewSource1" Source="{Binding Col1}"/>
-        <CollectionViewSource x:Key="ViewSource2" Source="{Binding Col2}"/>
-        <CompositeCollection x:Key="compColl">
-            <CollectionContainer Collection="{Binding Source={StaticResource ViewSource1}}"/>
-            <CollectionContainer Collection="{Binding Source={StaticResource ViewSource2}}"/>
+        <gui:ValueConverterGroup x:Key="InversedBoolToVisibilityConv">
+            <gui:InverseBooleanConverter/>
+            <BooleanToVisibilityConverter/>
+        </gui:ValueConverterGroup>
+
+        <CollectionViewSource x:Key="ProgressViewSource1" Source="{Binding VernamCryptoVM.ProgressViewModels}"/>
+        <CompositeCollection x:Key="CryptoViewSources">
+            <CollectionContainer Collection="{Binding Source={StaticResource ProgressViewSource1}}"/>
         </CompositeCollection>
-        
+
+        <Grid x:Key="vernam_key1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Key filename: "/>
+            <TextBox Grid.Column="1" Text="{Binding VernamCryptoVM.KeyFilename, Mode=TwoWay}"/>
+            <Button Grid.Column="2" Content="..." Width="30"
+                Command="{Binding VernamCryptoVM.ChangeKeyFilenameCommand}"/>
+        </Grid>
+        <TextBlock Text="Key will be generated automatically" x:Key="vernam_key2"/>
     </Window.Resources>
     <TabControl>
         <TabItem Header="Tasks 1-8">
@@ -61,7 +77,12 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Text="Task11"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task11. "/>
+                                <Run Text="Description"/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task11VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="k="/>
@@ -344,7 +365,8 @@
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <RadioButton Grid.Column="0" GroupName="VernamCryptoDirection" Content="Encrypt" IsChecked="True"/>
+                                <RadioButton Grid.Column="0" GroupName="VernamCryptoDirection" Content="Encrypt"
+                                             IsChecked="{Binding VernamCryptoVM.IsEncrypt}"/>
                                 <RadioButton Grid.Column="1" GroupName="VernamCryptoDirection" Content="Decrypt"/>
                             </Grid>
                             <Grid Grid.Row="1">
@@ -354,26 +376,33 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="Filename: "/>
-                                <TextBox Grid.Column="1"/>
-                                <Button Grid.Column="2" Content="..." Width="30px"/>
+                                <TextBox Grid.Column="1" Text="{Binding VernamCryptoVM.Filename, Mode=TwoWay}"/>
+                                <Button Grid.Column="2" Content="..." Width="30px"
+                                        Command="{Binding VernamCryptoVM.ChangeFilenameCommand}"/>
                             </Grid>
-                            <Grid Grid.Row="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Key filename: "/>
-                                <TextBox Grid.Column="1"/>
-                                <Button Grid.Column="2" Content="..." Width="30"/>
-                            </Grid>
+                            <ContentControl Grid.Row="2">
+                                <ContentControl.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding VernamCryptoVM.IsEncrypt}" Value="False">
+                                                <Setter Property="ContentControl.Content" Value="{StaticResource vernam_key1}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding VernamCryptoVM.IsEncrypt}" Value="True">
+                                                <Setter Property="ContentControl.Content" Value="{StaticResource vernam_key2}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
                             <Grid Grid.Row="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Column="0" Content="delete file after"/>
-                                <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"/>
+                                <CheckBox Grid.Column="0" Content="delete file after"
+                                          IsChecked="{Binding VernamCryptoVM.IsDeleteFileAfter}"/>
+                                <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"
+                                        Command="{Binding VernamCryptoVM.GoCommand}"/>
                             </Grid>
                         </Grid>
                     </TabItem>
@@ -475,7 +504,7 @@
                     </TabItem>
                 </TabControl>
                 <ScrollViewer Grid.Row="1">
-                    <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl ItemsSource="{Binding Source={StaticResource CryptoViewSources}}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0 4">
@@ -485,24 +514,24 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Grid.Row="0" Text="{Binding Filename, StringFormat=Filename: {0}}"/>
-                                    <TextBlock Grid.Row="1" Text="{Binding StatusString, StringFormat=Status: {0}}"/>
-                                    <ProgressBar Grid.Row="2" Value="{Binding CryptoProgress}"/>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Filename, StringFormat=Filename: {0}}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding CryptoName}"/>
+                                    </Grid>
+                                    <TextBlock Grid.Row="1" Text="{Binding StatusString, StringFormat=Status: {0}}"
+                                               TextTrimming="WordEllipsis"/>
+                                    <ProgressBar Grid.Row="2" Value="{Binding CryptoProgress}" Minimum="0" Maximum="1"
+                                                 Visibility="{Binding IsDone, Converter={StaticResource InversedBoolToVisibilityConv}}"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
-        </TabItem>
-        <TabItem Header="Test" IsSelected="False">
-            <ItemsControl ItemsSource="{Binding Source={StaticResource compColl}}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
         </TabItem>
     </TabControl>
 </Window>
