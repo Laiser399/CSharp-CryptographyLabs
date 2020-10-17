@@ -8,6 +8,7 @@ using Crypto;
 using System.IO;
 using System.Reflection;
 using System.Globalization;
+using System.Threading;
 
 namespace ConsoleTests
 {
@@ -121,12 +122,45 @@ namespace ConsoleTests
 
     class Program
     {
+        class SomeException : Exception
+        {
+            public SomeException(string message) : base(message)
+            {
+
+            }
+        }
         static void Main(string[] args)
         {
-            Console.WriteLine("ag");
-            string str = "10_10";
-            ulong value = Convert.ToUInt64(str.Replace("_", ""), 2);
-            Console.WriteLine(value);
+            string filename = @"C:\Users\Sergey\Desktop\testDir\source.mkv";
+            var start = DateTime.Now;
+            Task task = Vernam.EncryptFileAsync(filename, progress =>
+            {
+                //Console.WriteLine(progress);
+            });
+            while (!task.IsCompleted){}
+            Console.WriteLine($"End in {DateTime.Now - start}");
+            
+            if (task.IsFaulted)
+            {
+                foreach (var e in task.Exception.InnerExceptions)
+                {
+                    // Handle the custom exception.
+                    if (e is Exception)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    // Rethrow any other exception.
+                    else
+                    {
+                        throw e;
+                    }
+                }
+            }
+            
+            //string encryptedPath = @"C:\Users\Sergey\Desktop\testDir\source.mkv.v399";
+            //string keyPath = @"C:\Users\Sergey\Desktop\testDir\source.mkv.vkey399";
+            //string decryptedPath = @"C:\Users\Sergey\Desktop\testDir\decrypted.mkv";
+            //Vernam.DecryptFile(encryptedPath, keyPath, decryptedPath);
 
             Console.WriteLine();
             Console.WriteLine("Press...");
