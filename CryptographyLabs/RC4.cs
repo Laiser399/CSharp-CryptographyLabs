@@ -4,9 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using System.IO;
+using CryptographyLabs;
 
 namespace Crypto
 {
+    public static class RC4
+    {
+        public static Task CryptFileAsync(string sourcePath, string destinationPath, byte[] keyBytes, 
+            Action<double> progressCallback = null)
+        {
+            return Task.Run(() =>
+            {
+                using (FileStream inStream = new FileStream(sourcePath, FileMode.Open, FileAccess.Read))
+                using (FileStream outStream = new FileStream(destinationPath, FileMode.OpenOrCreate, FileAccess.Write))
+                using (ICryptoTransform transform = new RC4CryptoTransform(keyBytes))
+                using (CryptoStream outCrypto = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
+                {
+                    inStream.CopyToEx(outCrypto, 100000, progressCallback);
+                }
+            });
+        }
+    }
+
+
     public class RC4CryptoTransform : ICryptoTransform
     {
         public int InputBlockSize => 1;

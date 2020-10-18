@@ -4,37 +4,141 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using System.IO;
+using System.IO.IsolatedStorage;
+using CryptographyLabs;
 
 namespace Crypto
 {
     public static class DES
     {
-        public static ICryptoTransform ECBTransform(ulong key56, CryptoMode mode)
+        public enum Mode
         {
-            return new DESCryptoTransform(key56, mode);
+            ECB = 0, CBC = 1, CFB = 2, OFB = 3, CTR = 4
         }
 
-        public static ICryptoTransform CBCTransform(ulong key56, CryptoMode mode)
+        public static Task EncryptFileAsync(string path, ulong key56, Mode mode, 
+            Action<double> progressCallback = null)
         {
-            ICryptoTransform insideTransform = new DESCryptoTransform(key56, mode);
-            return new CipherBlockChainingTransform(insideTransform, mode);
+            return Task.Run(() =>
+            {
+                string encryptPath = path + ".des399";
+
+                using (FileStream inStream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using (FileStream outStream = new FileStream(encryptPath, FileMode.OpenOrCreate, FileAccess.Write))
+                using (ICryptoTransform transform = GetTransform(key56, mode, CryptoDirection.Encrypt))
+                using (CryptoStream outCrypto = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
+                {
+                    outStream.Write(new byte[] { (byte)mode }, 0, 1);
+                    outCrypto.Write(BitConverter.GetBytes(inStream.Length), 0, 8);
+                    inStream.CopyToEx(outCrypto, 8, 100000, progressCallback);
+                }
+            });
         }
 
-        public static ICryptoTransform CFBTransform(ulong key56, CryptoMode mode)
+        public static Task DecryptFileAsync(string encryptedPath, ulong key56, Action<double> progressCallback = null,
+            string decryptPath = null)
         {
-            ICryptoTransform insideEncryptTransform = new DESCryptoTransform(key56, CryptoMode.Encrypt);
-            return new CipherFeedbackTransform(insideEncryptTransform, mode);
+            return Task.Run(() =>
+            {
+                if (decryptPath is null)
+                {
+                    if (encryptedPath.EndsWith(".des399"))
+                        decryptPath = encryptedPath.Substring(0, encryptedPath.Length - 7);
+                    else
+                    {
+                        string dirName = Path.GetDirectoryName(encryptedPath);
+                        decryptPath = Path.Combine(dirName, "decrypted");
+                    }
+                }
+
+                using (FileStream inStream = new FileStream(encryptedPath, FileMode.Open, FileAccess.Read))
+                {
+                    byte[] tm = new byte[1];
+                    inStream.Read(tm, 0, 1);
+                    if (tm[0] > 4)
+                        throw new Exception("Error reading encrypted file.");
+
+                    using (ICryptoTransform transform = GetTransform(key56, (Mode)tm[0], CryptoDirection.Decrypt))
+                    using (CryptoStream inCrypto = new CryptoStream(inStream, transform, CryptoStreamMode.Read))
+                    using (FileStream outStream = new FileStream(decryptPath, FileMode.OpenOrCreate, FileAccess.Write))
+                    {
+                        byte[] lenTm = new byte[8];
+                        inCrypto.Read(lenTm, 0, 8);
+                        long length = BitConverter.ToInt64(lenTm, 0);
+
+                        int bufSize = 80000;
+                        byte[] buf = new byte[bufSize];
+
+                        progressCallback?.Invoke(0);
+                        for (long hasWrote = 0; hasWrote < length;)
+                        {
+                            int hasRead = inCrypto.Read(buf, 0, buf.Length);
+                            if (hasRead == 0)
+                            {
+                                throw new Exception("Length of file is not equals to length encoded in file.");
+                            }
+                            else if (hasWrote + hasRead > length)
+                            {
+                                outStream.Write(buf, 0, (int)(length - hasWrote));
+                                hasWrote = length;
+                            }
+                            else
+                            {
+                                outStream.Write(buf, 0, hasRead);
+                                hasWrote += hasRead;
+                            }
+                            progressCallback?.Invoke((double)hasWrote / length);
+                        }
+                    }
+                }
+            });
+        }
+
+        private static ICryptoTransform GetTransform(ulong key56, Mode mode, CryptoDirection direction)
+        {
+            switch (mode)
+            {
+                default:
+                case Mode.ECB:
+                    return ECBTransform(key56, direction);
+                case Mode.CBC:
+                    return CBCTransform(key56, direction);
+                case Mode.CFB:
+                    return CFBTransform(key56, direction);
+                case Mode.OFB:
+                    return OFBTransform(key56);
+                case Mode.CTR:
+                    return CTRTransform(key56);
+            }
+        }
+
+        public static ICryptoTransform ECBTransform(ulong key56, CryptoDirection direction)
+        {
+            return new DESCryptoTransform(key56, direction);
+        }
+
+        public static ICryptoTransform CBCTransform(ulong key56, CryptoDirection direction)
+        {
+            ICryptoTransform insideTransform = new DESCryptoTransform(key56, direction);
+            return new CipherBlockChainingTransform(insideTransform, direction);
+        }
+
+        public static ICryptoTransform CFBTransform(ulong key56, CryptoDirection direction)
+        {
+            ICryptoTransform insideEncryptTransform = new DESCryptoTransform(key56, CryptoDirection.Encrypt);
+            return new CipherFeedbackTransform(insideEncryptTransform, direction);
         }
 
         public static ICryptoTransform OFBTransform(ulong key56)
         {
-            ICryptoTransform insideEncryptTransform = new DESCryptoTransform(key56, CryptoMode.Encrypt);
+            ICryptoTransform insideEncryptTransform = new DESCryptoTransform(key56, CryptoDirection.Encrypt);
             return new OutputFeedbackTransform(insideEncryptTransform);
         }
 
         public static ICryptoTransform CTRTransform(ulong key56)
         {
-            ICryptoTransform insideEncryptTransform = new DESCryptoTransform(key56, CryptoMode.Encrypt);
+            ICryptoTransform insideEncryptTransform = new DESCryptoTransform(key56, CryptoDirection.Encrypt);
             return new CounterModeTransofrm(insideEncryptTransform);
         }
 
@@ -52,11 +156,11 @@ namespace Crypto
             private Func<ulong, ulong[], ulong> _cryptoFunc;
 
             // TODO bool -> enum
-            public DESCryptoTransform(ulong key56, CryptoMode mode)
+            public DESCryptoTransform(ulong key56, CryptoDirection mode)
             {
                 _keys48 = GenerateKeys(key56);
 
-                if (mode == CryptoMode.Encrypt)
+                if (mode == CryptoDirection.Encrypt)
                     _cryptoFunc = Encrypt;
                 else
                     _cryptoFunc = Decrypt;

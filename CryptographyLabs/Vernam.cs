@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.IO;
+using CryptographyLabs;
 
 namespace Crypto
 {
@@ -40,23 +41,10 @@ namespace Crypto
             using (FileStream outStream = new FileStream(encryptPath, FileMode.OpenOrCreate, FileAccess.Write))
             using (CryptoStream outCrypto = new CryptoStream(outStream, new VernamCryptoTransform(inKeyStream), CryptoStreamMode.Write))
             {
-                progressCallback?.Invoke(0.5);
-                if (bufSize <= 0)
-                {
-                    inStream.CopyTo(outCrypto);
-                    progressCallback?.Invoke(1);
-                }
+                if (progressCallback is object)
+                    inStream.CopyToEx(outCrypto, bufSize, progress => progressCallback(progress / 2 + 0.5));
                 else
-                {
-                    byte[] buf = new byte[bufSize];
-                    for (long i = 0; i < bytesCount;)
-                    {
-                        int hasRead = inStream.Read(buf, 0, buf.Length);
-                        outCrypto.Write(buf, 0, hasRead);
-                        i += hasRead;
-                        progressCallback?.Invoke((double)i / bytesCount / 2 + 0.5);
-                    }
-                }
+                    inStream.CopyToEx(outCrypto, bufSize);
             }
         }
 
@@ -113,24 +101,7 @@ namespace Crypto
             using (FileStream outStream = new FileStream(decryptPath, FileMode.OpenOrCreate, FileAccess.Write))
             using (CryptoStream outCrypto = new CryptoStream(outStream, new VernamCryptoTransform(inKeyStream), CryptoStreamMode.Write))
             {
-                progressCallback?.Invoke(0);
-                if (bufSize <= 0)
-                {
-                    inStream.CopyTo(outCrypto);
-                    progressCallback?.Invoke(1);
-                }
-                else
-                {
-                    long bytesCount = inStream.Length;
-                    byte[] buf = new byte[bufSize];
-                    for (long i = 0; i < bytesCount;)
-                    {
-                        int hasRead = inStream.Read(buf, 0, buf.Length);
-                        outCrypto.Write(buf, 0, hasRead);
-                        i += hasRead;
-                        progressCallback?.Invoke((double)i / bytesCount);
-                    }
-                }
+                inStream.CopyToEx(outCrypto, bufSize, progressCallback);
             }
         }
         
