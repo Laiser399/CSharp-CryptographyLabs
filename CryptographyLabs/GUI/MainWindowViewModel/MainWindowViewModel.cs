@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
+using System.ComponentModel;
 
 namespace CryptographyLabs.GUI
 {
@@ -46,15 +48,30 @@ namespace CryptographyLabs.GUI
         private Task8ViewModel _task8VM;
         public Task8ViewModel Task8VM => _task8VM ?? (_task8VM = new Task8ViewModel());
 
-        private VernamCryptoViewModel _vernamCryptoVM;
-        public VernamCryptoViewModel VernamCryptoVM => 
-            _vernamCryptoVM ?? (_vernamCryptoVM = new VernamCryptoViewModel());
+        private VernamViewModel _vernamVM;
+        public VernamViewModel VernamVM => 
+            _vernamVM ?? (_vernamVM = new VernamViewModel());
 
+        private DESViewModel _desVM;
+        public DESViewModel DESVM => _desVM ?? (_desVM = new DESViewModel());
 
+        private RC4ViewModel _rc4VM;
+        public RC4ViewModel RC4VM => _rc4VM ?? (_rc4VM = new RC4ViewModel());
+
+        private ObservableCollection<CryptoProgressViewModel> _progressViewModels;
+        public ObservableCollection<CryptoProgressViewModel> ProgressViewModels =>
+            _progressViewModels ?? (_progressViewModels = new ObservableCollection<CryptoProgressViewModel>());
 
         public MainWindowViewModel()
         {
+            VernamVM.AddCryptoProgressVM = AddCryptoProgressVM;
+            DESVM.AddCryptoProgressVM = AddCryptoProgressVM;
+            RC4VM.AddCryptoProgressVM = AddCryptoProgressVM;
+        }
 
+        private void AddCryptoProgressVM(CryptoProgressViewModel viewModel)
+        {
+            ProgressViewModels.Add(viewModel);
         }
 
     }

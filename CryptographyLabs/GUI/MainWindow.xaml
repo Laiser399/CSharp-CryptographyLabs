@@ -5,18 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptographyLabs"
         xmlns:gui="clr-namespace:CryptographyLabs.GUI"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <gui:ValueConverterGroup x:Key="InversedBoolToVisibilityConv">
             <gui:InverseBooleanConverter/>
             <BooleanToVisibilityConverter/>
         </gui:ValueConverterGroup>
 
-        <CollectionViewSource x:Key="ProgressViewSource1" Source="{Binding VernamCryptoVM.ProgressViewModels}"/>
-        <CompositeCollection x:Key="CryptoViewSources">
-            <CollectionContainer Collection="{Binding Source={StaticResource ProgressViewSource1}}"/>
-        </CompositeCollection>
+        <CollectionViewSource x:Key="SortedCryptoProgressVM" Source="{Binding ProgressViewModels}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="StartTime" Direction="Descending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
 
         <Grid x:Key="vernam_key1">
             <Grid.ColumnDefinitions>
@@ -25,16 +29,16 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Key filename: "/>
-            <TextBox Grid.Column="1" Text="{Binding VernamCryptoVM.KeyFilename, Mode=TwoWay}"/>
+            <TextBox Grid.Column="1" Text="{Binding VernamVM.KeyFilename, Mode=TwoWay}"/>
             <Button Grid.Column="2" Content="..." Width="30"
-                Command="{Binding VernamCryptoVM.ChangeKeyFilenameCommand}"/>
+                Command="{Binding VernamVM.ChangeKeyFilenameCommand}"/>
         </Grid>
         <TextBlock Text="Key will be generated automatically" x:Key="vernam_key2"/>
     </Window.Resources>
     <TabControl>
         <TabItem Header="Tasks 1-8">
             <ScrollViewer>
-                <Grid>
+                <Grid Margin="4 10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -50,21 +54,8 @@
 
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
+                    <Grid Grid.Row="0" Margin="0 0 0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -80,7 +71,7 @@
                         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
                             <TextBlock.Inlines>
                                 <Run FontWeight="Bold" Text="Task11. "/>
-                                <Run Text="Description"/>
+                                <Run Text="Get k-th bit of the a."/>
                             </TextBlock.Inlines>
                         </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
@@ -90,8 +81,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="5" IsReadOnly="True" Text="{Binding Task11VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="1" Margin="10"/>
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="1" Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -105,17 +95,23 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Text="Task12"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task12. "/>
+                                <Run Text="Set\unset k-th bit of the a."/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task12VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="k="/>
                         <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task12VM.K, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <CheckBox Grid.Row="1" Grid.Column="4" Content="isSet" IsChecked="{Binding Task12VM.IsSet, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                        <CheckBox Grid.Row="1" Grid.Column="4" Content="isSet" Margin="10 0"
+                                  VerticalAlignment="Center"
+                                  IsChecked="{Binding Task12VM.IsSet, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="5" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="6" Text="{Binding Task12VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="3" Margin="10"/>
-                    <Grid Grid.Row="4">
+                    <Grid Grid.Row="2" Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -130,7 +126,12 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task13"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task13. "/>
+                                <Run Text="Swap i-th and j-th bits in the a."/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task13VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="i="/>
@@ -140,8 +141,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task13VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="5" Margin="10"/>
-                    <Grid Grid.Row="6">
+                    <Grid Grid.Row="3" Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -154,7 +154,12 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Text="Task14"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task14. "/>
+                                <Run Text="Nullify m bits of the a."/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task14VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="m="/>
@@ -162,8 +167,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task14VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="7" Margin="10"/>
-                    <Grid Grid.Row="8">
+                    <Grid Grid.Row="4" Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -178,7 +182,12 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task2a"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task2a. "/>
+                                <Run Text="Concat left i bits with right i bits of the a with length len."/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task21VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
@@ -188,8 +197,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task21VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="9" Margin="10"/>
-                    <Grid Grid.Row="10">
+                    <Grid Grid.Row="5" Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -204,7 +212,12 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task2b"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task2b. "/>
+                                <Run Text="Receive bits between left i and right i bits from the a with length len."/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task22VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
@@ -214,8 +227,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task22VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="11" Margin="10"/>
-                    <Grid Grid.Row="12">
+                    <Grid Grid.Row="6" Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -228,7 +240,12 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task3"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task3. "/>
+                                <Run Text="Permute bytes in uint32."/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task3VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="permutation="/>
@@ -236,8 +253,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task3VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="13" Margin="10"/>
-                    <Grid Grid.Row="14">
+                    <Grid Grid.Row="7" Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -248,14 +264,18 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task4"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task4. "/>
+                                <Run Text="Find the maximum power of 2 divisible by a given a"/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task4VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task4VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="15" Margin="10"/>
-                    <Grid Grid.Row="16">
+                    <Grid Grid.Row="8" Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -266,14 +286,18 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task5"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task5. "/>
+                                <Run Text="Find p that 2^p &lt;= a &lt;= 2^{p+1}"/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task5VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task5VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="17" Margin="10"/>
-                    <Grid Grid.Row="18">
+                    <Grid Grid.Row="9" Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -286,7 +310,12 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task6"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task6. "/>
+                                <Run Text="Xor of all bits of the a. Where a has length 2^p."/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task6VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="p="/>
@@ -294,8 +323,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task6VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="19" Margin="10"/>
-                    <Grid Grid.Row="20">
+                    <Grid Grid.Row="10" Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -310,7 +338,12 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task7"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task7. "/>
+                                <Run Text="Left cycle shift of the a on n bits. Where len - length of the a."/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task7VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
@@ -320,8 +353,7 @@
                         <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
                         <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task7VM.Result, Mode=OneWay}"/>
                     </Grid>
-                    <Separator Grid.Row="21" Margin="10"/>
-                    <Grid Grid.Row="22">
+                    <Grid Grid.Row="11" Margin="0 10 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
@@ -334,7 +366,12 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Text="Task8"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
+                            <TextBlock.Inlines>
+                                <Run FontWeight="Bold" Text="Task8. "/>
+                                <Run Text="Bit permutation of the a."/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task8VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="permutation="/>
@@ -360,49 +397,49 @@
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
+                            <Grid Grid.Row="0" Margin="0 0 0 4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
                                 <RadioButton Grid.Column="0" GroupName="VernamCryptoDirection" Content="Encrypt"
-                                             IsChecked="{Binding VernamCryptoVM.IsEncrypt}"/>
+                                             IsChecked="{Binding VernamVM.IsEncrypt}" Margin="0 0 10 0"/>
                                 <RadioButton Grid.Column="1" GroupName="VernamCryptoDirection" Content="Decrypt"/>
                             </Grid>
-                            <Grid Grid.Row="1">
+                            <Grid Grid.Row="1" Margin="0 4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Filename: "/>
-                                <TextBox Grid.Column="1" Text="{Binding VernamCryptoVM.Filename, Mode=TwoWay}"/>
+                                <TextBlock Grid.Column="0" Text="Filename: " VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" Text="{Binding VernamVM.Filename, Mode=TwoWay}"/>
                                 <Button Grid.Column="2" Content="..." Width="30px"
-                                        Command="{Binding VernamCryptoVM.ChangeFilenameCommand}"/>
+                                        Command="{Binding VernamVM.ChangeFilenameCommand}"/>
                             </Grid>
-                            <ContentControl Grid.Row="2">
+                            <ContentControl Grid.Row="2" Margin="0 4">
                                 <ContentControl.Style>
                                     <Style>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding VernamCryptoVM.IsEncrypt}" Value="False">
+                                            <DataTrigger Binding="{Binding VernamVM.IsEncrypt}" Value="False">
                                                 <Setter Property="ContentControl.Content" Value="{StaticResource vernam_key1}"/>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding VernamCryptoVM.IsEncrypt}" Value="True">
+                                            <DataTrigger Binding="{Binding VernamVM.IsEncrypt}" Value="True">
                                                 <Setter Property="ContentControl.Content" Value="{StaticResource vernam_key2}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </ContentControl.Style>
                             </ContentControl>
-                            <Grid Grid.Row="3">
+                            <Grid Grid.Row="3" Margin="0 4 0 0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <CheckBox Grid.Column="0" Content="delete file after"
-                                          IsChecked="{Binding VernamCryptoVM.IsDeleteFileAfter}"/>
+                                          IsChecked="{Binding VernamVM.IsDeleteFileAfter}"/>
                                 <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"
-                                        Command="{Binding VernamCryptoVM.GoCommand}"/>
+                                        Command="{Binding VernamVM.GoCommand}"/>
                             </Grid>
                         </Grid>
                     </TabItem>
@@ -413,98 +450,105 @@
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <RadioButton Grid.Column="0" GroupName="DESDirection" Content="Encrypt" IsChecked="True"/>
-                                <RadioButton Grid.Column="1" GroupName="DESDirection" Content="Decrypt"/>
-                            </Grid>
-                            <Grid Grid.Row="1">
+                            <Grid Grid.Row="0" Margin="0 0 0 4" Height="22">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Mode: "/>
-                                <RadioButton Grid.Column="1" GroupName="DESMode" Content="ECB" IsChecked="True"/>
-                                <RadioButton Grid.Column="2" GroupName="DESMode" Content="CBC"/>
-                                <RadioButton Grid.Column="3" GroupName="DESMode" Content="CFB"/>
-                                <RadioButton Grid.Column="4" GroupName="DESMode" Content="OFB"/>
-                                <RadioButton Grid.Column="5" GroupName="DESMode" Content="CTR"/>
+                                <RadioButton Grid.Column="0" GroupName="DESDirection" Content="Encrypt"
+                                             IsChecked="{Binding DESVM.IsEncrypt}"
+                                             VerticalAlignment="Center" Margin="0 0 10 0"/>
+                                <RadioButton Grid.Column="1" GroupName="DESDirection" Content="Decrypt"
+                                             VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="Mode: " Margin="20 0 0 0" 
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding DESVM.IsEncrypt, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <ComboBox Grid.Column="3" Width="60px" HorizontalAlignment="Left" 
+                                          SelectedIndex="{Binding DESVM.ModeIndex, Mode=TwoWay}"
+                                          Visibility="{Binding DESVM.IsEncrypt, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <TextBlock Text="ECB"/>
+                                    <TextBlock Text="CBC"/>
+                                    <TextBlock Text="CFB"/>
+                                    <TextBlock Text="OFB"/>
+                                    <TextBlock Text="CTR"/>
+                                </ComboBox>
                             </Grid>
-                            <Grid Grid.Row="2">
+                            <Grid Grid.Row="1" Margin="0 4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Filename: "/>
-                                <TextBox Grid.Column="1"/>
-                                <Button Grid.Column="2" Content="..." Width="30"/>
+                                <TextBlock Grid.Column="0" Text="Filename: " VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" Text="{Binding DESVM.Filename}"/>
+                                <Button Grid.Column="2" Content="..." Width="30"
+                                        Command="{Binding DESVM.ChangeFilenameCommand}"/>
                             </Grid>
-                            <Grid Grid.Row="3">
+                            <Grid Grid.Row="2" Margin="0 4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Key: "/>
-                                <TextBox Grid.Column="1"/>
+                                <TextBlock Grid.Column="0" Text="Key (56bit, 0x..., 0b...): "/>
+                                <TextBox Grid.Column="1" Text="{Binding DESVM.Key}"/>
                             </Grid>
-                            <Grid Grid.Row="4">
+                            <Grid Grid.Row="3" Margin="0 4 0 0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Column="0" Content="delete file after"/>
-                                <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"/>
+                                <CheckBox Grid.Column="0" Content="delete file after" 
+                                          IsChecked="{Binding DESVM.IsDeleteFileAfter}"/>
+                                <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"
+                                        Command="{Binding DESVM.GoCommand}"/>
                             </Grid>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="RC4">
+                    <TabItem Header="RC4" IsSelected="True">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
+                            <Grid Grid.Row="0" Margin="0 0 0 4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Filename: "/>
-                                <TextBox Grid.Column="1"/>
-                                <Button Grid.Column="2" Content="..." Width="30"/>
+                                <TextBlock Grid.Column="0" Text="Filename: " VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" Text="{Binding RC4VM.Filename}"/>
+                                <Button Grid.Column="2" Content="..." Width="30"
+                                        Command="{Binding RC4VM.ChangeFilenameCommand}"/>
                             </Grid>
-                            <Grid Grid.Row="1">
+                            <Grid Grid.Row="1" Margin="0 4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Key: "/>
-                                <TextBox Grid.Column="1"/>
+                                <TextBlock Grid.Column="0" Text="Key (1-256bytes, 0x..., 0b...): "/>
+                                <TextBox Grid.Column="1" Text="{Binding RC4VM.Key}"/>
                             </Grid>
-                            <Grid Grid.Row="2">
+                            <Grid Grid.Row="2" Margin="0 4 0 0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Column="0" Content="delete file after"/>
-                                <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"/>
+                                <CheckBox Grid.Column="0" Content="delete file after"
+                                          IsChecked="{Binding RC4VM.IsDeleteFileAfter}"/>
+                                <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"
+                                        Command="{Binding RC4VM.GoCommand}"/>
                             </Grid>
                         </Grid>
                     </TabItem>
                 </TabControl>
                 <ScrollViewer Grid.Row="1">
-                    <ItemsControl ItemsSource="{Binding Source={StaticResource CryptoViewSources}}">
+                    <ItemsControl ItemsSource="{Binding Source={StaticResource SortedCryptoProgressVM}}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0 4">

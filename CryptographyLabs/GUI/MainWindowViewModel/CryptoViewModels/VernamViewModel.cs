@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class VernamCryptoViewModel : BaseViewModel
+    class VernamViewModel : BaseViewModel
     {
         private bool _isEncrypt = true;
         public bool IsEncrypt
@@ -56,9 +56,7 @@ namespace CryptographyLabs.GUI
             }
         }
 
-        private ObservableCollection<CryptoProgressViewModel> _progressViewModels;
-        public ObservableCollection<CryptoProgressViewModel> ProgressViewModels =>
-            _progressViewModels ?? (_progressViewModels = new ObservableCollection<CryptoProgressViewModel>());
+        public Action<CryptoProgressViewModel> AddCryptoProgressVM;
 
         private RelayCommand _changeFilenameCommand;
         public RelayCommand ChangeFilenameCommand =>
@@ -96,39 +94,42 @@ namespace CryptographyLabs.GUI
 
         private void Go()
         {
+            string filename = Filename;
+            string keyFilename = KeyFilename;
+            bool isDeleteAfter = IsDeleteFileAfter;
+
             var viewModel = new CryptoProgressViewModel
             {
                 CryptoName = "Vernam",
-                Filename = Filename
+                Filename = filename
             };
-            ProgressViewModels.Add(viewModel);
+            AddCryptoProgressVM?.Invoke(viewModel);
 
             Task task0;
             if (IsEncrypt)
             {
-                task0 = Vernam.EncryptFileAsync(Filename, progress => viewModel.CryptoProgress = progress);
                 viewModel.StatusString = "Encrypting";
+                task0 = Vernam.EncryptFileAsync(filename, progress => viewModel.CryptoProgress = progress);
             }
             else
             {
-                task0 = Vernam.DecryptFileAsync(Filename, KeyFilename,
-                    progress => viewModel.CryptoProgress = progress);
                 viewModel.StatusString = "Decrypting";
+                task0 = Vernam.DecryptFileAsync(filename, keyFilename,
+                    progress => viewModel.CryptoProgress = progress);
             }
             
-
             task0.ContinueWith(task =>
             {
                 if (task.IsFaulted)
                 {
                     viewModel.StatusString = "Error: " + task.Exception.InnerException.Message;
                 }
-                else if (IsDeleteFileAfter)
+                else if (isDeleteAfter)
                 {
                     viewModel.StatusString = "Deleting file";
                     try
                     {
-                        File.Delete(Filename);
+                        File.Delete(filename);
                         viewModel.StatusString = "Done successfully";
                     }
                     catch (Exception e)
