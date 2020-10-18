@@ -52,6 +52,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -74,7 +75,9 @@
     <Compile Include="GUI\BaseViewModel.cs" />
     <Compile Include="GUI\Converters.cs" />
     <Compile Include="GUI\MainWindowViewModel\CryptoProgressViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\CryptoViewModels\VernamCryptoViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\CryptoViewModels\DESViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\CryptoViewModels\RC4ViewModel.cs" />
+    <Compile Include="GUI\MainWindowViewModel\CryptoViewModels\VernamViewModel.cs" />
     <Compile Include="GUI\MainWindowViewModel\MainWindowViewModel.cs" />
     <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task11ViewModel.cs" />
     <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task12ViewModel.cs" />
@@ -137,6 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Windows Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

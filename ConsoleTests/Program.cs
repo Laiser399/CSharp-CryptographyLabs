@@ -9,6 +9,8 @@ using System.IO;
 using System.Reflection;
 using System.Globalization;
 using System.Threading;
+using System.Numerics;
+using CryptographyLabs;
 
 namespace ConsoleTests
 {
@@ -122,45 +124,10 @@ namespace ConsoleTests
 
     class Program
     {
-        class SomeException : Exception
-        {
-            public SomeException(string message) : base(message)
-            {
-
-            }
-        }
         static void Main(string[] args)
         {
-            string filename = @"C:\Users\Sergey\Desktop\testDir\source.mkv";
-            var start = DateTime.Now;
-            Task task = Vernam.EncryptFileAsync(filename, progress =>
-            {
-                //Console.WriteLine(progress);
-            });
-            while (!task.IsCompleted){}
-            Console.WriteLine($"End in {DateTime.Now - start}");
             
-            if (task.IsFaulted)
-            {
-                foreach (var e in task.Exception.InnerExceptions)
-                {
-                    // Handle the custom exception.
-                    if (e is Exception)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    // Rethrow any other exception.
-                    else
-                    {
-                        throw e;
-                    }
-                }
-            }
             
-            //string encryptedPath = @"C:\Users\Sergey\Desktop\testDir\source.mkv.v399";
-            //string keyPath = @"C:\Users\Sergey\Desktop\testDir\source.mkv.vkey399";
-            //string decryptedPath = @"C:\Users\Sergey\Desktop\testDir\decrypted.mkv";
-            //Vernam.DecryptFile(encryptedPath, keyPath, decryptedPath);
 
             Console.WriteLine();
             Console.WriteLine("Press...");
@@ -242,7 +209,7 @@ namespace ConsoleTests
             // encryption
             using (FileStream inStream = new FileStream(inFilename, FileMode.Open, FileAccess.Read))
             using (FileStream outStream = new FileStream(encryptedFilename, FileMode.OpenOrCreate, FileAccess.Write))
-            using (ICryptoTransform transform = Crypto.DES.ECBTransform(key, CryptoMode.Encrypt))
+            using (ICryptoTransform transform = Crypto.DES.ECBTransform(key, CryptoDirection.Encrypt))
             using (CryptoStream outCrStream = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
             {
                 int bytesCount = 80000;
@@ -260,7 +227,7 @@ namespace ConsoleTests
             // decryption
             using (FileStream inStream = new FileStream(encryptedFilename, FileMode.Open, FileAccess.Read))
             using (FileStream outStream = new FileStream(decryptedFilename, FileMode.OpenOrCreate, FileAccess.Write))
-            using (ICryptoTransform transform = Crypto.DES.ECBTransform(key, CryptoMode.Decrypt))
+            using (ICryptoTransform transform = Crypto.DES.ECBTransform(key, CryptoDirection.Decrypt))
             using (CryptoStream outCrStream = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
             {
                 int bytesCount = 80000;

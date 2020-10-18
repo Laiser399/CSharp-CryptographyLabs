@@ -597,8 +597,8 @@ namespace UnitTests
             random.NextBytes(keyTm);
             ulong key = BitConverter.ToUInt64(keyTm, 0);
 
-            var encrTrans = DES.ECBTransform(key, CryptoMode.Encrypt);
-            var decrTrans = DES.ECBTransform(key, CryptoMode.Decrypt);
+            var encrTrans = DES.ECBTransform(key, CryptoDirection.Encrypt);
+            var decrTrans = DES.ECBTransform(key, CryptoDirection.Decrypt);
 
             byte[] encr = new byte[byteSize];
             encrTrans.TransformBlock(text, 0, byteSize, encr, 0);
@@ -620,8 +620,8 @@ namespace UnitTests
             random.NextBytes(keyTm);
             ulong key = BitConverter.ToUInt64(keyTm, 0);
 
-            var encrTrans = DES.CBCTransform(key, CryptoMode.Encrypt);
-            var decrTrans = DES.CBCTransform(key, CryptoMode.Decrypt);
+            var encrTrans = DES.CBCTransform(key, CryptoDirection.Encrypt);
+            var decrTrans = DES.CBCTransform(key, CryptoDirection.Decrypt);
 
             byte[] encr = new byte[byteSize];
             encrTrans.TransformBlock(text, 0, byteSize, encr, 0);
@@ -643,8 +643,8 @@ namespace UnitTests
             random.NextBytes(keyTm);
             ulong key = BitConverter.ToUInt64(keyTm, 0);
 
-            var encrTrans = DES.CFBTransform(key, CryptoMode.Encrypt);
-            var decrTrans = DES.CFBTransform(key, CryptoMode.Decrypt);
+            var encrTrans = DES.CFBTransform(key, CryptoDirection.Encrypt);
+            var decrTrans = DES.CFBTransform(key, CryptoDirection.Decrypt);
 
             byte[] encr = new byte[byteSize];
             encrTrans.TransformBlock(text, 0, byteSize, encr, 0);

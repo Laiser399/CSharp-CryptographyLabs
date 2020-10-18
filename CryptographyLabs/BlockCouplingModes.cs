@@ -27,7 +27,7 @@ namespace Crypto
         private BlockTransformFunc _transformFunc;
 
         // TODO bool -> enum
-        public CipherBlockChainingTransform(ICryptoTransform blockCryptoTransform, CryptoMode mode)
+        public CipherBlockChainingTransform(ICryptoTransform blockCryptoTransform, CryptoDirection mode)
         {
             _insideCryptoTransform = blockCryptoTransform;
 
@@ -35,7 +35,7 @@ namespace Crypto
             for (int i = 0; i < InputBlockSize; ++i)// TODO del mb
                 _prevBlock[i] = 0;
 
-            if (mode == CryptoMode.Encrypt)
+            if (mode == CryptoDirection.Encrypt)
                 _transformFunc = EncryptBlock;
             else
                 _transformFunc = DecryptBlock;
@@ -92,7 +92,7 @@ namespace Crypto
         private byte[] _prevBlock;
         private BlockTransformFunc _transformFunc;
 
-        public CipherFeedbackTransform(ICryptoTransform encryptTransform, CryptoMode mode)
+        public CipherFeedbackTransform(ICryptoTransform encryptTransform, CryptoDirection mode)
         {
             _insideEncryptTransform = encryptTransform;
 
@@ -100,7 +100,7 @@ namespace Crypto
             for (int i = 0; i < InputBlockSize; ++i)// TODO del mb
                 _prevBlock[i] = 0;
 
-            if (mode == CryptoMode.Encrypt)
+            if (mode == CryptoDirection.Encrypt)
                 _transformFunc = EncryptBlock;
             else
                 _transformFunc = DecryptBlock;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Crypto
 {
-    public enum CryptoMode
+    public enum CryptoDirection
     {
         Encrypt, Decrypt
     }
