@@ -1,5 +1,4 @@
-﻿using Crypto;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -58,7 +57,7 @@ namespace CryptographyLabs.GUI
 
         private void Apply()
         {
-            if (Extended.TryParse(A, out uint a) && byte.TryParse(Len, out byte len) && byte.TryParse(N, out byte n))
+            if (StringEx.TryParse(A, out uint a) && byte.TryParse(Len, out byte len) && byte.TryParse(N, out byte n))
             {
                 Result = "0b" + Convert.ToString(Bitops.CycleShiftLeft(a, len, n), 2);
             }

@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.IO;
 using CryptographyLabs;
 
-namespace Crypto
+namespace CryptographyLabs.Crypto
 {
     public static class RC4
     {

@@ -1,5 +1,4 @@
-﻿using Crypto;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,7 +46,7 @@ namespace CryptographyLabs.GUI
 
         private void Apply()
         {
-            if (Extended.TryParse(A, out uint a) && int.TryParse(M, out int m))
+            if (StringEx.TryParse(A, out uint a) && int.TryParse(M, out int m))
             {
                 if (m >= 0 && m <= 32)
                     Result = "0b" + Convert.ToString(Bitops.NullifyMLowBits(a, m), 2);

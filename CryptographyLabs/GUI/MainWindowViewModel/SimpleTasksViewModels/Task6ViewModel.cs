@@ -1,5 +1,4 @@
-﻿using Crypto;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,7 +45,7 @@ namespace CryptographyLabs.GUI
 
         private void Apply()
         {
-            if (Extended.TryParse(A, out uint a) && byte.TryParse(P, out byte p))
+            if (StringEx.TryParse(A, out uint a) && byte.TryParse(P, out byte p))
             {
                 Result = Bitops.XorBits(a, p).ToString();
             }

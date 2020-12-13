@@ -1,5 +1,4 @@
-﻿using Crypto;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,7 +33,7 @@ namespace CryptographyLabs.GUI
 
         private void Apply()
         {
-            if (Extended.TryParse(A, out uint a))
+            if (StringEx.TryParse(A, out uint a))
             {
                 Result = "0b" + Convert.ToString(Bitops.Task4(a), 2).ToUpper();
             }

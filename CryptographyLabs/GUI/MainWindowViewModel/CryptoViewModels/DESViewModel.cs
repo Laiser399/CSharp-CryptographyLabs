@@ -1,4 +1,4 @@
-﻿using Crypto;
+﻿using CryptographyLabs.Crypto;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -24,13 +24,13 @@ namespace CryptographyLabs.GUI
             }
         }
 
-        private DES.Mode _mode = DES.Mode.ECB;
+        private DES_.Mode _mode = DES_.Mode.ECB;
         public int ModeIndex
         {
             get => (int)_mode;
             set
             {
-                _mode = (DES.Mode)value;
+                _mode = (DES_.Mode)value;
                 NotifyPropertyChanged(nameof(ModeIndex));
             }
         }
@@ -93,7 +93,7 @@ namespace CryptographyLabs.GUI
         private void Go()
         {
             ulong key56;
-            if (!Extended.TryParse(Key, out key56))
+            if (!StringEx.TryParse(Key, out key56))
             {
                 MessageBox.Show("Wrong key format.", "Error");
                 return;
@@ -113,12 +113,12 @@ namespace CryptographyLabs.GUI
             if (IsEncrypt)
             {
                 viewModel.StatusString = "Encrypting";
-                task0 = DES.EncryptFileAsync(filename, key56, _mode, progress => viewModel.CryptoProgress = progress);
+                task0 = DES_.EncryptFileAsync(filename, key56, _mode, progress => viewModel.CryptoProgress = progress);
             }
             else
             {
                 viewModel.StatusString = "Decrypting";
-                task0 = DES.DecryptFileAsync(filename, key56, progress => viewModel.CryptoProgress = progress);
+                task0 = DES_.DecryptFileAsync(filename, key56, progress => viewModel.CryptoProgress = progress);
             }
 
             task0.ContinueWith(task =>

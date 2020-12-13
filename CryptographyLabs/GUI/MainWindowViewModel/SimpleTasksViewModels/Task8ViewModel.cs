@@ -1,5 +1,4 @@
-﻿using Crypto;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,7 +46,7 @@ namespace CryptographyLabs.GUI
         private void Apply()
         {
             string[] items = Permutation.Split(new string[] { " ", ",", ";" }, StringSplitOptions.RemoveEmptyEntries);
-            if (Extended.TryParse(A, out ulong a) && items.Length > 0 && items.Length <= 64)
+            if (StringEx.TryParse(A, out ulong a) && items.Length > 0 && items.Length <= 64)
             {
                 byte[] permutation = new byte[items.Length];
                 for (int i = 0; i < permutation.Length; ++i)

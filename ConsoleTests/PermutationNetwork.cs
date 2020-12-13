@@ -1,9 +1,9 @@
-﻿using System;
+﻿using CryptographyLabs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Crypto;
 
 namespace ConsoleTests
 {
@@ -43,7 +43,9 @@ namespace ConsoleTests
 			long check = 0;
 			for (int i = 0; i < 64; i++)
 			{
+#pragma warning disable CS0675 // Битовая операция или оператор, использовавшийся в операнде с расширением знака
 				check |= 1 << i;
+#pragma warning restore CS0675 // Битовая операция или оператор, использовавшийся в операнде с расширением знака
 			}
 			return check == -1;
 		}

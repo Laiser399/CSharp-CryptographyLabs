@@ -1,4 +1,4 @@
-﻿using Crypto;
+﻿using CryptographyLabs.Crypto;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;

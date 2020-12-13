@@ -1,4 +1,4 @@
-﻿using Crypto;
+﻿using CryptographyLabs.Crypto;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -69,7 +69,7 @@ namespace CryptographyLabs.GUI
         private void Go()
         {
             byte[] keyBytes;
-            if (!Extended.TryParse(Key, out keyBytes))
+            if (!StringEx.TryParse(Key, out keyBytes))
             {
                 MessageBox.Show("Wrong key format.", "Input error");
                 return;
