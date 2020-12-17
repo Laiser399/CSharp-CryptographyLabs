@@ -10,30 +10,12 @@
         Title="MainWindow" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <gui:ValueConverterGroup x:Key="InversedBoolToVisibilityConv">
-            <gui:InverseBooleanConverter/>
-            <BooleanToVisibilityConverter/>
-        </gui:ValueConverterGroup>
-
-        <CollectionViewSource x:Key="SortedCryptoProgressVM" Source="{Binding ProgressViewModels}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="StartTime" Direction="Descending"/>
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
-
-        <Grid x:Key="vernam_key1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="Key filename: "/>
-            <TextBox Grid.Column="1" Text="{Binding VernamVM.KeyFilename, Mode=TwoWay}"/>
-            <Button Grid.Column="2" Content="..." Width="30"
-                Command="{Binding VernamVM.ChangeKeyFilenameCommand}"/>
-        </Grid>
-        <TextBlock Text="Key will be generated automatically" x:Key="vernam_key2"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="MainWindowDictionary.xaml"/>
+                <ResourceDictionary Source="Progress/BaseTransform.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <TabControl>
         <TabItem Header="Tasks 1-8">
@@ -443,7 +425,7 @@
                             </Grid>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="DES">
+                    <TabItem Header="DES" IsSelected="True">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -465,16 +447,13 @@
                                 <RadioButton Grid.Column="1" GroupName="DESDirection" Content="Decrypt"
                                              VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="2" Text="Mode: " Margin="20 0 0 0" 
-                                           VerticalAlignment="Center"
-                                           Visibility="{Binding DESVM.IsEncrypt, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                           VerticalAlignment="Center"/>
                                 <ComboBox Grid.Column="3" Width="60px" HorizontalAlignment="Left" 
-                                          SelectedIndex="{Binding DESVM.ModeIndex, Mode=TwoWay}"
-                                          Visibility="{Binding DESVM.IsEncrypt, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                          SelectedIndex="{Binding DESVM.ModeIndex, Mode=TwoWay}">
                                     <TextBlock Text="ECB"/>
                                     <TextBlock Text="CBC"/>
                                     <TextBlock Text="CFB"/>
                                     <TextBlock Text="OFB"/>
-                                    <TextBlock Text="CTR"/>
                                 </ComboBox>
                             </Grid>
                             <Grid Grid.Row="1" Margin="0 4">
@@ -508,7 +487,7 @@
                             </Grid>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="RC4" IsSelected="True">
+                    <TabItem Header="RC4">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -548,32 +527,7 @@
                     </TabItem>
                 </TabControl>
                 <ScrollViewer Grid.Row="1">
-                    <ItemsControl ItemsSource="{Binding Source={StaticResource SortedCryptoProgressVM}}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0 4">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Grid Grid.Row="0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="{Binding Filename, StringFormat=Filename: {0}}"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding CryptoName}"/>
-                                    </Grid>
-                                    <TextBlock Grid.Row="1" Text="{Binding StatusString, StringFormat=Status: {0}}"
-                                               TextTrimming="WordEllipsis"/>
-                                    <ProgressBar Grid.Row="2" Value="{Binding CryptoProgress}" Minimum="0" Maximum="1"
-                                                 Visibility="{Binding IsDone, Converter={StaticResource InversedBoolToVisibilityConv}}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <ItemsControl ItemsSource="{Binding Source={StaticResource SortedCryptoProgressVM}}"/>
                 </ScrollViewer>
             </Grid>
         </TabItem>

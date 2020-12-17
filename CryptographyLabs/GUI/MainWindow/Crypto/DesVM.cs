@@ -5,14 +5,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace CryptographyLabs.GUI
 {
-    class DESViewModel : BaseViewModel
+    class DesVM : BaseViewModel
     {
+        private MainWindowVM _owner;
+
+        #region Bindings
+
         private bool _isEncrypt = true;
         public bool IsEncrypt
         {
@@ -20,7 +26,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _isEncrypt = value;
-                NotifyPropertyChanged(nameof(IsEncrypt));
+                NotifyPropChanged(nameof(IsEncrypt));
             }
         }
 
@@ -31,7 +37,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _mode = (DES_.Mode)value;
-                NotifyPropertyChanged(nameof(ModeIndex));
+                NotifyPropChanged(nameof(ModeIndex));
             }
         }
 
@@ -42,7 +48,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _filename = value;
-                NotifyPropertyChanged(nameof(Filename));
+                NotifyPropChanged(nameof(Filename));
             }
         }
 
@@ -53,7 +59,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _key = value;
-                NotifyPropertyChanged(nameof(Key));
+                NotifyPropChanged(nameof(Key));
             }
         }
 
@@ -64,11 +70,9 @@ namespace CryptographyLabs.GUI
             set
             {
                 _isDeleteFileAfter = value;
-                NotifyPropertyChanged(nameof(IsDeleteFileAfter));
+                NotifyPropChanged(nameof(IsDeleteFileAfter));
             }
         }
-
-        public Action<CryptoProgressViewModel> AddCryptoProgressVM;
 
         private RelayCommand _changeFilenameCommand;
         public RelayCommand ChangeFilenameCommand =>
@@ -77,6 +81,13 @@ namespace CryptographyLabs.GUI
         private RelayCommand _goCommand;
         public RelayCommand GoCommand =>
             _goCommand ?? (_goCommand = new RelayCommand(_ => Go()));
+
+        #endregion
+
+        public DesVM(MainWindowVM owner)
+        {
+            _owner = owner;
+        }
 
         private void ChangeFilename()
         {
@@ -99,52 +110,29 @@ namespace CryptographyLabs.GUI
                 return;
             }
 
-            string filename = Filename;
+            string filePath = Filename;
             bool isDeleteAfter = IsDeleteFileAfter;
 
-            var viewModel = new CryptoProgressViewModel
-            {
-                CryptoName = "DES",
-                Filename = filename
-            };
-            AddCryptoProgressVM?.Invoke(viewModel);
-
-            Task task0;
             if (IsEncrypt)
             {
-                viewModel.StatusString = "Encrypting";
-                task0 = DES_.EncryptFileAsync(filename, key56, _mode, progress => viewModel.CryptoProgress = progress);
+                string encryptPath = filePath + ".des399";
+                var vm = new DESEncryptVM(filePath, encryptPath, key56, _mode, isDeleteAfter);
+                _owner.ProgressViewModels.Add(vm);
             }
             else
             {
-                viewModel.StatusString = "Decrypting";
-                task0 = DES_.DecryptFileAsync(filename, key56, progress => viewModel.CryptoProgress = progress);
-            }
-
-            task0.ContinueWith(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    viewModel.StatusString = "Error: " + task.Exception.InnerException.Message;
-                }
-                else if (isDeleteAfter)
-                {
-                    viewModel.StatusString = "Deleting file";
-                    try
-                    {
-                        File.Delete(filename);
-                        viewModel.StatusString = "Done successfully";
-                    }
-                    catch (Exception e)
-                    {
-                        viewModel.StatusString = "Error: " + e.Message;
-                    }
-                }
+                string decryptPath;
+                if (filePath.EndsWith(".des399"))
+                    decryptPath = filePath.Substring(0, filePath.Length - 7);
                 else
-                    viewModel.StatusString = "Done successfully";
+                {
+                    MessageBox.Show("Wrong extension of file.");
+                    return;
+                }
 
-                viewModel.IsDone = true;
-            });
+                var vm = new DESDecryptVM(filePath, decryptPath, key56, _mode, isDeleteAfter);
+                _owner.ProgressViewModels.Add(vm);
+            }
         }
 
     }

@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void NotifyPropertyChanged(string propertyName)
+        protected void NotifyPropChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected void NotifyPropertiesChanged(params string[] propertiesNames)
+        protected void NotifyPropChanged(params string[] propertiesNames)
         {
             foreach (string propertyName in propertiesNames)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task3ViewModel : BaseViewModel
+    class Task8VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -15,7 +15,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _a = value;
-                NotifyPropertyChanged(nameof(A));
+                NotifyPropChanged(nameof(A));
                 Apply();
             }
         }
@@ -27,7 +27,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _permutation = value;
-                NotifyPropertyChanged(nameof(Permutation));
+                NotifyPropChanged(nameof(Permutation));
                 Apply();
             }
         }
@@ -39,27 +39,28 @@ namespace CryptographyLabs.GUI
             set
             {
                 _result = value;
-                NotifyPropertyChanged(nameof(Result));
+                NotifyPropChanged(nameof(Result));
             }
         }
 
         private void Apply()
         {
             string[] items = Permutation.Split(new string[] { " ", ",", ";" }, StringSplitOptions.RemoveEmptyEntries);
-            if (StringEx.TryParse(A, out uint a) && items.Length == 4)
+            if (StringEx.TryParse(A, out ulong a) && items.Length > 0 && items.Length <= 64)
             {
-                byte[] indices = new byte[4];
-                for (int i = 0; i < 4; ++i)
+                byte[] permutation = new byte[items.Length];
+                for (int i = 0; i < permutation.Length; ++i)
                 {
-                    if (!byte.TryParse(items[i], out indices[i]))
+                    if (!byte.TryParse(items[i], out permutation[i]))
                     {
                         Result = "-";
                         return;
                     }
                 }
+
                 try
                 {
-                    Result = "0x" + Convert.ToString(Bitops.BytePermutation(a, indices), 16).ToUpper();
+                    Result = "0b" + Convert.ToString((long)Bitops.BitPermutation(a, permutation), 2);
                 }
                 catch (ArgumentException)
                 {
@@ -69,6 +70,5 @@ namespace CryptographyLabs.GUI
             else
                 Result = "-";
         }
-
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.Crypto.BlockCouplingModes
 {
+    // TODO delete or remake
     public abstract class BaseCTRTransform : ICryptoTransform
     {
         protected ICryptoTransform _baseTransform;

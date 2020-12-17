@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task13ViewModel : BaseViewModel
+    class Task11VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -15,31 +15,19 @@ namespace CryptographyLabs.GUI
             set
             {
                 _a = value;
-                NotifyPropertyChanged(nameof(A));
+                NotifyPropChanged(nameof(A));
                 Apply();
             }
         }
 
-        private string _i = "";
-        public string I
+        private string _k = "";
+        public string K
         {
-            get => _i;
+            get => _k;
             set
             {
-                _i = value;
-                NotifyPropertyChanged(nameof(I));
-                Apply();
-            }
-        }
-
-        private string _j = "";
-        public string J
-        {
-            get => _j;
-            set
-            {
-                _j = value;
-                NotifyPropertyChanged(nameof(J));
+                _k = value;
+                NotifyPropChanged(nameof(K));
                 Apply();
             }
         }
@@ -51,16 +39,16 @@ namespace CryptographyLabs.GUI
             set
             {
                 _result = value;
-                NotifyPropertyChanged(nameof(Result));
+                NotifyPropChanged(nameof(Result));
             }
         }
 
         private void Apply()
         {
-            if (StringEx.TryParse(A, out uint a) && int.TryParse(I, out int i) && int.TryParse(J, out int j))
+            if (StringEx.TryParse(A, out uint a) && int.TryParse(K, out int k))
             {
-                if (i >= 0 && i <= 31 && j >= 0 && j <= 31)
-                    Result = "0b" + Convert.ToString(Bitops.SwapBits(a, i, j), 2);
+                if (k >= 0 && k <= 31)
+                    Result = Bitops.GetKthBit(a, k).ToString();
                 else
                     Result = "-";
             }

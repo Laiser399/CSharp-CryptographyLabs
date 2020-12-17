@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task5ViewModel : BaseViewModel
+    class Task14VM : BaseViewModel
     {
+
         private string _a = "";
         public string A
         {
@@ -15,7 +16,19 @@ namespace CryptographyLabs.GUI
             set
             {
                 _a = value;
-                NotifyPropertyChanged(nameof(A));
+                NotifyPropChanged(nameof(A));
+                Apply();
+            }
+        }
+
+        private string _m = "";
+        public string M
+        {
+            get => _m;
+            set
+            {
+                _m = value;
+                NotifyPropChanged(nameof(M));
                 Apply();
             }
         }
@@ -27,25 +40,23 @@ namespace CryptographyLabs.GUI
             set
             {
                 _result = value;
-                NotifyPropertyChanged(nameof(Result));
+                NotifyPropChanged(nameof(Result));
             }
         }
 
         private void Apply()
         {
-            if (StringEx.TryParse(A, out uint a))
+            if (StringEx.TryParse(A, out uint a) && int.TryParse(M, out int m))
             {
-                try
-                {
-                    Result = Bitops.Task5(a).ToString();
-                }
-                catch (ArgumentException)
-                {
+                if (m >= 0 && m <= 32)
+                    Result = "0b" + Convert.ToString(Bitops.NullifyMLowBits(a, m), 2);
+                else
                     Result = "-";
-                }
             }
             else
+            {
                 Result = "-";
+            }
         }
     }
 }

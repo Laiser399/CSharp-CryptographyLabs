@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task22ViewModel : BaseViewModel
+    class Task22VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -15,7 +15,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _a = value;
-                NotifyPropertyChanged(nameof(A));
+                NotifyPropChanged(nameof(A));
                 Apply();
             }
         }
@@ -27,7 +27,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _len = value;
-                NotifyPropertyChanged(nameof(Len));
+                NotifyPropChanged(nameof(Len));
                 Apply();
             }
         }
@@ -39,7 +39,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _i = value;
-                NotifyPropertyChanged(nameof(I));
+                NotifyPropChanged(nameof(I));
                 Apply();
             }
         }
@@ -51,7 +51,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _result = value;
-                NotifyPropertyChanged(nameof(Result));
+                NotifyPropChanged(nameof(Result));
             }
         }
 

@@ -5,13 +5,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CryptographyLabs.GUI
 {
-    class VernamViewModel : BaseViewModel
+    class VernamVM : BaseViewModel
     {
+        private MainWindowVM _owner;
+
+        #region Bindings
+
         private bool _isEncrypt = true;
         public bool IsEncrypt
         {
@@ -19,7 +26,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _isEncrypt = value;
-                NotifyPropertyChanged(nameof(IsEncrypt));
+                NotifyPropChanged(nameof(IsEncrypt));
             }
         }
 
@@ -30,7 +37,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _filename = value;
-                NotifyPropertyChanged(nameof(Filename));
+                NotifyPropChanged(nameof(Filename));
             }
         }
 
@@ -41,7 +48,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _keyFilename = value;
-                NotifyPropertyChanged(nameof(KeyFilename));
+                NotifyPropChanged(nameof(KeyFilename));
             }
         }
 
@@ -52,11 +59,9 @@ namespace CryptographyLabs.GUI
             set
             {
                 _isDeleteFileAfter = value;
-                NotifyPropertyChanged(nameof(IsDeleteFileAfter));
+                NotifyPropChanged(nameof(IsDeleteFileAfter));
             }
         }
-
-        public Action<CryptoProgressViewModel> AddCryptoProgressVM;
 
         private RelayCommand _changeFilenameCommand;
         public RelayCommand ChangeFilenameCommand =>
@@ -69,6 +74,13 @@ namespace CryptographyLabs.GUI
         private RelayCommand _goCommand;
         public RelayCommand GoCommand =>
             _goCommand ?? (_goCommand = new RelayCommand(_ => Go()));
+
+        #endregion
+
+        public VernamVM(MainWindowVM owner)
+        {
+            _owner = owner;
+        }
 
         private void ChangeFilename()
         {
@@ -94,54 +106,28 @@ namespace CryptographyLabs.GUI
 
         private void Go()
         {
-            string filename = Filename;
-            string keyFilename = KeyFilename;
-            bool isDeleteAfter = IsDeleteFileAfter;
-
-            var viewModel = new CryptoProgressViewModel
-            {
-                CryptoName = "Vernam",
-                Filename = filename
-            };
-            AddCryptoProgressVM?.Invoke(viewModel);
-
-            Task task0;
             if (IsEncrypt)
             {
-                viewModel.StatusString = "Encrypting";
-                task0 = Vernam.EncryptFileAsync(filename, progress => viewModel.CryptoProgress = progress);
+                string encryptPath = Filename + ".v399";
+                string keyFilePath = Filename + ".vkey399";
+
+                var vm = new VernamEncryptVM(Filename, encryptPath, keyFilePath, IsDeleteFileAfter);
+                _owner.ProgressViewModels.Add(vm);
             }
             else
             {
-                viewModel.StatusString = "Decrypting";
-                task0 = Vernam.DecryptFileAsync(filename, keyFilename,
-                    progress => viewModel.CryptoProgress = progress);
-            }
-            
-            task0.ContinueWith(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    viewModel.StatusString = "Error: " + task.Exception.InnerException.Message;
-                }
-                else if (isDeleteAfter)
-                {
-                    viewModel.StatusString = "Deleting file";
-                    try
-                    {
-                        File.Delete(filename);
-                        viewModel.StatusString = "Done successfully";
-                    }
-                    catch (Exception e)
-                    {
-                        viewModel.StatusString = "Error: " + e.Message;
-                    }
-                }
+                string decryptPath;
+                if (Filename.EndsWith(".v399"))
+                    decryptPath = Filename.Substring(0, Filename.Length - 5);
                 else
-                    viewModel.StatusString = "Done successfully";
+                {
+                    MessageBox.Show("Wrong file extension.");
+                    return;
+                }
 
-                viewModel.IsDone = true;
-            });
+                var vm = new VernamDecryptVM(Filename, decryptPath, KeyFilename, IsDeleteFileAfter);
+                _owner.ProgressViewModels.Add(vm);
+            }
         }
     }
 }

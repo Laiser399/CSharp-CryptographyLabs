@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task12ViewModel : BaseViewModel
+    class Task21VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -15,31 +15,31 @@ namespace CryptographyLabs.GUI
             set
             {
                 _a = value;
-                NotifyPropertyChanged(nameof(A));
+                NotifyPropChanged(nameof(A));
                 Apply();
             }
         }
 
-        private string _k = "";
-        public string K
+        private string _len = "";
+        public string Len
         {
-            get => _k;
+            get => _len;
             set
             {
-                _k = value;
-                NotifyPropertyChanged(nameof(K));
+                _len = value;
+                NotifyPropChanged(nameof(Len));
                 Apply();
             }
         }
 
-        private bool _isSet = false;
-        public bool IsSet
+        private string _i = "";
+        public string I
         {
-            get => _isSet;
+            get => _i;
             set
             {
-                _isSet = value;
-                NotifyPropertyChanged(nameof(IsSet));
+                _i = value;
+                NotifyPropChanged(nameof(I));
                 Apply();
             }
         }
@@ -51,24 +51,27 @@ namespace CryptographyLabs.GUI
             set
             {
                 _result = value;
-                NotifyPropertyChanged(nameof(Result));
+                NotifyPropChanged(nameof(Result));
             }
         }
 
         private void Apply()
         {
-            if (StringEx.TryParse(A, out uint a) && int.TryParse(K, out int k))
+            if (StringEx.TryParse(A, out uint a) && int.TryParse(Len, out int len) && int.TryParse(I, out int i))
             {
-                if (k >= 0 && k <= 31)
-                    Result = "0b" + Convert.ToString(Bitops.SwitchKthBit(a, k, IsSet), 2);
-                else
+                try
+                {
+                    Result = "0b" + Convert.ToString(Bitops.ConcatExtremeBits(a, len, i), 2);
+                }
+                catch (ArgumentException)
+                {
                     Result = "-";
+                }
             }
             else
             {
                 Result = "-";
             }
         }
-
     }
 }

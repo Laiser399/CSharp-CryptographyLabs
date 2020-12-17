@@ -12,6 +12,7 @@ using System.Numerics;
 using CryptographyLabs;
 using System.Collections;
 using CryptographyLabs.Crypto;
+using CryptographyLabs.Extensions;
 
 namespace ConsoleTests
 {
@@ -269,81 +270,301 @@ namespace ConsoleTests
 
     class Program
     {
+        enum Size
+        {
+            S128, S192, S256
+        }
+
         private static string pFilename = "p";
         private static string qFilename = "q";
+        
+
 
         static void Main(string[] args)
         {
 
-            Random random = new Random(144);
-            byte[] key = new byte[8];
-            byte[] IV = new byte[8];
+
+            Random random = new Random(127);
+
+            byte[] key = new byte[16];
             random.NextBytes(key);
-            random.NextBytes(IV);
 
-            //DESCryptoServiceProvider csp = new DESCryptoServiceProvider();
-            //ICryptoTransform enTransform = csp.CreateEncryptor(key, IV);
-            //ICryptoTransform deTransform = csp.CreateDecryptor(key, IV);
+            ICryptoTransform encryptor = new Rijndael_.RijndaelEncryptTransform(Rijndael_.Size.S128, key);
+            ICryptoTransform decryptor = new Rijndael_.RijndaelDecryptTransform(Rijndael_.Size.S128, key);
+            //var rij = Rijndael.Create();
+            //ICryptoTransform encryptor = rij.CreateEncryptor();
+            //ICryptoTransform decryptor = rij.CreateDecryptor();
 
-            //ICryptoTransform enTransform = new SimpleEncryptTransform();
-            //ICryptoTransform deTransform = new SimpleDecryptTransform();
-            ulong longKey = BitConverter.ToUInt64(key, 0);
-            ICryptoTransform enTransform = DES_.Get(longKey, DES_.Mode.CFB, CryptoDirection.Encrypt);
-            ICryptoTransform deTransform = DES_.Get(longKey, DES_.Mode.CFB, CryptoDirection.Decrypt);
+            byte[] text = new byte[16];
+            byte[] encrypted = new byte[16];
+            byte[] decrypted = new byte[16];
 
-            byte[] data = new byte[9];
-            random.NextBytes(data);
-            Console.WriteLine(data.Length);
-            Print(data);
-
-            byte[] encrypted;
-            using (MemoryStream result = new MemoryStream())
+            DateTime start = DateTime.Now;
+            int blocksCount = 10_000;
+            for (int i = 0; i < blocksCount; ++i)
             {
-                using (MemoryStream mStream = new MemoryStream(data))
-                using (CryptoStream crStream = new CryptoStream(mStream, enTransform, CryptoStreamMode.Read))
-                {
-                    byte[] buf = new byte[8];
-                    while (true)
-                    {
-                        int hasRead = crStream.Read(buf, 0, 8);
-                        if (hasRead == 0)
-                            break;
-                        result.Write(buf, 0, hasRead);
-                    }
-                    //crStream.CopyTo(result);
-                }
-                encrypted = result.ToArray();
-            }
-            Console.WriteLine();
-            Console.WriteLine(encrypted.Length);
-            Print(encrypted);
+                random.NextBytes(text);
+                encryptor.TransformBlock(text, 0, 16, encrypted, 0);
+                decryptor.TransformBlock(encrypted, 0, 16, decrypted, 0);
 
-            byte[] decrypted;
-            using (MemoryStream result = new MemoryStream())
-            {
-                using (MemoryStream mStream = new MemoryStream(encrypted))
-                using (CryptoStream crStream = new CryptoStream(mStream, deTransform, CryptoStreamMode.Read))
-                {
-                    byte[] buf = new byte[8];
-                    while (true)
-                    {
-                        int hasRead = crStream.Read(buf, 0, 8);
-                        if (hasRead == 0)
-                            break;
-                        result.Write(buf, 0, hasRead);
-                    }
-                    //crStream.CopyTo(result);
-                }
-                decrypted = result.ToArray();
             }
-            Console.WriteLine();
-            Console.WriteLine(decrypted.Length);
-            Print(decrypted);
+
+            DateTime end = DateTime.Now;
+            TimeSpan duration = end - start;
+            long bytesTransformed = 16 * blocksCount;
+            Console.WriteLine($"Transformed {bytesTransformed} bytes in {duration.TotalSeconds}s");
+            Console.WriteLine($"Speed {bytesTransformed / duration.TotalSeconds / 1024} KB/s");
+
+
+
+
+
+
+
+
+
+
+            //byte[][] mixColumnMatrix = new byte[][]
+            //{
+            //    new byte[] { 0x02, 0x03, 0x01, 0x01 },
+            //    new byte[] { 0x01, 0x02, 0x03, 0x01 },
+            //    new byte[] { 0x01, 0x01, 0x02, 0x03 },
+            //    new byte[] { 0x03, 0x01, 0x01, 0x02 }
+            //};
+
+            //byte[] a = new byte[] { 1, 2, 3, 4 };
+            //byte[][] mtx = mixColumnMatrix;
+            //byte[] b = MultiplyGFMtxVector(mtx, a);
+
+            //byte[][] invMatrix = InvMtx(mtx);
+            //byte[] aBack = MultiplyGFMtxVector(invMatrix, b);
+
+
+
 
 
             Console.WriteLine();
             Console.WriteLine("Press...");
             Console.ReadKey();
+        }
+
+        private static byte[][] MultiplyGFMtx(byte[][] mtx1, byte[][] mtx2)
+        {
+            byte[][] res = new byte[mtx1.Length][];
+            for (int row = 0; row < mtx1.Length; row++)
+            {
+                res[row] = new byte[mtx1.Length];
+                for (int col = 0; col < mtx1.Length; col++)
+                {
+                    byte tm = 0;
+                    for (int i = 0; i < mtx1.Length; i++)
+                    {
+                        tm ^= GF.Multiply(mtx1[row][i], mtx2[i][col]);
+                    }
+                    res[row][col] = tm;
+                }
+            }
+            return res;
+        }
+
+        private static byte[] MultiplyGFMtxVector(byte[][] mtx, byte[] vector)
+        {
+            byte[] res = new byte[mtx.Length];
+            for (int row = 0; row < mtx.Length; row++)
+            {
+                res[row] = 0;
+                for (int i = 0; i < mtx[row].Length; i++)
+                    res[row] ^= GF.Multiply(mtx[row][i], vector[i]);
+            }
+            return res;
+        }
+
+        private static byte[][] InvMtx(byte[][] mtx)
+        {
+            byte det = Det(mtx);
+
+            byte[][] result = new byte[mtx.Length][];
+            for (int i = 0; i < mtx.Length; i++)
+                result[i] = new byte[mtx.Length];
+
+            for (int row = 0; row < mtx.Length; row++)
+            {
+                for (int col = 0; col < result[row].Length; col++)
+                {
+                    byte minor = Minor(mtx, row, col);
+                    result[col][row] = GF.Divide(minor, det);
+                }
+            }
+
+            return result;
+        }
+
+        private static byte Minor(byte[][] mtx, int row, int col)
+        {
+            if (mtx.Length == 2)
+                return mtx[(row + 1) % 2][(col + 1) % 2];
+
+            byte[][] subMatrix = SubMatrix(mtx, row, col);
+            return Det(subMatrix);
+        }
+
+        private static byte Det(byte[][] mtx)
+        {
+            if (mtx.Length == 2)
+            {
+                byte tm = GF.Multiply(mtx[0][0], mtx[1][1]);
+                tm ^= GF.Multiply(mtx[1][0], mtx[0][1]);
+                return tm;
+            }
+
+            byte res = 0;
+            for (int i = 0; i < mtx.Length; ++i)
+            {
+                byte detSub = Det(SubMatrix(mtx, i, 0));
+                res ^= GF.Multiply(mtx[i][0], detSub);
+            }
+            return res;
+        }
+
+        private static byte[][] SubMatrix(byte[][] mtx, int row, int col)
+        {
+            byte[][] res = new byte[mtx.Length - 1][];
+            for (int i = 0; i < res.Length; i++)
+            {
+                res[i] = new byte[mtx.Length - 1];
+                int rowOffset = i < row ? 0 : 1;
+                for (int j = 0; j < res[i].Length; j++)
+                {
+                    if (j < col)
+                        res[i][j] = mtx[i + rowOffset][j];
+                    else
+                        res[i][j] = mtx[i + rowOffset][j + 1];
+                }
+            }
+            return res;
+        }
+
+        private static void PrintState(byte[] state)
+        {
+            int columnsCount = state.Length / 4;
+            for (int row = 0; row < 4; row++)
+            {
+                Console.Write('\t');
+                for (int col = 0; col < columnsCount; col++)
+                {
+                    if (col > 0)
+                        Console.Write(", ");
+                    Console.Write("0x");
+                    Console.Write(Convert.ToString(state[row * columnsCount + col], 16).PadLeft(2, '0'));
+                }
+                Console.WriteLine();
+            }
+        }
+
+        private static int GetBytesCount(Size size)
+        {
+            switch (size)
+            {
+                default:
+                case Size.S128:
+                    return 16;
+                case Size.S192:
+                    return 24;
+                case Size.S256:
+                    return 32;
+            }
+        }
+
+        private static int GetRoundsCount(Size stateSize, Size keySize)
+        {
+            if (stateSize == Size.S128 && keySize == Size.S128)
+                return 10;
+            else if (stateSize == Size.S256 || keySize == Size.S256)
+                return 14;
+            else
+                return 12;
+        }
+
+        private static string AsPolynom(byte coefs)
+        {
+            return AsPolynom(coefs, 8);
+        }
+
+        private static string AsPolynom(ushort coefs)
+        {
+            return AsPolynom(coefs, 16);
+        }
+
+        private static string AsPolynom(ulong coefs, int bitsCount = sizeof(ulong))
+        {
+            StringBuilder builder = new StringBuilder();
+            bool isFirst = true;
+            for (int d = bitsCount - 1; d >= 0; d--)
+            {
+                if (((coefs >> d) & 1) == 0)
+                    continue;
+
+                if (isFirst)
+                    isFirst = false;
+                else
+                    builder.Append(" + ");
+
+                if (d == 0)
+                    builder.Append("1");
+                else if (d == 1)
+                    builder.Append("x");
+                else
+                {
+                    builder.Append("x^");
+                    builder.Append(d);
+                }
+            }
+            return builder.ToString();
+        }
+
+        private static void Divide(ushort a, ushort b, out ushort div, out ushort mod)
+        {
+            int bDegree = DegreeOf(b);
+            div = 0;
+            mod = a;
+
+            while (true)
+            {
+                int degree = DegreeOf(mod);
+                if (degree < bDegree)
+                    break;
+                int shift = degree - bDegree;
+                mod ^= (ushort)(b << shift);
+                div |= (ushort)(1 << shift);
+            }
+        }
+
+        private static int DegreeOf(ushort coefs)
+        {
+            int degree = 0;
+            while (true)
+            {
+                coefs >>= 1;
+                if (coefs == 0)
+                    break;
+                degree++;
+            }
+            return degree;
+        }
+
+        private static int DegreeOf(BigInteger coefs)
+        {
+            byte[] data = coefs.ToByteArrayWithoutZero();
+            int degree = 0;
+            while (true)
+            {
+                data[data.Length - 1] >>= 1;
+                if (data[data.Length - 1] == 0)
+                    break;
+                degree++;
+            }
+            degree += 8 * (data.Length - 1);
+            return degree;
         }
 
         private static void Print(byte[] bytes)
@@ -360,41 +581,6 @@ namespace ConsoleTests
             Console.WriteLine();
         }
         
-        private static void Aga0()
-        {
-            Random random = new Random(123);
-            RSACryptoServiceProvider csp = new RSACryptoServiceProvider();
-
-            for (int round = 0; ; ++round)
-            {
-                byte[] text = new byte[100];
-                random.NextBytes(text);
-
-                byte[] encrypted = csp.Encrypt(text, false);
-                byte[] decrypted = csp.Decrypt(encrypted, false);
-                Console.WriteLine(encrypted.Length);
-
-                if (text.Length != decrypted.Length)
-                    Console.WriteLine("Length not equals");
-                else
-                {
-                    for (int i = 0; i < text.Length; ++i)
-                    {
-                        if (text[i] != decrypted[i])
-                        {
-                            Console.WriteLine("text != decrypted");
-                            break;
-                        }
-                    }
-                }
-
-                Console.WriteLine($"round {round} done");
-            }
-
-
-
-        }
-
         private static void Aga()
         {
             string errorsFilename = "errors.txt";

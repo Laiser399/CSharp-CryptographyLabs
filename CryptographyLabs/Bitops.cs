@@ -166,6 +166,21 @@ namespace CryptographyLabs
             return (byte)(value & 1);
         }
 
+        public static byte XorBits(byte value)
+        {
+            // TODO универсализировать для длины в битах
+            // xor всех бит числа a
+            byte p = 3;
+
+            byte tm = (byte)(1 << (p - 1));
+            while (tm > 0)
+            {
+                value ^= (byte)(value >> tm);
+                tm /= 2;
+            }
+            return (byte)(value & 1);
+        }
+
         // Task7
         public static uint CycleShiftLeft(uint a, byte len, byte n)
         {

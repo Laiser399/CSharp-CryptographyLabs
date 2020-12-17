@@ -23,8 +23,8 @@ namespace UnitTests
                 byte[] key = new byte[8 * i + 8];
                 random.NextBytes(key);
 
-                var encrTrans = new RC4CryptoTransform(key);
-                var decrTrans = new RC4CryptoTransform(key);
+                var encrTrans = RC4.Get(key);
+                var decrTrans = RC4.Get(key);
 
                 byte[] encr = new byte[byteSize];
                 encrTrans.TransformBlock(text, 0, byteSize, encr, 0);

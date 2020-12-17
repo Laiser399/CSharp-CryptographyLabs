@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task14ViewModel : BaseViewModel
+    class Task13VM : BaseViewModel
     {
-
         private string _a = "";
         public string A
         {
@@ -16,19 +15,31 @@ namespace CryptographyLabs.GUI
             set
             {
                 _a = value;
-                NotifyPropertyChanged(nameof(A));
+                NotifyPropChanged(nameof(A));
                 Apply();
             }
         }
 
-        private string _m = "";
-        public string M
+        private string _i = "";
+        public string I
         {
-            get => _m;
+            get => _i;
             set
             {
-                _m = value;
-                NotifyPropertyChanged(nameof(M));
+                _i = value;
+                NotifyPropChanged(nameof(I));
+                Apply();
+            }
+        }
+
+        private string _j = "";
+        public string J
+        {
+            get => _j;
+            set
+            {
+                _j = value;
+                NotifyPropChanged(nameof(J));
                 Apply();
             }
         }
@@ -40,16 +51,16 @@ namespace CryptographyLabs.GUI
             set
             {
                 _result = value;
-                NotifyPropertyChanged(nameof(Result));
+                NotifyPropChanged(nameof(Result));
             }
         }
 
         private void Apply()
         {
-            if (StringEx.TryParse(A, out uint a) && int.TryParse(M, out int m))
+            if (StringEx.TryParse(A, out uint a) && int.TryParse(I, out int i) && int.TryParse(J, out int j))
             {
-                if (m >= 0 && m <= 32)
-                    Result = "0b" + Convert.ToString(Bitops.NullifyMLowBits(a, m), 2);
+                if (i >= 0 && i <= 31 && j >= 0 && j <= 31)
+                    Result = "0b" + Convert.ToString(Bitops.SwapBits(a, i, j), 2);
                 else
                     Result = "-";
             }
@@ -58,5 +69,6 @@ namespace CryptographyLabs.GUI
                 Result = "-";
             }
         }
+
     }
 }

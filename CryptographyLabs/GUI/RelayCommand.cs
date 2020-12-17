@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace CryptographyLabs.GUI
 {
-    class RelayCommand : ICommand
+    public class RelayCommand : ICommand
     {
         private Action<object> _execute;
         private Predicate<object> _canExecute;

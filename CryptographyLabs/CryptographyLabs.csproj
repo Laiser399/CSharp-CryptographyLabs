@@ -83,32 +83,45 @@
     <Compile Include="Crypto\DES\TransformGetters.cs" />
     <Compile Include="Crypto\DES\Transforms.cs" />
     <Compile Include="Crypto\INiceCryptoTransform.cs" />
+    <Compile Include="Crypto\Rijndael\Constants.cs" />
+    <Compile Include="Crypto\Rijndael\Mode.cs" />
+    <Compile Include="Crypto\Rijndael\Rijndael.cs" />
+    <Compile Include="Crypto\Rijndael\Size.cs" />
+    <Compile Include="Crypto\Rijndael\TransformGetters.cs" />
+    <Compile Include="Crypto\Rijndael\Transforms.cs" />
+    <Compile Include="Extensions\ArrayEx.cs" />
     <Compile Include="Extensions\BigIntegerEx.cs" />
     <Compile Include="Extensions\StreamEx.cs" />
     <Compile Include="Extensions\StringEx.cs" />
+    <Compile Include="GF.cs" />
     <Compile Include="GUI\BaseViewModel.cs" />
     <Compile Include="GUI\Converters.cs" />
-    <Compile Include="GUI\MainWindowViewModel\CryptoProgressViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\CryptoViewModels\DESViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\CryptoViewModels\RC4ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\CryptoViewModels\VernamViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\MainWindowViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task11ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task12ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task13ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task14ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task21ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task22ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task3ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task4ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task5ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task6ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task7ViewModel.cs" />
-    <Compile Include="GUI\MainWindowViewModel\SimpleTasksViewModels\Task8ViewModel.cs" />
+    <Compile Include="GUI\MainWindow\Progress\BaseTransformVM.cs" />
+    <Compile Include="GUI\MainWindow\Crypto\DesVM.cs" />
+    <Compile Include="GUI\MainWindow\Crypto\RC4VM.cs" />
+    <Compile Include="GUI\MainWindow\Crypto\VernamVM.cs" />
+    <Compile Include="GUI\MainWindow\MainWindowVM.cs" />
+    <Compile Include="GUI\MainWindow\Progress\DESDecryptVM.cs" />
+    <Compile Include="GUI\MainWindow\Progress\DESEncryptVM.cs" />
+    <Compile Include="GUI\MainWindow\Progress\RC4CryptVM.cs" />
+    <Compile Include="GUI\MainWindow\Progress\VernamDecryptVM.cs" />
+    <Compile Include="GUI\MainWindow\Progress\VernamEncryptVM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task11VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task12VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task13VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task14VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task21VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task22VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task3VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task4VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task5VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task6VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task7VM.cs" />
+    <Compile Include="GUI\MainWindow\SimpleTasks\Task8VM.cs" />
     <Compile Include="GUI\RelayCommand.cs" />
     <Compile Include="Crypto\RC4.cs" />
     <Compile Include="Crypto\Vernam.cs" />
-    <Page Include="GUI\MainWindow.xaml">
+    <Page Include="GUI\MainWindow\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -117,11 +130,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bitops.cs" />
-    <Compile Include="Crypto\DES\DES.cs" />
-    <Compile Include="GUI\MainWindow.xaml.cs">
+    <Compile Include="GUI\MainWindow\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="GUI\MainWindow\MainWindowDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Progress\BaseTransform.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

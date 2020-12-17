@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task7ViewModel : BaseViewModel
+    class Task12VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -15,31 +15,31 @@ namespace CryptographyLabs.GUI
             set
             {
                 _a = value;
-                NotifyPropertyChanged(nameof(A));
+                NotifyPropChanged(nameof(A));
                 Apply();
             }
         }
 
-        private string _len = "";
-        public string Len
+        private string _k = "";
+        public string K
         {
-            get => _len;
+            get => _k;
             set
             {
-                _len = value;
-                NotifyPropertyChanged(nameof(Len));
+                _k = value;
+                NotifyPropChanged(nameof(K));
                 Apply();
             }
         }
 
-        private string _n = "";
-        public string N
+        private bool _isSet = false;
+        public bool IsSet
         {
-            get => _n;
+            get => _isSet;
             set
             {
-                _n = value;
-                NotifyPropertyChanged(nameof(N));
+                _isSet = value;
+                NotifyPropChanged(nameof(IsSet));
                 Apply();
             }
         }
@@ -51,18 +51,24 @@ namespace CryptographyLabs.GUI
             set
             {
                 _result = value;
-                NotifyPropertyChanged(nameof(Result));
+                NotifyPropChanged(nameof(Result));
             }
         }
 
         private void Apply()
         {
-            if (StringEx.TryParse(A, out uint a) && byte.TryParse(Len, out byte len) && byte.TryParse(N, out byte n))
+            if (StringEx.TryParse(A, out uint a) && int.TryParse(K, out int k))
             {
-                Result = "0b" + Convert.ToString(Bitops.CycleShiftLeft(a, len, n), 2);
+                if (k >= 0 && k <= 31)
+                    Result = "0b" + Convert.ToString(Bitops.SwitchKthBit(a, k, IsSet), 2);
+                else
+                    Result = "-";
             }
             else
+            {
                 Result = "-";
+            }
         }
+
     }
 }

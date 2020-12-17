@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task6ViewModel : BaseViewModel
+    class Task5VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -15,19 +15,7 @@ namespace CryptographyLabs.GUI
             set
             {
                 _a = value;
-                NotifyPropertyChanged(nameof(A));
-                Apply();
-            }
-        }
-
-        private string _p = "";
-        public string P
-        {
-            get => _p;
-            set
-            {
-                _p = value;
-                NotifyPropertyChanged(nameof(P));
+                NotifyPropChanged(nameof(A));
                 Apply();
             }
         }
@@ -39,15 +27,22 @@ namespace CryptographyLabs.GUI
             set
             {
                 _result = value;
-                NotifyPropertyChanged(nameof(Result));
+                NotifyPropChanged(nameof(Result));
             }
         }
 
         private void Apply()
         {
-            if (StringEx.TryParse(A, out uint a) && byte.TryParse(P, out byte p))
+            if (StringEx.TryParse(A, out uint a))
             {
-                Result = Bitops.XorBits(a, p).ToString();
+                try
+                {
+                    Result = Bitops.Task5(a).ToString();
+                }
+                catch (ArgumentException)
+                {
+                    Result = "-";
+                }
             }
             else
                 Result = "-";
