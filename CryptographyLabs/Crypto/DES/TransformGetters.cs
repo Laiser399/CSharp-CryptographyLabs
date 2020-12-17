@@ -20,9 +20,9 @@ namespace CryptographyLabs.Crypto
                 case Mode.CBC:
                     return CBC.Get(GetNice(key56, direction), direction);
                 case Mode.CFB:
-                    return CFB.Get(GetNice(key56, direction), direction);
+                    return CFB.Get(GetNice(key56, CryptoDirection.Encrypt), direction);
                 case Mode.OFB:
-                    return OFB.Get(GetNice(key56, direction), direction);
+                    return OFB.Get(GetNice(key56, CryptoDirection.Encrypt), direction);
             }
         }
 

@@ -98,7 +98,7 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
                 byte[] buf = new byte[2 * InputBlockSize];
                 Transform(_prevText, 0, buf, 0);
                 Transform(_prevText, InputBlockSize, buf, InputBlockSize);
-                if (buf[InputBlockSize] > 7)
+                if (buf[InputBlockSize] > InputBlockSize)
                     throw new CryptographicException("Final block is broken.");
                 Array.Resize(ref buf, buf[InputBlockSize]);
                 return buf;
