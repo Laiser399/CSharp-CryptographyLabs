@@ -210,13 +210,13 @@ namespace ConsoleTests
 
         public RSACryptoTransform()
         {
-            Random random = new Random(123);// TODO seed
+            Random random = new Random(123);// TODOL seed
             BigInteger p = Program.RandomPrime(128, 5, random);
             BigInteger q = Program.RandomPrime(128, 5, random);
             _n = p * q;
             BigInteger phi_n = (p - 1) * (q - 1);
             if (!TryFindExponents(phi_n, out _e, out _d))
-                throw new Exception(); // TODO regenerate p, q
+                throw new Exception(); // TODOL regenerate p, q
             
 
             _inputBlockSize = Math.Min(p.BytesCount(), q.BytesCount()) - 1;
@@ -234,7 +234,7 @@ namespace ConsoleTests
         {
             for (int i = 0; i < inputCount; ++i)
             {
-                // TODO to another func   transform_simple_block
+                // TODOL to another func   transform_simple_block
                 Array.Copy(inputBuffer, inputOffset + i * _inputBlockSize, _inputBuf, 0, _inputBlockSize);
                 BigInteger text = new BigInteger(_inputBuf);
                 BigInteger transformed = Program.BinPowMod(text, _e, _n);
@@ -255,7 +255,7 @@ namespace ConsoleTests
         private static bool TryFindExponents(BigInteger eulerFuncN, out BigInteger e, out BigInteger d)
         {
             List<int> primes = Program.CalcPrimes(100);
-            Random random = new Random(123); // TODO remove seed
+            Random random = new Random(123); // TODOL remove seed
             e = primes[random.Next(2, primes.Count)];
             if (Program.GCD(e, eulerFuncN, out d, out BigInteger _) == 1)
             {
@@ -379,71 +379,6 @@ namespace ConsoleTests
             return res;
         }
 
-        private static byte[][] InvMtx(byte[][] mtx)
-        {
-            byte det = Det(mtx);
-
-            byte[][] result = new byte[mtx.Length][];
-            for (int i = 0; i < mtx.Length; i++)
-                result[i] = new byte[mtx.Length];
-
-            for (int row = 0; row < mtx.Length; row++)
-            {
-                for (int col = 0; col < result[row].Length; col++)
-                {
-                    byte minor = Minor(mtx, row, col);
-                    result[col][row] = GF.Divide(minor, det);
-                }
-            }
-
-            return result;
-        }
-
-        private static byte Minor(byte[][] mtx, int row, int col)
-        {
-            if (mtx.Length == 2)
-                return mtx[(row + 1) % 2][(col + 1) % 2];
-
-            byte[][] subMatrix = SubMatrix(mtx, row, col);
-            return Det(subMatrix);
-        }
-
-        private static byte Det(byte[][] mtx)
-        {
-            if (mtx.Length == 2)
-            {
-                byte tm = GF.Multiply(mtx[0][0], mtx[1][1]);
-                tm ^= GF.Multiply(mtx[1][0], mtx[0][1]);
-                return tm;
-            }
-
-            byte res = 0;
-            for (int i = 0; i < mtx.Length; ++i)
-            {
-                byte detSub = Det(SubMatrix(mtx, i, 0));
-                res ^= GF.Multiply(mtx[i][0], detSub);
-            }
-            return res;
-        }
-
-        private static byte[][] SubMatrix(byte[][] mtx, int row, int col)
-        {
-            byte[][] res = new byte[mtx.Length - 1][];
-            for (int i = 0; i < res.Length; i++)
-            {
-                res[i] = new byte[mtx.Length - 1];
-                int rowOffset = i < row ? 0 : 1;
-                for (int j = 0; j < res[i].Length; j++)
-                {
-                    if (j < col)
-                        res[i][j] = mtx[i + rowOffset][j];
-                    else
-                        res[i][j] = mtx[i + rowOffset][j + 1];
-                }
-            }
-            return res;
-        }
-
         private static void PrintState(byte[] state)
         {
             int columnsCount = state.Length / 4;
@@ -459,67 +394,6 @@ namespace ConsoleTests
                 }
                 Console.WriteLine();
             }
-        }
-
-        private static int GetBytesCount(Size size)
-        {
-            switch (size)
-            {
-                default:
-                case Size.S128:
-                    return 16;
-                case Size.S192:
-                    return 24;
-                case Size.S256:
-                    return 32;
-            }
-        }
-
-        private static int GetRoundsCount(Size stateSize, Size keySize)
-        {
-            if (stateSize == Size.S128 && keySize == Size.S128)
-                return 10;
-            else if (stateSize == Size.S256 || keySize == Size.S256)
-                return 14;
-            else
-                return 12;
-        }
-
-        private static string AsPolynom(byte coefs)
-        {
-            return AsPolynom(coefs, 8);
-        }
-
-        private static string AsPolynom(ushort coefs)
-        {
-            return AsPolynom(coefs, 16);
-        }
-
-        private static string AsPolynom(ulong coefs, int bitsCount = sizeof(ulong))
-        {
-            StringBuilder builder = new StringBuilder();
-            bool isFirst = true;
-            for (int d = bitsCount - 1; d >= 0; d--)
-            {
-                if (((coefs >> d) & 1) == 0)
-                    continue;
-
-                if (isFirst)
-                    isFirst = false;
-                else
-                    builder.Append(" + ");
-
-                if (d == 0)
-                    builder.Append("1");
-                else if (d == 1)
-                    builder.Append("x");
-                else
-                {
-                    builder.Append("x^");
-                    builder.Append(d);
-                }
-            }
-            return builder.ToString();
         }
 
         private static void Divide(ushort a, ushort b, out ushort div, out ushort mod)
@@ -598,7 +472,7 @@ namespace ConsoleTests
                 e = primes[index];
                 primes.RemoveAt(index);
                 Console.WriteLine("check for e");
-            } while (GCD(e, phi_n, out d, out BigInteger _) != 1);// TODO think d < 0
+            } while (GCD(e, phi_n, out d, out BigInteger _) != 1);
 
             if (d < 0)
                 d = (d % phi_n) + phi_n;
@@ -669,7 +543,7 @@ namespace ConsoleTests
             }
             else
             {
-                throw new Exception();// TODO
+                throw new Exception();// TODOL
             }
         }
 
@@ -766,7 +640,7 @@ namespace ConsoleTests
         /// </summary>
         private static BigInteger RandomBigInteger(BigInteger minValue, BigInteger maxValue)
         {
-            Random random = new Random(123);// TODO seed
+            Random random = new Random(123);// TODOL seed
 
             maxValue = maxValue - minValue;
             byte[] bytes = maxValue.ToByteArray();
@@ -797,7 +671,7 @@ namespace ConsoleTests
             if (pow < 0)
             {
                 if (GCD(a, mod) != 1)
-                    throw new Exception("");// TODO exc
+                    throw new Exception("Can't find inverse value.");
                 pow %= EulerFunc(mod);
                 pow += mod;
             }

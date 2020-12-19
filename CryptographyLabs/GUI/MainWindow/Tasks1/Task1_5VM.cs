@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task3VM : BaseViewModel
+    class Task1_5VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -16,18 +16,6 @@ namespace CryptographyLabs.GUI
             {
                 _a = value;
                 NotifyPropChanged(nameof(A));
-                Apply();
-            }
-        }
-
-        private string _permutation = "";
-        public string Permutation
-        {
-            get => _permutation;
-            set
-            {
-                _permutation = value;
-                NotifyPropChanged(nameof(Permutation));
                 Apply();
             }
         }
@@ -45,21 +33,11 @@ namespace CryptographyLabs.GUI
 
         private void Apply()
         {
-            string[] items = Permutation.Split(new string[] { " ", ",", ";" }, StringSplitOptions.RemoveEmptyEntries);
-            if (StringEx.TryParse(A, out uint a) && items.Length == 4)
+            if (StringEx.TryParse(A, out uint a))
             {
-                byte[] indices = new byte[4];
-                for (int i = 0; i < 4; ++i)
-                {
-                    if (!byte.TryParse(items[i], out indices[i]))
-                    {
-                        Result = "-";
-                        return;
-                    }
-                }
                 try
                 {
-                    Result = "0x" + Convert.ToString(Bitops.BytePermutation(a, indices), 16).ToUpper();
+                    Result = Bitops.Task5(a).ToString();
                 }
                 catch (ArgumentException)
                 {
@@ -69,6 +47,5 @@ namespace CryptographyLabs.GUI
             else
                 Result = "-";
         }
-
     }
 }

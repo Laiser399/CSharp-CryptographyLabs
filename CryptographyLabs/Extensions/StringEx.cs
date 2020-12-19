@@ -10,6 +10,79 @@ namespace CryptographyLabs
 {
     public static class StringEx
     {
+        public static string AsPolynom(byte coefs)
+        {
+            return AsPolynom(coefs, 8);
+        }
+
+        public static string AsPolynom(ushort coefs)
+        {
+            return AsPolynom(coefs, 16);
+        }
+
+        private static string AsPolynom(ulong coefs, int bitsCount = sizeof(ulong))
+        {
+            StringBuilder builder = new StringBuilder();
+            bool isFirst = true;
+            for (int d = bitsCount - 1; d >= 0; d--)
+            {
+                if (((coefs >> d) & 1) == 0)
+                    continue;
+
+                if (isFirst)
+                    isFirst = false;
+                else
+                    builder.Append(" + ");
+
+                if (d == 0)
+                    builder.Append("1");
+                else if (d == 1)
+                    builder.Append("x");
+                else
+                {
+                    builder.Append("x^");
+                    builder.Append(d);
+                }
+            }
+            return builder.ToString();
+        }
+
+        public static bool TryParse(string strValue, out byte value)
+        {
+            strValue = strValue.Replace(" ", "").Replace("_", "");
+
+            if (strValue.Length > 2 && strValue.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    value = Convert.ToByte(strValue.Substring(2), 16);
+                    return true;
+                }
+                catch
+                {
+                    value = 0;
+                    return false;
+                }
+            }
+            else if (strValue.Length > 2 && strValue.StartsWith("0b", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    value = Convert.ToByte(strValue.Substring(2), 2);
+                    return true;
+                }
+                catch
+                {
+                    value = 0;
+                    return false;
+                }
+            }
+            else
+            {
+                return byte.TryParse(strValue, out value);
+            }
+        }
+
         public static bool TryParse(string strValue, out uint value)
         {
             strValue = strValue.Replace(" ", "").Replace("_", "");

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptographyLabs", "Cryptog
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTests", "ConsoleTests\ConsoleTests.csproj", "{91D8E504-EEB4-4A02-8CA7-B5E389114404}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{AE1ADE32-8104-431A-8C70-5604997CA181}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{DE553885-9D4E-4ED2-8FAD-1D942AA98980}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{91D8E504-EEB4-4A02-8CA7-B5E389114404}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91D8E504-EEB4-4A02-8CA7-B5E389114404}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91D8E504-EEB4-4A02-8CA7-B5E389114404}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE1ADE32-8104-431A-8C70-5604997CA181}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE1ADE32-8104-431A-8C70-5604997CA181}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE1ADE32-8104-431A-8C70-5604997CA181}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE1ADE32-8104-431A-8C70-5604997CA181}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE553885-9D4E-4ED2-8FAD-1D942AA98980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE553885-9D4E-4ED2-8FAD-1D942AA98980}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE553885-9D4E-4ED2-8FAD-1D942AA98980}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE553885-9D4E-4ED2-8FAD-1D942AA98980}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,7 +13,7 @@ namespace CryptographyLabs.Crypto
             S128, S192, S256
         }
 
-        private static int GetBytesCount(Size size)
+        public static int GetBytesCount(Size size)
         {
             switch(size)
             {

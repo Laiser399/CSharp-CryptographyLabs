@@ -37,7 +37,6 @@ namespace CryptographyLabs
             return x ^ y ^ (y << delta);
         }
 
-        // TODO name every task function
         // simple tasks
         // Task11
         public static byte GetKthBit(uint a, int k)
@@ -153,9 +152,10 @@ namespace CryptographyLabs
         // Task6
         public static byte XorBits(uint value, byte p)
         {
-            // TODO универсализировать для длины в битах
+            // TODOL: универсализировать для длины в битах
             // xor всех бит числа a
-            p = p < 5 ? p : (byte)5;
+            if (p > 5)
+                p = 5;
 
             byte tm = (byte)(1 << (p - 1));
             while (tm > 0)
@@ -168,7 +168,6 @@ namespace CryptographyLabs
 
         public static byte XorBits(byte value)
         {
-            // TODO универсализировать для длины в битах
             // xor всех бит числа a
             byte p = 3;
 
@@ -210,13 +209,13 @@ namespace CryptographyLabs
         public static ulong BitPermutation(ulong source, byte[] permutation)
         {
             if (permutation.Length > 64)
-                throw new Exception("aga");// TODO exc
+                throw new Exception("Wrong length of permutation array.");
 
             ulong result = 0;
             foreach (byte index in permutation)
             {
                 if (index > 63)
-                    throw new Exception("aga");// TODO exc
+                    throw new Exception("Wrong index in permutation.");
                 result = (result << 1) | ((source >> index) & 1);
             }
             return result;
@@ -225,13 +224,13 @@ namespace CryptographyLabs
         public static uint BitPermutation(uint source, byte[] permutation)
         {
             if (permutation.Length > 32)
-                throw new Exception("aga");// TODO exc
+                throw new Exception("Wrong length of permutation array.");
 
             uint result = 0;
             foreach (byte index in permutation)
             {
                 if (index > 31)
-                    throw new Exception("aga");// TODO exc
+                    throw new Exception("Wrong index in permutation.");
                 result = (result << 1) | ((source >> index) & 1);
             }
             return result;

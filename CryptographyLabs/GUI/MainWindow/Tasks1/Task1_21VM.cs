@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task8VM : BaseViewModel
+    class Task1_21VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -20,14 +20,26 @@ namespace CryptographyLabs.GUI
             }
         }
 
-        private string _permutation = "";
-        public string Permutation
+        private string _len = "";
+        public string Len
         {
-            get => _permutation;
+            get => _len;
             set
             {
-                _permutation = value;
-                NotifyPropChanged(nameof(Permutation));
+                _len = value;
+                NotifyPropChanged(nameof(Len));
+                Apply();
+            }
+        }
+
+        private string _i = "";
+        public string I
+        {
+            get => _i;
+            set
+            {
+                _i = value;
+                NotifyPropChanged(nameof(I));
                 Apply();
             }
         }
@@ -45,22 +57,11 @@ namespace CryptographyLabs.GUI
 
         private void Apply()
         {
-            string[] items = Permutation.Split(new string[] { " ", ",", ";" }, StringSplitOptions.RemoveEmptyEntries);
-            if (StringEx.TryParse(A, out ulong a) && items.Length > 0 && items.Length <= 64)
+            if (StringEx.TryParse(A, out uint a) && int.TryParse(Len, out int len) && int.TryParse(I, out int i))
             {
-                byte[] permutation = new byte[items.Length];
-                for (int i = 0; i < permutation.Length; ++i)
-                {
-                    if (!byte.TryParse(items[i], out permutation[i]))
-                    {
-                        Result = "-";
-                        return;
-                    }
-                }
-
                 try
                 {
-                    Result = "0b" + Convert.ToString((long)Bitops.BitPermutation(a, permutation), 2);
+                    Result = "0b" + Convert.ToString(Bitops.ConcatExtremeBits(a, len, i), 2);
                 }
                 catch (ArgumentException)
                 {
@@ -68,7 +69,9 @@ namespace CryptographyLabs.GUI
                 }
             }
             else
+            {
                 Result = "-";
+            }
         }
     }
 }

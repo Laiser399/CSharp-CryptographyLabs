@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task21VM : BaseViewModel
+    class Task1_22VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -61,7 +61,7 @@ namespace CryptographyLabs.GUI
             {
                 try
                 {
-                    Result = "0b" + Convert.ToString(Bitops.ConcatExtremeBits(a, len, i), 2);
+                    Result = "0b" + Convert.ToString(Bitops.GetCentralBits(a, len, i), 2);
                 }
                 catch (ArgumentException)
                 {

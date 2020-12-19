@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task22VM : BaseViewModel
+    class Task1_3VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -20,26 +20,14 @@ namespace CryptographyLabs.GUI
             }
         }
 
-        private string _len = "";
-        public string Len
+        private string _permutation = "";
+        public string Permutation
         {
-            get => _len;
+            get => _permutation;
             set
             {
-                _len = value;
-                NotifyPropChanged(nameof(Len));
-                Apply();
-            }
-        }
-
-        private string _i = "";
-        public string I
-        {
-            get => _i;
-            set
-            {
-                _i = value;
-                NotifyPropChanged(nameof(I));
+                _permutation = value;
+                NotifyPropChanged(nameof(Permutation));
                 Apply();
             }
         }
@@ -57,11 +45,21 @@ namespace CryptographyLabs.GUI
 
         private void Apply()
         {
-            if (StringEx.TryParse(A, out uint a) && int.TryParse(Len, out int len) && int.TryParse(I, out int i))
+            string[] items = Permutation.Split(new string[] { " ", ",", ";" }, StringSplitOptions.RemoveEmptyEntries);
+            if (StringEx.TryParse(A, out uint a) && items.Length == 4)
             {
+                byte[] indices = new byte[4];
+                for (int i = 0; i < 4; ++i)
+                {
+                    if (!byte.TryParse(items[i], out indices[i]))
+                    {
+                        Result = "-";
+                        return;
+                    }
+                }
                 try
                 {
-                    Result = "0b" + Convert.ToString(Bitops.GetCentralBits(a, len, i), 2);
+                    Result = "0x" + Convert.ToString(Bitops.BytePermutation(a, indices), 16).ToUpper();
                 }
                 catch (ArgumentException)
                 {
@@ -69,9 +67,8 @@ namespace CryptographyLabs.GUI
                 }
             }
             else
-            {
                 Result = "-";
-            }
         }
+
     }
 }

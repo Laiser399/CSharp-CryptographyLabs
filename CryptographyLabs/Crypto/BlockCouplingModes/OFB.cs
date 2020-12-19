@@ -25,9 +25,7 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
 
         public OFBEncryptTransform(INiceCryptoTransform transform) : base(transform)
         {
-            _initVector = new byte[InputBlockSize];// TODO fill with something
-            for (int i = 0; i < InputBlockSize; ++i)// TODO del mb
-                _initVector[i] = 0;
+            _initVector = new byte[InputBlockSize];
         }
 
         #region BaseDecryptTransform
@@ -50,9 +48,7 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
 
         public OFBDecryptTransform(INiceCryptoTransform transform) : base(transform)
         {
-            _initVector = new byte[InputBlockSize];// TODO fill with something
-            for (int i = 0; i < InputBlockSize; ++i)// TODO del mb
-                _initVector[i] = 0;
+            _initVector = new byte[InputBlockSize];
         }
 
         #region BaseDecryptTransform

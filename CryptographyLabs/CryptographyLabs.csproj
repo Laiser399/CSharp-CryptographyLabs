@@ -71,11 +71,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BinPoly.cs" />
     <Compile Include="Crypto\BlockCouplingModes\BaseDecryptTransform.cs" />
     <Compile Include="Crypto\BlockCouplingModes\BaseEncryptTransform.cs" />
     <Compile Include="Crypto\BlockCouplingModes\CBC.cs" />
     <Compile Include="Crypto\BlockCouplingModes\CFB.cs" />
-    <Compile Include="Crypto\BlockCouplingModes\CTR.cs" />
     <Compile Include="Crypto\BlockCouplingModes\OFB.cs" />
     <Compile Include="Crypto\CryptoDirection.cs" />
     <Compile Include="Crypto\DES\Constants.cs" />
@@ -96,31 +96,44 @@
     <Compile Include="GF.cs" />
     <Compile Include="GUI\BaseViewModel.cs" />
     <Compile Include="GUI\Converters.cs" />
+    <Compile Include="GUI\MainWindow\Crypto\RijndaelDecryptVM.cs" />
+    <Compile Include="GUI\MainWindow\Crypto\RijndaelEncryptVM.cs" />
+    <Compile Include="GUI\MainWindow\Crypto\RijndaelVM.cs" />
     <Compile Include="GUI\MainWindow\Progress\BaseTransformVM.cs" />
     <Compile Include="GUI\MainWindow\Crypto\DesVM.cs" />
     <Compile Include="GUI\MainWindow\Crypto\RC4VM.cs" />
     <Compile Include="GUI\MainWindow\Crypto\VernamVM.cs" />
     <Compile Include="GUI\MainWindow\MainWindowVM.cs" />
-    <Compile Include="GUI\MainWindow\Progress\DESDecryptVM.cs" />
-    <Compile Include="GUI\MainWindow\Progress\DESEncryptVM.cs" />
+    <Compile Include="GUI\MainWindow\Progress\DESDecryptTransformVM.cs" />
+    <Compile Include="GUI\MainWindow\Progress\DESEncryptTransformVM.cs" />
     <Compile Include="GUI\MainWindow\Progress\RC4CryptVM.cs" />
+    <Compile Include="GUI\MainWindow\Progress\RijndaelDecryptTransformVM.cs" />
+    <Compile Include="GUI\MainWindow\Progress\RijndaelEncryptTransformVM.cs" />
     <Compile Include="GUI\MainWindow\Progress\VernamDecryptVM.cs" />
     <Compile Include="GUI\MainWindow\Progress\VernamEncryptVM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task11VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task12VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task13VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task14VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task21VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task22VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task3VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task4VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task5VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task6VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task7VM.cs" />
-    <Compile Include="GUI\MainWindow\SimpleTasks\Task8VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_11VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_12VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_13VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_14VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_21VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_22VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_3VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_4VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_5VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_6VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_7VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks1\Task1_8VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks3\Task3_1VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks3\Task3_2VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks3\Task3_3VM.cs" />
+    <Compile Include="GUI\MainWindow\Tasks3\Task3_SpecVM.cs" />
     <Compile Include="GUI\RelayCommand.cs" />
     <Compile Include="Crypto\RC4.cs" />
     <Compile Include="Crypto\Vernam.cs" />
+    <Page Include="GUI\MainWindow\Crypto\Rijndael.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\MainWindow\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -139,6 +152,70 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\MainWindow\Progress\BaseTransform.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_11DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_12DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_13DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_14DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_21DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_22DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_3DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_4DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_5DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_6DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_7DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks1\Task1_8DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks3\Task3_1DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks3\Task3_2DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks3\Task3_3DataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\MainWindow\Tasks3\Task3_SpecDataTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

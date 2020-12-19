@@ -34,5 +34,52 @@ namespace CryptographyLabs.Extensions
 
             return result;
         }
+
+        public static string ToGridString<T>(T[] items, int colCount, Func<T, string> converter)
+        {
+            StringBuilder builder = new StringBuilder();
+            bool isFirst = true;
+            int i = 0;
+            foreach (T item in items)
+            {
+                if (isFirst)
+                    isFirst = false;
+                else
+                    builder.Append(", ");
+                builder.Append(converter(item));
+
+                i++;
+                if (i % colCount == 0)
+                {
+                    isFirst = true;
+                    builder.Append('\n');
+                }
+            }
+            return builder.ToString();
+        }
+
+        public static string ToGridString<T>(T[][] items, Func<T, string> converter)
+        {
+            StringBuilder builder = new StringBuilder();
+            bool isFirstLine = true;
+            foreach (T[] line in items)
+            {
+                if (isFirstLine)
+                    isFirstLine = false;
+                else
+                    builder.Append('\n');
+
+                bool isFirst = true;
+                foreach (T item in line)
+                {
+                    if (isFirst)
+                        isFirst = false;
+                    else
+                        builder.Append(", ");
+                    builder.Append(converter(item));
+                }
+            }
+            return builder.ToString();
+        }
     }
 }

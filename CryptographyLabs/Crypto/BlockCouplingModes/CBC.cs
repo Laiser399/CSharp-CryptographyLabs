@@ -24,9 +24,7 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
 
         public CBCEncryptTransform(INiceCryptoTransform transform) : base(transform)
         {
-            _initVector = new byte[InputBlockSize];// TODO fill with something
-            for (int i = 0; i < InputBlockSize; ++i)// TODO del mb
-                _initVector[i] = 0;
+            _initVector = new byte[InputBlockSize];
         }
 
         #region BaseEncryptTransform
@@ -48,9 +46,7 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
 
         public CBCDecryptTransform(INiceCryptoTransform transform) : base(transform)
         {
-            _initVector = new byte[InputBlockSize];// TODO fill with something
-            for (int i = 0; i < InputBlockSize; ++i)// TODO del mb
-                _initVector[i] = 0;
+            _initVector = new byte[InputBlockSize];
         }
 
         #region ICryptoTransform interface

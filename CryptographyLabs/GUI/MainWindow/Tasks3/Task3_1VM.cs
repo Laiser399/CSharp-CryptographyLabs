@@ -6,21 +6,23 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task4VM : BaseViewModel
+    class Task3_1VM : BaseViewModel
     {
-        private string _a = "";
-        public string A
+        #region Bindings
+
+        private string _gfElement = "";
+        public string GFElement
         {
-            get => _a;
+            get => _gfElement;
             set
             {
-                _a = value;
-                NotifyPropChanged(nameof(A));
+                _gfElement = value;
+                NotifyPropChanged(nameof(GFElement));
                 Apply();
             }
         }
 
-        private string _result = "";
+        private string _result;
         public string Result
         {
             get => _result;
@@ -31,12 +33,12 @@ namespace CryptographyLabs.GUI
             }
         }
 
+        #endregion
+
         private void Apply()
         {
-            if (StringEx.TryParse(A, out uint a))
-            {
-                Result = "0b" + Convert.ToString(Bitops.Task4(a), 2).ToUpper();
-            }
+            if (StringEx.TryParse(GFElement, out byte value))
+                Result = StringEx.AsPolynom(value);
             else
                 Result = "-";
         }

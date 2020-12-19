@@ -11,30 +11,6 @@ namespace CryptographyLabs
 {
     public static class StreamEx
     {
-        // TODO delete
-        public static void CopyToEx(this Stream from, Stream destination, int bufSize,
-            Action<double> progressCallback = null)
-        {
-            progressCallback?.Invoke(0);
-            if (bufSize <= 0)
-            {
-                from.CopyTo(destination);
-                progressCallback?.Invoke(1);
-            }
-            else
-            {
-                long bytesCount = from.Length;
-                byte[] buf = new byte[bufSize];
-                for (long i = 0; i < bytesCount;)
-                {
-                    int hasRead = from.Read(buf, 0, buf.Length);
-                    destination.Write(buf, 0, hasRead);
-                    i += hasRead;
-                    progressCallback?.Invoke((double)i / bytesCount);
-                }
-            }
-        }
-
         public static void CopyTo(this Stream from, Stream destination, int bufSize,
             CancellationToken token, Action<double> progressCallback = null)
         {

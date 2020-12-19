@@ -33,7 +33,7 @@ namespace CryptographyLabs.Crypto
 
             public int InputBlockSize => _blockSize;
             public int OutputBlockSize => _blockSize;
-            public bool CanTransformMultipleBlocks => false;// TODO
+            public bool CanTransformMultipleBlocks => true;
             public bool CanReuseTransform => false;
 
             public void Dispose()
@@ -43,8 +43,9 @@ namespace CryptographyLabs.Crypto
 
             public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
             {
-                Transform(inputBuffer, inputOffset, outputBuffer, outputOffset);
-                return _blockSize;
+                int blocksCount = inputCount / _blockSize;
+                NiceTransform(inputBuffer, inputOffset, outputBuffer, outputOffset, blocksCount);
+                return blocksCount * _blockSize;
             }
 
             public byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount)
@@ -61,7 +62,11 @@ namespace CryptographyLabs.Crypto
 
             public void NiceTransform(byte[] inputBuffer, int inputOffset, byte[] outputBuffer, int outputOffset, int blocksCount)
             {
-                Transform(inputBuffer, inputOffset, outputBuffer, outputOffset);
+                for (int i = 0; i < blocksCount; i++)
+                {
+                    Transform(inputBuffer, inputOffset + i * _blockSize, 
+                        outputBuffer, outputOffset + i * _blockSize);
+                }
             }
             
             public byte[] NiceFinalTransform(byte[] inputBuffer, int inputOffset, int bytesCount)
@@ -162,7 +167,7 @@ namespace CryptographyLabs.Crypto
 
             public int InputBlockSize => _blockSize;
             public int OutputBlockSize => _blockSize;
-            public bool CanTransformMultipleBlocks => false;// TODO
+            public bool CanTransformMultipleBlocks => true;
             public bool CanReuseTransform => false;
 
             public void Dispose()
@@ -172,17 +177,30 @@ namespace CryptographyLabs.Crypto
 
             public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
             {
+                int blocksCount = inputCount / _blockSize;
                 if (_isFirst)
                 {
-                    Array.Copy(inputBuffer, inputOffset, _prevText, 0, _blockSize);
+                    for (int i = 0; i < blocksCount - 1; i++)
+                    {
+                        Transform(inputBuffer, inputOffset + i * _blockSize,
+                            outputBuffer, outputOffset + i * _blockSize);
+                    }
+                    Array.Copy(inputBuffer, inputOffset + (blocksCount - 1) * _blockSize, 
+                        _prevText, 0, _blockSize);
                     _isFirst = false;
-                    return 0;
+                    return (blocksCount - 1) * _blockSize;
                 }
                 else
                 {
                     Transform(_prevText, 0, outputBuffer, outputOffset);
-                    Array.Copy(inputBuffer, inputOffset, _prevText, 0, _blockSize);
-                    return _blockSize;
+                    for (int i = 0; i < blocksCount - 1; i++)
+                    {
+                        Transform(inputBuffer, inputOffset + i * _blockSize,
+                            outputBuffer, outputOffset + (i + 1) * _blockSize);
+                    }
+                    Array.Copy(inputBuffer, inputOffset + (blocksCount - 1) * _blockSize,
+                        _prevText, 0, _blockSize);
+                    return blocksCount * _blockSize;
                 }
             }
 
@@ -209,7 +227,11 @@ namespace CryptographyLabs.Crypto
 
             public void NiceTransform(byte[] inputBuffer, int inputOffset, byte[] outputBuffer, int outputOffset, int blocksCount)
             {
-                Transform(inputBuffer, inputOffset, outputBuffer, outputOffset);
+                for (int i = 0; i < blocksCount; i++)
+                {
+                    Transform(inputBuffer, inputOffset + i * _blockSize, 
+                        outputBuffer, outputOffset + i * _blockSize);
+                }
             }
 
             public byte[] NiceFinalTransform(byte[] inputBuffer, int inputOffset, int bytesCount)
@@ -295,7 +317,7 @@ namespace CryptographyLabs.Crypto
                 {
                     RotWord(temp);
                     SubBytes(temp);
-                    temp[0] ^= RC(i / Nk - 1);// TODO change index
+                    temp[0] ^= RC(i / Nk - 1);
                 }
                 else if (Nk == 8 && i % Nk == 4)
                     SubBytes(temp);

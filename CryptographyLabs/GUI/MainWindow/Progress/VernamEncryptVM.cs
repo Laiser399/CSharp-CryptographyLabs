@@ -11,10 +11,11 @@ namespace CryptographyLabs.GUI
 {
     class VernamEncryptVM : BaseTransformVM
     {
-        private string _keyFilePath;
+
+        string _keyFilePath;
 
         public VernamEncryptVM(string filePath, string destFilePath, string keyFilePath, bool isDeleteAfter)
-            : base(isDeleteAfter)
+            : base(isDeleteAfter, CryptoDirection.Encrypt)
         {
             SourceFilePath = filePath;
             DestFilePath = destFilePath;
@@ -25,24 +26,21 @@ namespace CryptographyLabs.GUI
             Start();
         }
 
-        protected override async Task Process()
+        private async void Start()
         {
             StatusString = "Generating key file...";
-
-            long bytesCount = new FileInfo(SourceFilePath).Length;
-            await Vernam.GenerateKeyFileAsync(_keyFilePath, bytesCount, 80_000,
-                    progress => CryptoProgress = progress / 2);
-
-            StatusString = "Encrypting...";
-
-            using (FileStream inStream = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
-            using (FileStream inKeyStream = new FileStream(_keyFilePath, FileMode.Open, FileAccess.Read))
-            using (FileStream outStream = new FileStream(DestFilePath, FileMode.OpenOrCreate, FileAccess.Write))
-            using (CryptoStream outCrypto = new CryptoStream(outStream, Vernam.Get(inKeyStream), CryptoStreamMode.Write))
+            try
             {
-                await inStream.CopyToAsync(outCrypto, 80_000, _cts.Token,
-                    progress => CryptoProgress = 0.5 + progress / 2);
+                long bytesCount = new FileInfo(SourceFilePath).Length;
+                await Vernam.GenerateKeyFileAsync(_keyFilePath, bytesCount, 80_000);
+                FileStream inKeyStream = new FileStream(_keyFilePath, FileMode.Open, FileAccess.Read);
+                Start(Vernam.Get(inKeyStream));
+            }
+            catch (Exception e)
+            {
+                StatusString = "Error: " + e.Message;
             }
         }
+
     }
 }

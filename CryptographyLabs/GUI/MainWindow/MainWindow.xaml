@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CryptographyLabs"
         xmlns:gui="clr-namespace:CryptographyLabs.GUI"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
@@ -11,357 +10,72 @@
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
+            <gui:Task1_11VM x:Key="task1_11vm"/>
+            <gui:Task1_12VM x:Key="task1_12vm"/>
+            <gui:Task1_13VM x:Key="task1_13vm"/>
+            <gui:Task1_14VM x:Key="task1_14vm"/>
+            <gui:Task1_21VM x:Key="task1_21vm"/>
+            <gui:Task1_22VM x:Key="task1_22vm"/>
+            <gui:Task1_3VM x:Key="task1_3vm"/>
+            <gui:Task1_4VM x:Key="task1_4vm"/>
+            <gui:Task1_5VM x:Key="task1_5vm"/>
+            <gui:Task1_6VM x:Key="task1_6vm"/>
+            <gui:Task1_7VM x:Key="task1_7vm"/>
+            <gui:Task1_8VM x:Key="task1_8vm"/>
+            <gui:Task3_1VM x:Key="task3_1vm"/>
+            <gui:Task3_2VM x:Key="task3_2vm"/>
+            <gui:Task3_3VM x:Key="task3_3vm"/>
+            <gui:Task3_SpecVM x:Key="task3_specvm"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MainWindowDictionary.xaml"/>
                 <ResourceDictionary Source="Progress/BaseTransform.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_11DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_12DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_13DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_14DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_21DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_22DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_3DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_4DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_5DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_6DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_7DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks1/Task1_8DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks3/Task3_1DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks3/Task3_2DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks3/Task3_3DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks3/Task3_SpecDataTemplate.xaml"/>
+                <ResourceDictionary Source="Crypto/Rijndael.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <TabControl>
-        <TabItem Header="Tasks 1-8">
+        <TabItem Header="Tasks 1 (1-8)">
             <ScrollViewer>
-                <Grid Margin="4 10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task11. "/>
-                                <Run Text="Get k-th bit of the a."/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task11VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="k="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task11VM.K, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="5" IsReadOnly="True" Text="{Binding Task11VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="1" Margin="0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task12. "/>
-                                <Run Text="Set\unset k-th bit of the a."/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task12VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="k="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task12VM.K, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <CheckBox Grid.Row="1" Grid.Column="4" Content="isSet" Margin="10 0"
-                                  VerticalAlignment="Center"
-                                  IsChecked="{Binding Task12VM.IsSet, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="5" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="6" Text="{Binding Task12VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="2" Margin="0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task13. "/>
-                                <Run Text="Swap i-th and j-th bits in the a."/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task13VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="i="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task13VM.I, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="4" Text="j="/>
-                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task13VM.J, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task13VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="3" Margin="0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task14. "/>
-                                <Run Text="Nullify m bits of the a."/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task14VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="m="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task14VM.M, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task14VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="4" Margin="0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task2a. "/>
-                                <Run Text="Concat left i bits with right i bits of the a with length len."/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task21VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task21VM.Len, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="4" Text="i="/>
-                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task21VM.I, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task21VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="5" Margin="0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task2b. "/>
-                                <Run Text="Receive bits between left i and right i bits from the a with length len."/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task22VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task22VM.Len, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="4" Text="i="/>
-                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task22VM.I, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task22VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="6" Margin="0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task3. "/>
-                                <Run Text="Permute bytes in uint32."/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task3VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="permutation="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task3VM.Permutation, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task3VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="7" Margin="0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task4. "/>
-                                <Run Text="Find the maximum power of 2 divisible by a given a"/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task4VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task4VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="8" Margin="0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task5. "/>
-                                <Run Text="Find p that 2^p &lt;= a &lt;= 2^{p+1}"/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task5VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task5VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="9" Margin="0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task6. "/>
-                                <Run Text="Xor of all bits of the a. Where a has length 2^p."/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task6VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="p="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task6VM.P, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task6VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="10" Margin="0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task7. "/>
-                                <Run Text="Left cycle shift of the a on n bits. Where len - length of the a."/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task7VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="len="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task7VM.Len, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="4" Text="n="/>
-                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task7VM.N, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="6" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="7" Text="{Binding Task7VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                    <Grid Grid.Row="11" Margin="0 10 0 0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8">
-                            <TextBlock.Inlines>
-                                <Run FontWeight="Bold" Text="Task8. "/>
-                                <Run Text="Bit permutation of the a."/>
-                            </TextBlock.Inlines>
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="a="/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Task8VM.A, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="permutation="/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Task8VM.Permutation, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="4" Text="result="/>
-                        <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding Task8VM.Result, Mode=OneWay}"/>
-                    </Grid>
-                </Grid>
+                <StackPanel Margin="4 10">
+                    <ContentControl Grid.Row="0" Content="{StaticResource task1_11vm}"/>
+                    <ContentControl Grid.Row="1" Content="{StaticResource task1_12vm}"/>
+                    <ContentControl Grid.Row="2" Content="{StaticResource task1_13vm}"/>
+                    <ContentControl Grid.Row="3" Content="{StaticResource task1_14vm}"/>
+                    <ContentControl Grid.Row="4" Content="{StaticResource task1_21vm}"/>
+                    <ContentControl Grid.Row="5" Content="{StaticResource task1_22vm}"/>
+                    <ContentControl Grid.Row="6" Content="{StaticResource task1_3vm}"/>
+                    <ContentControl Grid.Row="7" Content="{StaticResource task1_4vm}"/>
+                    <ContentControl Grid.Row="8" Content="{StaticResource task1_5vm}"/>
+                    <ContentControl Grid.Row="9" Content="{StaticResource task1_6vm}"/>
+                    <ContentControl Grid.Row="10" Content="{StaticResource task1_7vm}"/>
+                    <ContentControl Grid.Row="11" Content="{StaticResource task1_8vm}"/>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Tasks 3 (1-3, spec)">
+            <ScrollViewer>
+                <StackPanel Margin="4 10">
+                    <ContentControl Content="{StaticResource task3_1vm}"/>
+                    <ContentControl Content="{StaticResource task3_2vm}"/>
+                    <ContentControl Content="{StaticResource task3_3vm}"/>
+                    <ContentControl Content="{StaticResource task3_specvm}"/>
+                </StackPanel>
             </ScrollViewer>
         </TabItem>
         <TabItem Header="Encrypt\Decrypt" IsSelected="True">
@@ -425,7 +139,7 @@
                             </Grid>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="DES" IsSelected="True">
+                    <TabItem Header="DES">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -524,6 +238,18 @@
                                         Command="{Binding RC4VM.GoCommand}"/>
                             </Grid>
                         </Grid>
+                    </TabItem>
+                    <TabItem Header="Rijndael" IsSelected="True">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Grid.Column="0" GroupName="DESDirection" Content="Encrypt"
+                                             IsChecked="{Binding RijndaelIsEncrypt}"
+                                             VerticalAlignment="Center" Margin="0 0 10 0"/>
+                                <RadioButton Grid.Column="1" GroupName="DESDirection" Content="Decrypt"
+                                             VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <ContentControl Content="{Binding RijndaelVM}"/>
+                        </StackPanel>
                     </TabItem>
                 </TabControl>
                 <ScrollViewer Grid.Row="1">

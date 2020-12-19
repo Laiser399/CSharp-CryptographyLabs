@@ -40,14 +40,11 @@ namespace CryptographyLabs.Crypto
                 byte[] keyPart = new byte[inputCount];
                 int hasRead = _keyStream.Read(keyPart, 0, inputCount);
                 if (hasRead < inputCount)
-                {
-                    Console.WriteLine("parasha");
-                    throw new Exception("Can't read enough bytes.");// TODO exc
-                }
+                    throw new CryptographicException("Wrong length of key file on Vernam transform.");
 
                 for (int i = 0; i < inputCount; ++i)
                 {
-                    outputBuffer[outputOffset + i] = (byte)(inputBuffer[inputOffset + i] ^ keyPart[i]);// TODO think
+                    outputBuffer[outputOffset + i] = (byte)(inputBuffer[inputOffset + i] ^ keyPart[i]);
                 }
                 return inputCount;
             }

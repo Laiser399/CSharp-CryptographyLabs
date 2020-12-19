@@ -26,7 +26,6 @@ namespace UnitTests
             _key = BitConverter.ToUInt64(keyTm, 0);
         }
 
-        // TODO vernam tests
         [TestMethod]
         public void Test1_DESCryptoTransform()
         {

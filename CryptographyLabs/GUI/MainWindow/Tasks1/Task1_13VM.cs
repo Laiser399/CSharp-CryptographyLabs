@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task12VM : BaseViewModel
+    class Task1_13VM : BaseViewModel
     {
         private string _a = "";
         public string A
@@ -20,26 +20,26 @@ namespace CryptographyLabs.GUI
             }
         }
 
-        private string _k = "";
-        public string K
+        private string _i = "";
+        public string I
         {
-            get => _k;
+            get => _i;
             set
             {
-                _k = value;
-                NotifyPropChanged(nameof(K));
+                _i = value;
+                NotifyPropChanged(nameof(I));
                 Apply();
             }
         }
 
-        private bool _isSet = false;
-        public bool IsSet
+        private string _j = "";
+        public string J
         {
-            get => _isSet;
+            get => _j;
             set
             {
-                _isSet = value;
-                NotifyPropChanged(nameof(IsSet));
+                _j = value;
+                NotifyPropChanged(nameof(J));
                 Apply();
             }
         }
@@ -57,10 +57,10 @@ namespace CryptographyLabs.GUI
 
         private void Apply()
         {
-            if (StringEx.TryParse(A, out uint a) && int.TryParse(K, out int k))
+            if (StringEx.TryParse(A, out uint a) && int.TryParse(I, out int i) && int.TryParse(J, out int j))
             {
-                if (k >= 0 && k <= 31)
-                    Result = "0b" + Convert.ToString(Bitops.SwitchKthBit(a, k, IsSet), 2);
+                if (i >= 0 && i <= 31 && j >= 0 && j <= 31)
+                    Result = "0b" + Convert.ToString(Bitops.SwapBits(a, i, j), 2);
                 else
                     Result = "-";
             }

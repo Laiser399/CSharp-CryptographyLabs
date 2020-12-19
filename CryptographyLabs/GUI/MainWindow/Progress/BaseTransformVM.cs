@@ -1,7 +1,9 @@
-﻿using System;
+﻿using CryptographyLabs.Crypto;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -95,17 +97,26 @@ namespace CryptographyLabs.GUI
         #endregion
 
         private bool _isDeleteAfter;
+        private CryptoDirection? _direction;
 
-        public BaseTransformVM(bool isDeleteAfter)
+        public BaseTransformVM(bool isDeleteAfter, CryptoDirection? direction)
         {
             _isDeleteAfter = isDeleteAfter;
+            _direction = direction;
         }
 
-        protected async void Start()
+        protected async void Start(ICryptoTransform transform)
         {
+            if (_direction is null)
+                StatusString = "Cryption...";
+            else if (_direction == CryptoDirection.Encrypt)
+                StatusString = "Encryption...";
+            else
+                StatusString = "Decryption...";
+
             try
             {
-                await Process();
+                await Process(transform);
                 if (_isDeleteAfter)
                 {
                     StatusString = "Deleting file";
@@ -142,6 +153,15 @@ namespace CryptographyLabs.GUI
             catch { }
         }
 
-        protected abstract Task Process();
+        private async Task Process(ICryptoTransform transform)
+        {
+            using (FileStream inStream = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
+            using (FileStream outStream = new FileStream(DestFilePath, FileMode.OpenOrCreate, FileAccess.Write))
+            using (CryptoStream outCrypto = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
+            {
+                await inStream.CopyToAsync(outCrypto, 80_000, _cts.Token,
+                    progress => CryptoProgress = progress);
+            }
+        }
     }
 }

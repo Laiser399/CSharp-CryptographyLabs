@@ -18,7 +18,7 @@ namespace ConsoleTests
 	public class PermutationNetwork
 	{
 		// The list of masks for the final permutation
-		public List<ulong> Masks { get; set; }// TODO changed from protected
+		public List<ulong> Masks { get; set; }
 
 		protected PermutationNetwork()
 		{

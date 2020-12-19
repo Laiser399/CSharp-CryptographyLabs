@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class Task11VM : BaseViewModel
+    class Task1_11VM : BaseViewModel
     {
         private string _a = "";
         public string A

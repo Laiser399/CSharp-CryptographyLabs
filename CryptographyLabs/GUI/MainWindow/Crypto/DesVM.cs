@@ -111,12 +111,11 @@ namespace CryptographyLabs.GUI
             }
 
             string filePath = Filename;
-            bool isDeleteAfter = IsDeleteFileAfter;
 
             if (IsEncrypt)
             {
                 string encryptPath = filePath + ".des399";
-                var vm = new DESEncryptVM(filePath, encryptPath, key56, _mode, isDeleteAfter);
+                var vm = new DESEncryptTransformVM(filePath, encryptPath, key56, _mode, IsDeleteFileAfter);
                 _owner.ProgressViewModels.Add(vm);
             }
             else
@@ -130,7 +129,7 @@ namespace CryptographyLabs.GUI
                     return;
                 }
 
-                var vm = new DESDecryptVM(filePath, decryptPath, key56, _mode, isDeleteAfter);
+                var vm = new DESDecryptTransformVM(filePath, decryptPath, key56, _mode, IsDeleteFileAfter);
                 _owner.ProgressViewModels.Add(vm);
             }
         }
