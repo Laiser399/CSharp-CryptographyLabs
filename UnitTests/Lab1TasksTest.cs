@@ -1,5 +1,5 @@
 ﻿using CryptographyLabs;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace UnitTests
 {
-    [TestClass]
     public class Lab1TasksTest
     {
-        [TestMethod]
+        [Test]
         public void TestTask11()
         {
             uint value = 0b1000_1111_0110_0101_1010_1101;
@@ -30,7 +29,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask12()
         {
             uint value = 0b1100_1001;
@@ -41,7 +40,7 @@ namespace UnitTests
             Assert.AreEqual(0b0100_1001u, Bitops.SwitchKthBit(value, 7, false));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask13()
         {
             uint value = 0b1100_1001;
@@ -53,7 +52,7 @@ namespace UnitTests
             Assert.AreEqual(0b1100_1001u, Bitops.SwapBits(value, 0, 7));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask14()
         {
             uint[] values = new uint[]
@@ -81,7 +80,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask21()
         {
             uint[] value = new uint[]
@@ -115,7 +114,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask22()
         {
             uint[] value = new uint[]
@@ -158,7 +157,7 @@ namespace UnitTests
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask3()
         {
             uint value = 0b11001010_10001000_11101111_11110000;
@@ -183,7 +182,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask4()
         {
             uint[] a = new uint[]
@@ -208,7 +207,7 @@ namespace UnitTests
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask5()
         {
             uint[] x = new uint[]
@@ -233,7 +232,7 @@ namespace UnitTests
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask6()
         {
             uint[] a = new uint[]
@@ -271,7 +270,7 @@ namespace UnitTests
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask7Left()
         {
             uint[] a = new uint[]
@@ -309,7 +308,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask7Right()
         {
             uint[] a = new uint[]
@@ -347,7 +346,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestTask8()
         {
             uint[] a = new uint[]

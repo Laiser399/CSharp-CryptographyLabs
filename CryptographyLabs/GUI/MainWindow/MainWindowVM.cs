@@ -9,6 +9,7 @@ using System.ComponentModel;
 
 namespace CryptographyLabs.GUI
 {
+    // TODO cancel crypto progress
     class MainWindowVM : BaseViewModel
     {
         #region Bindings

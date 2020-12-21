@@ -1,23 +1,16 @@
 ﻿using CryptographyLabs.Crypto;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using CryptographyLabs;
-using CryptographyLabs.Crypto.BlockCouplingModes;
 
 namespace UnitTests
 {
-    [TestClass]
     public class DESTest
     {
         private ulong _key;
 
-        public DESTest()
+        [SetUp]
+        public void SetUp()
         {
             Random random = new Random(992);
 
@@ -26,7 +19,7 @@ namespace UnitTests
             _key = BitConverter.ToUInt64(keyTm, 0);
         }
 
-        [TestMethod]
+        [Test]
         public void Test1_DESCryptoTransform()
         {
             Func<ICryptoTransform> getEncryptor = () => DES_.Get(_key, DES_.Mode.ECB, CryptoDirection.Encrypt);
@@ -35,7 +28,7 @@ namespace UnitTests
             General.Check(getEncryptor, getDecryptor);
         }
 
-        [TestMethod]
+        [Test]
         public void Test2_CBC()
         {
             Func<ICryptoTransform> getEncryptor = () => DES_.Get(_key, DES_.Mode.CBC, CryptoDirection.Encrypt);
@@ -44,7 +37,7 @@ namespace UnitTests
             General.Check(getEncryptor, getDecryptor);
         }
 
-        [TestMethod]
+        [Test]
         public void Test3_CFB()
         {
             Func<ICryptoTransform> getEncryptor = () => DES_.Get(_key, DES_.Mode.CFB, CryptoDirection.Encrypt);
@@ -53,7 +46,7 @@ namespace UnitTests
             General.Check(getEncryptor, getDecryptor);
         }
 
-        [TestMethod]
+        [Test]
         public void Test4_OFB()
         {
             Func<ICryptoTransform> getEncryptor = () => DES_.Get(_key, DES_.Mode.OFB, CryptoDirection.Encrypt);

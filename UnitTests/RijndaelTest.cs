@@ -1,21 +1,17 @@
 ﻿using CryptographyLabs.Crypto;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTests
 {
-    [TestClass]
     public class RijndaelTest
     {
         // 16 24 32
         private byte[][] _keys = new byte[3][];
 
-        public RijndaelTest()
+        [SetUp]
+        public void SetUp()
         {
             Random random = new Random(129);
 
@@ -27,7 +23,7 @@ namespace UnitTests
             random.NextBytes(_keys[2]);
         }
 
-        [TestMethod]
+        [Test]
         public void Test1_ECB()
         {
             for (int i = 0; i < 3; i++)
@@ -44,7 +40,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test2_CBC()
         {
             for (int i = 0; i < 3; i++)
@@ -61,7 +57,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test3_CFB()
         {
             for (int i = 0; i < 3; i++)
@@ -78,7 +74,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test4_OFB()
         {
             for (int i = 0; i < 3; i++)

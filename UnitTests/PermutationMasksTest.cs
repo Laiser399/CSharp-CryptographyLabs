@@ -1,6 +1,5 @@
 ﻿using ConsoleTests;
 using CryptographyLabs;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using CryptographyLabs.Crypto;
+using NUnit.Framework;
 
 namespace UnitTests
 {
-    [TestClass]
     public class PermutationMasksTest
     {
-        [TestMethod]
+        [Test]
         public void Test0_PermutationNetwork()
         {
             byte[] _IPTranspose = new byte[]
@@ -53,7 +52,7 @@ namespace UnitTests
 
         }
 
-        [TestMethod]
+        [Test]
         public void Test1_IPPermutation()
         {
             byte[] IPPermutation = new byte[64]
@@ -79,7 +78,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test2_IPInvPermutation()
         {
             byte[] IPInvPermutation = new byte[64]
@@ -105,7 +104,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test3_C0Permutation()
         {
             byte[] C0Permutation = new byte[28]
@@ -131,7 +130,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test4_D0Permutation()
         {
             byte[] D0Permutation = new byte[28]
@@ -157,7 +156,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test5_KeyFinalPermutation()
         {
             byte[] keyFinalPermutation = new byte[48]
@@ -184,7 +183,7 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Test6_PPermutation()
         {
             byte[] PPermutation = new byte[32]

@@ -242,10 +242,10 @@
                     <TabItem Header="Rijndael" IsSelected="True">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <RadioButton Grid.Column="0" GroupName="DESDirection" Content="Encrypt"
+                                <RadioButton Grid.Column="0" GroupName="RijndaelDirection" Content="Encrypt"
                                              IsChecked="{Binding RijndaelIsEncrypt}"
                                              VerticalAlignment="Center" Margin="0 0 10 0"/>
-                                <RadioButton Grid.Column="1" GroupName="DESDirection" Content="Decrypt"
+                                <RadioButton Grid.Column="1" GroupName="RijndaelDirection" Content="Decrypt"
                                              VerticalAlignment="Center"/>
                             </StackPanel>
                             <ContentControl Content="{Binding RijndaelVM}"/>
