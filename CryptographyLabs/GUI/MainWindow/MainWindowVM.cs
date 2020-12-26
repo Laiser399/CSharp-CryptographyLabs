@@ -9,7 +9,9 @@ using System.ComponentModel;
 
 namespace CryptographyLabs.GUI
 {
-    // TODO cancel crypto progress
+    // TODO multithreading ECB (gui)
+    // TODO IV for coupling
+    // TODO possibility input key and IV from file
     class MainWindowVM : BaseViewModel
     {
         #region Bindings

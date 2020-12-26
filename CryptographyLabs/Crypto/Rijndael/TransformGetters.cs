@@ -40,7 +40,7 @@ namespace CryptographyLabs.Crypto
         }
 
         /// <exception cref="ArgumentException">Wrong key length</exception>
-        private static INiceCryptoTransform GetNice(byte[] key, Size stateSize, CryptoDirection direction)
+        public static INiceCryptoTransform GetNice(byte[] key, Size stateSize, CryptoDirection direction)
         {
             if (!IsValidKeyLength(key))
                 throw new ArgumentException("Wrong key length.");

@@ -155,13 +155,33 @@ namespace CryptographyLabs.GUI
 
         private async Task Process(ICryptoTransform transform)
         {
-            using (FileStream inStream = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
-            using (FileStream outStream = new FileStream(DestFilePath, FileMode.OpenOrCreate, FileAccess.Write))
-            using (CryptoStream outCrypto = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
+            OperationCanceledException canceledException = null;
+
+            try
             {
-                await inStream.CopyToAsync(outCrypto, 80_000, _cts.Token,
-                    progress => CryptoProgress = progress);
+                using (FileStream inStream = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
+                using (FileStream outStream = new FileStream(DestFilePath, FileMode.OpenOrCreate, FileAccess.Write))
+                using (CryptoStream outCrypto = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
+                {
+                    try
+                    {
+                        await inStream.CopyToAsync(outCrypto, 80_000, _cts.Token,
+                            progress => CryptoProgress = progress);
+                    }
+                    catch (OperationCanceledException e)
+                    {
+                        canceledException = e;
+                    }
+                }
             }
+            catch (Exception e)
+            {
+                if (canceledException is null)
+                    throw e;
+            }
+
+            if (canceledException is object)
+                throw canceledException;
         }
     }
 }

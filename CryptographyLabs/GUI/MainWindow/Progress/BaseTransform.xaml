@@ -7,33 +7,35 @@
     </gui:ValueConverterGroup>
     
     <DataTemplate DataType="{x:Type gui:BaseTransformVM}">
-        <Grid Margin="6 0 6 12">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
+        <StackPanel Margin="6 0 6 12">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0">
-                    <Run Text="Source file path: "/>
-                    <Run Text="{Binding SourceFilePath}"/>
-                </TextBlock>
-                <TextBlock Grid.Column="1" Text="{Binding CryptoName}"/>
+                <StackPanel Grid.Column="0">
+                    <TextBlock>
+                        <Run Text="Source file path: "/>
+                        <Run Text="{Binding SourceFilePath}"/>
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Destination file path: "/>
+                        <Run Text="{Binding DestFilePath}"/>
+                    </TextBlock>
+                    <TextBlock TextTrimming="WordEllipsis"
+                               Text="{Binding StatusString, StringFormat=Status: {0}}"/>
+
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="{Binding CryptoName}"/>
+                    <Button Content="Cancel"
+                            Visibility="{Binding IsDone, Converter={StaticResource InversedBoolToVisibilityConv}}"
+                            Command="{Binding CancelCmd}"/>
+                </StackPanel>
             </Grid>
-            <TextBlock Grid.Row="1">
-                <Run Text="Destination file path: "/>
-                <Run Text="{Binding DestFilePath}"/>
-            </TextBlock>
-            <TextBlock Grid.Row="2" Text="{Binding StatusString, StringFormat=Status: {0}}"
-                       TextTrimming="WordEllipsis"/>
             <ProgressBar Grid.Row="3" Value="{Binding CryptoProgress}" Minimum="0" Maximum="1"
                          Visibility="{Binding IsDone, Converter={StaticResource InversedBoolToVisibilityConv}}"/>
-        </Grid>
+
+        </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

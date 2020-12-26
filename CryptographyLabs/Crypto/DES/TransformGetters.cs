@@ -34,7 +34,7 @@ namespace CryptographyLabs.Crypto
                 return new DESDecryptTransform(key56);
         }
 
-        private static INiceCryptoTransform GetNice(ulong key56, CryptoDirection direction)
+        public static INiceCryptoTransform GetNice(ulong key56, CryptoDirection direction)
         {
             if (direction == CryptoDirection.Encrypt)
                 return new DESEncryptTransform(key56);

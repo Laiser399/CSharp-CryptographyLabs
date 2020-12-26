@@ -54,6 +54,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <CheckBox Grid.Column="0" Content="delete file after"
+                          HorizontalAlignment="Left"
                           IsChecked="{Binding IsDeleteAfter}"/>
                 <Button Grid.Column="1" Content="Go"
                         Command="{Binding GoCmd}"/>

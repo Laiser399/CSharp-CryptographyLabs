@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace ConsoleTests
+namespace CryptographyLabs.Extensions
 {
     public static class BitArrayEx
     {
@@ -34,6 +32,6 @@ namespace ConsoleTests
                     return i;
             return -1;
         }
-
     }
+
 }
