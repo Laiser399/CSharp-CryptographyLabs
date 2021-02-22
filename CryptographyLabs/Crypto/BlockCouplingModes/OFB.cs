@@ -10,12 +10,13 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
 
     public static class OFB
     {
-        public static ICryptoTransform Get(INiceCryptoTransform transform, CryptoDirection direction)
+        /// <exception cref="ArgumentException">Wrong length of IV</exception>
+        public static ICryptoTransform Get(INiceCryptoTransform transform, byte[] IV, CryptoDirection direction)
         {
             if (direction == CryptoDirection.Encrypt)
-                return new OFBEncryptTransform(transform);
+                return new OFBEncryptTransform(transform, IV);
             else
-                return new OFBDecryptTransform(transform);
+                return new OFBDecryptTransform(transform, IV);
         }
     }
 
@@ -23,9 +24,14 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
     {
         private byte[] _initVector;
 
-        public OFBEncryptTransform(INiceCryptoTransform transform) : base(transform)
+        /// <exception cref="ArgumentException">Wrong length of IV</exception>
+        public OFBEncryptTransform(INiceCryptoTransform transform, byte[] IV) : base(transform)
         {
+            if (IV.Length != InputBlockSize)
+                throw new ArgumentException("Wrong length of IV.");
+
             _initVector = new byte[InputBlockSize];
+            Array.Copy(IV, _initVector, InputBlockSize);
         }
 
         #region BaseDecryptTransform
@@ -46,9 +52,14 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
     {
         private byte[] _initVector;
 
-        public OFBDecryptTransform(INiceCryptoTransform transform) : base(transform)
+        /// <exception cref="ArgumentException">Wrong length of IV</exception>
+        public OFBDecryptTransform(INiceCryptoTransform transform, byte[] IV) : base(transform)
         {
+            if (IV.Length != InputBlockSize)
+                throw new ArgumentException("Wrong length of IV.");
+
             _initVector = new byte[InputBlockSize];
+            Array.Copy(IV, _initVector, InputBlockSize);
         }
 
         #region BaseDecryptTransform

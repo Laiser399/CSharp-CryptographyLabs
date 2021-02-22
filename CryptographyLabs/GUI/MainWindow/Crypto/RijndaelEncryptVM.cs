@@ -42,7 +42,29 @@ namespace CryptographyLabs.GUI
             }
 
             string encryptPath = FilePath + ".rjn399";
-            var vm = new RijndaelEncryptTransformVM(FilePath, encryptPath, keyBytes, BlockSize, IsDeleteAfter);
+            BaseTransformVM vm;
+            if (Mode == Rijndael_.Mode.ECB)
+            {
+                vm = new RijndaelEncryptTransformVM(FilePath, encryptPath, keyBytes, BlockSize, IsDeleteAfter,
+                    Multithread);
+            }
+            else
+            {
+                if (!StringEx.TryParse(IV, out byte[] iv))
+                {
+                    MessageBox.Show("Wrong IV format.");
+                    return;
+                }
+                if (iv.Length != Rijndael_.GetBytesCount(BlockSize))
+                {
+                    MessageBox.Show($"Wrong IV bytes count. Must be {Rijndael_.GetBytesCount(BlockSize)}.");
+                    return;
+                }
+
+                vm = new RijndaelEncryptTransformVM(FilePath, encryptPath, keyBytes, 
+                    BlockSize, iv, Mode, IsDeleteAfter);
+            }
+
             _owner.ProgressViewModels.Add(vm);
         }
     }

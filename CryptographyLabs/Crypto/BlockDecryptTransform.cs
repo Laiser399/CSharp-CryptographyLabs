@@ -13,9 +13,7 @@ namespace CryptographyLabs.Crypto
         private byte[] _prevText;
 
         public BlockDecryptTransform(int blockSize) : this(blockSize, blockSize)
-        {
-
-        }
+        { }
 
         public BlockDecryptTransform(int inputBlockSize, int outputBlockSize)
         {

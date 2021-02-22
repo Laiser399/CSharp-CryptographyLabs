@@ -1,6 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:gui="clr-namespace:CryptographyLabs.GUI">
+                    xmlns:gui="clr-namespace:CryptographyLabs.GUI"
+                    xmlns:crypto="clr-namespace:CryptographyLabs.Crypto">
+    <gui:NotEqualsConverter x:Key="notEqualsConverter"/>
+    <gui:EqualsConverter x:Key="equalsConverter"/>
+
     <DataTemplate DataType="{x:Type gui:RijndaelVM}">
         <StackPanel>
             <StackPanel  Margin="0 4 0 0" Orientation="Horizontal">
@@ -12,6 +16,11 @@
                     <TextBlock Text="CFB"/>
                     <TextBlock Text="OFB"/>
                 </ComboBox>
+                <CheckBox Margin="0 0 10 0" VerticalAlignment="Center"
+                          Content="Multithreading"
+                          IsChecked="{Binding Multithread}"
+                          IsEnabled="{Binding Mode, Converter={StaticResource equalsConverter},
+                                ConverterParameter={x:Static crypto:Rijndael_+Mode.ECB}}"/>
                 <TextBlock Text="Block size:" VerticalAlignment="Center"/>
                 <ComboBox Grid.Column="3" Width="70px" HorizontalAlignment="Left" 
                           Margin="0 0 10 0" SelectedIndex="{Binding BlockSizeIndex}">
@@ -40,13 +49,38 @@
                         Command="{Binding ChangeFilePathCmd}"/>
             </Grid>
             <Grid Margin="0 4 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" VerticalAlignment="Center"
                            Text="Key (0x..., 0b...):"/>
                 <TextBox Grid.Column="1" Text="{Binding Key}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           HorizontalAlignment="Right"
+                           Text="IV (0x..., 0b...):"/>
+                <TextBox Grid.Row="1" Grid.Column="1"
+                         IsEnabled="{Binding Mode, Converter={StaticResource notEqualsConverter},
+                                ConverterParameter={x:Static crypto:Rijndael_+Mode.ECB}}"
+                         Text="{Binding IV}"/>
+                <Button Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Width="60px"
+                        Command="{Binding LoadKeyCmd}">
+                    <Button.Content>
+                        <TextBlock Text="Load from file" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Width="60px"
+                        Command="{Binding SaveKeyCmd}">
+                    <Button.Content>
+                        <TextBlock Text="Save to file" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button.Content>
+                </Button>
             </Grid>
             <Grid Margin="0 4 0 0">
                 <Grid.ColumnDefinitions>

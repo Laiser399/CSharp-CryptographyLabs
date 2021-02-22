@@ -12,74 +12,58 @@ namespace UnitTests
     
     public class MultithreadTransformTest
     {
-        [Test]
-        public async Task Test()
+        private INiceCryptoTransform _encryptor;
+        private INiceCryptoTransform _decryptor;
+        private byte[][] _texts;
+
+        [SetUp]
+        public void Init()
         {
             Random random = new Random(126);
             byte[] tmKey = new byte[8];
             random.NextBytes(tmKey);
             ulong key56 = BitConverter.ToUInt64(tmKey);
 
-            byte[] text = new byte[800_003];
-            random.NextBytes(text);
+            _encryptor = DES_.GetNice(key56, CryptoDirection.Encrypt);
+            _decryptor = DES_.GetNice(key56, CryptoDirection.Decrypt);
 
-            INiceCryptoTransform encryptor = DES_.GetNice(key56, CryptoDirection.Encrypt);
-            INiceCryptoTransform decryptor = DES_.GetNice(key56, CryptoDirection.Decrypt);
-
-            byte[] encrypted;
-
-            int bytesPerIter = 100 * encryptor.InputBlockSize;
-            using (MemoryStream outStream = new MemoryStream())
+            _texts = new byte[3][];
+            _texts[0] = new byte[800_003];
+            _texts[1] = new byte[800_000];
+            _texts[2] = new byte[5];
+            for (int i = 0; i < _texts.Length; i++)
             {
-                int blocksCount = text.Length / bytesPerIter;
-                int remains = text.Length % bytesPerIter;
-                if (remains == 0)
-                {
-                    blocksCount--;
-                    remains = bytesPerIter;
-                }
-                byte[] tm;
-                for (int i = 0; i < blocksCount; i++)
-                {
-                    tm = await ECB.TransformAsync(text, i * bytesPerIter, bytesPerIter, encryptor, 4);
-                    outStream.Write(tm);
-                }
-                tm = await ECB.TransformFinalAsync(text, blocksCount * bytesPerIter, remains, encryptor, 4);
-                outStream.Write(tm);
-
-                encrypted = outStream.ToArray();
+                random.NextBytes(_texts[i]);
             }
+        }
 
-            byte[] decrypted;
+        [Test]
+        public async Task Test0()
+        {
+            await Check(_texts[0]);
+        }
 
-            bytesPerIter = 100 * decryptor.InputBlockSize;
-            using (MemoryStream outStream = new MemoryStream())
-            {
-                int blocksCount = encrypted.Length / bytesPerIter;
-                int remains = encrypted.Length % bytesPerIter;
-                if (remains == 0)
-                {
-                    blocksCount--;
-                    remains = bytesPerIter;
-                }
+        [Test]
+        public async Task Test1()
+        {
+            await Check(_texts[1]);
+        }
 
-                byte[] tm;
-                for (int i = 0; i < blocksCount; i++)
-                {
-                    tm = await ECB.TransformAsync(encrypted, i * bytesPerIter, bytesPerIter, decryptor, 4);
-                    outStream.Write(tm);
-                }
-                tm = await ECB.TransformFinalAsync(encrypted, blocksCount * bytesPerIter, 
-                    remains, decryptor, 4);
-                outStream.Write(tm);
+        [Test]
+        public async Task Test2()
+        {
+            await Check(_texts[2]);
+        }
 
-                decrypted = outStream.ToArray();
-            }
+        private async Task Check(byte[] text)
+        {
+            byte[] encrypted = await ECB.TransformAsync(text, _encryptor);
+            byte[] decrypted = await ECB.TransformAsync(encrypted, _decryptor);
 
             Assert.AreEqual(text.Length, decrypted.Length);
             for (int i = 0; i < text.Length; i++)
             {
-                Assert.AreEqual(text[i], decrypted[i]);
+                Assert.AreEqual(text[i], decrypted[i], $"i={i}, Text length: {text.Length}");
             }
         }
     }

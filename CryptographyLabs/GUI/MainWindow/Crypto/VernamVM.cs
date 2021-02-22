@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace CryptographyLabs.GUI
 {
-    class VernamVM : BaseViewModel
+    public class VernamVM : BaseViewModel
     {
         private MainWindowVM _owner;
 

@@ -1,5 +1,7 @@
 ﻿using CryptographyLabs.Crypto;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,42 +15,30 @@ using System.Windows;
 
 namespace CryptographyLabs.GUI
 {
-    class DesVM : BaseViewModel
+    public class DesVM : BaseViewModel
     {
-        private MainWindowVM _owner;
-
         #region Bindings
 
-        private bool _isEncrypt = true;
-        public bool IsEncrypt
-        {
-            get => _isEncrypt;
-            set
-            {
-                _isEncrypt = value;
-                NotifyPropChanged(nameof(IsEncrypt));
-            }
-        }
-
         private DES_.Mode _mode = DES_.Mode.ECB;
+        public DES_.Mode Mode => _mode;
         public int ModeIndex
         {
             get => (int)_mode;
             set
             {
                 _mode = (DES_.Mode)value;
-                NotifyPropChanged(nameof(ModeIndex));
+                NotifyPropChanged(nameof(ModeIndex), nameof(Mode));
             }
         }
 
-        private string _filename = "";
-        public string Filename
+        private bool _multithreading = false;
+        public bool Multithreading
         {
-            get => _filename;
+            get => _multithreading;
             set
             {
-                _filename = value;
-                NotifyPropChanged(nameof(Filename));
+                _multithreading = value;
+                NotifyPropChanged(nameof(Multithreading));
             }
         }
 
@@ -63,6 +53,25 @@ namespace CryptographyLabs.GUI
             }
         }
 
+        private string _IV = "";
+        public string IV
+        {
+            get => _IV;
+            set
+            {
+                _IV = value;
+                NotifyPropChanged(nameof(IV));
+            }
+        }
+
+        private RelayCommand _loadKeyCmd;
+        public RelayCommand LoadKeyCmd
+            => _loadKeyCmd ?? (_loadKeyCmd = new RelayCommand(_ => LoadKey()));
+
+        private RelayCommand _saveKeyCmd;
+        public RelayCommand SaveKeyCmd
+            => _saveKeyCmd ?? (_saveKeyCmd = new RelayCommand(_ => SaveKey()));
+
         private bool _isDeleteFileAfter = false;
         public bool IsDeleteFileAfter
         {
@@ -74,65 +83,57 @@ namespace CryptographyLabs.GUI
             }
         }
 
-        private RelayCommand _changeFilenameCommand;
-        public RelayCommand ChangeFilenameCommand =>
-            _changeFilenameCommand ?? (_changeFilenameCommand = new RelayCommand(_ => ChangeFilename()));
-
-        private RelayCommand _goCommand;
-        public RelayCommand GoCommand =>
-            _goCommand ?? (_goCommand = new RelayCommand(_ => Go()));
-
         #endregion
 
-        public DesVM(MainWindowVM owner)
-        {
-            _owner = owner;
-        }
+        private string _jKeyForKey = "key";
+        private string _jKeyForIV = "iv";
 
-        private void ChangeFilename()
+        private void LoadKey()
         {
-            using (var dialog = new CommonOpenFileDialog())
-            {
-                if (!IsEncrypt)
-                    dialog.Filters.Add(new CommonFileDialogFilter("Encrypted file", ".des399"));
-                dialog.Filters.Add(new CommonFileDialogFilter("Any file", "*"));
-                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                    Filename = dialog.FileName;
-            }
-        }
-
-        private void Go()
-        {
-            ulong key56;
-            if (!StringEx.TryParse(Key, out key56))
-            {
-                MessageBox.Show("Wrong key format.", "Error");
+            using var dialog = new CommonOpenFileDialog();
+            dialog.EnsureFileExists = true;
+            dialog.Filters.Add(new CommonFileDialogFilter("Json", "*.json"));
+            if (dialog.ShowDialog() != CommonFileDialogResult.Ok)
                 return;
-            }
 
-            string filePath = Filename;
-
-            if (IsEncrypt)
+            try
             {
-                string encryptPath = filePath + ".des399";
-                var vm = new DESEncryptTransformVM(filePath, encryptPath, key56, _mode, IsDeleteFileAfter);
-                _owner.ProgressViewModels.Add(vm);
+                string text = File.ReadAllText(dialog.FileName);
+                JObject obj = (JObject)JsonConvert.DeserializeObject(text);
+                string key = obj.Value<string>(_jKeyForKey);
+                string iv = obj.Value<string>(_jKeyForIV);
+                Key = key;
+                IV = iv;
             }
-            else
+            catch (Exception e)
             {
-                string decryptPath;
-                if (filePath.EndsWith(".des399"))
-                    decryptPath = filePath.Substring(0, filePath.Length - 7);
-                else
-                {
-                    MessageBox.Show("Wrong extension of file.");
-                    return;
-                }
-
-                var vm = new DESDecryptTransformVM(filePath, decryptPath, key56, _mode, IsDeleteFileAfter);
-                _owner.ProgressViewModels.Add(vm);
+                MessageBox.Show($"Error: {e.Message}");
             }
         }
 
+        private void SaveKey()
+        {
+            using var dialog = new CommonSaveFileDialog();
+            //dialog.Filters.Add(new CommonFileDialogFilter("Json", "*.json"));
+            dialog.Filters.Add(new CommonFileDialogFilter("Json file", ".json"));
+            dialog.DefaultExtension = "json";
+            if (dialog.ShowDialog() != CommonFileDialogResult.Ok)
+                return;
+
+            JObject obj = new JObject(new object[]
+            {
+                new JProperty(_jKeyForKey, Key),
+                new JProperty(_jKeyForIV, IV)
+            });
+
+            try
+            {
+                File.WriteAllText(dialog.FileName, obj.ToString(Formatting.Indented));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Error: {e.Message}");
+            }
+        }
     }
 }

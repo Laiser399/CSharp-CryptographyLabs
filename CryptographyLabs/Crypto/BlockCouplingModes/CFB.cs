@@ -9,21 +9,27 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
 {
     public static class CFB
     {
-        public static ICryptoTransform Get(INiceCryptoTransform transform, CryptoDirection direction)
+        /// <exception cref="ArgumentException">Wrong length of IV</exception>
+        public static ICryptoTransform Get(INiceCryptoTransform transform, byte[] IV, CryptoDirection direction)
         {
             if (direction == CryptoDirection.Encrypt)
-                return new CFBEncryptTransform(transform);
+                return new CFBEncryptTransform(transform, IV);
             else
-                return new CFBDecryptTransform(transform);
+                return new CFBDecryptTransform(transform, IV);
         }
 
         private class CFBEncryptTransform : BaseEncryptTransform
         {
             private byte[] _initVector;
 
-            public CFBEncryptTransform(INiceCryptoTransform transform) : base(transform)
+            /// <exception cref="ArgumentException">Wrong length of IV</exception>
+            public CFBEncryptTransform(INiceCryptoTransform transform, byte[] IV) : base(transform)
             {
+                if (IV.Length != InputBlockSize)
+                    throw new ArgumentException("Wrong length of IV.");
+
                 _initVector = new byte[InputBlockSize];
+                Array.Copy(IV, _initVector, InputBlockSize);
             }
 
             #region BaseEncryptTransform
@@ -43,9 +49,14 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
         {
             private byte[] _initVector;
 
-            public CFBDecryptTransform(INiceCryptoTransform transform) : base(transform)
+            /// <exception cref="ArgumentException">Wrong length of IV</exception>
+            public CFBDecryptTransform(INiceCryptoTransform transform, byte[] IV) : base(transform)
             {
+                if (IV.Length != InputBlockSize)
+                    throw new ArgumentException("Wrong length of IV.");
+
                 _initVector = new byte[InputBlockSize];
+                Array.Copy(IV, _initVector, InputBlockSize);
             }
 
             #region BaseEncryptTransform

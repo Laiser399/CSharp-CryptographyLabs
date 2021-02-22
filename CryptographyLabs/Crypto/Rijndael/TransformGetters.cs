@@ -10,8 +10,8 @@ namespace CryptographyLabs.Crypto
 {
     public static partial class Rijndael_
     {
-        /// <exception cref="ArgumentException">Wrong key length</exception>
-        public static ICryptoTransform Get(byte[] key, Size stateSize, Mode mode, CryptoDirection direction)
+        /// <exception cref="ArgumentException">Wrong key length or IV length</exception>
+        public static ICryptoTransform Get(byte[] key, Size stateSize, byte[] IV, Mode mode, CryptoDirection direction)
         {
             switch (mode)
             {
@@ -19,11 +19,11 @@ namespace CryptographyLabs.Crypto
                 case Mode.ECB:
                     return Get(key, stateSize, direction);
                 case Mode.CBC:
-                    return CBC.Get(GetNice(key, stateSize, direction), direction);
+                    return CBC.Get(GetNice(key, stateSize, direction), IV, direction);
                 case Mode.CFB:
-                    return CFB.Get(GetNice(key, stateSize, CryptoDirection.Encrypt), direction);
+                    return CFB.Get(GetNice(key, stateSize, CryptoDirection.Encrypt), IV, direction);
                 case Mode.OFB:
-                    return OFB.Get(GetNice(key, stateSize, CryptoDirection.Encrypt), direction);
+                    return OFB.Get(GetNice(key, stateSize, CryptoDirection.Encrypt), IV, direction);
             }
         }
 

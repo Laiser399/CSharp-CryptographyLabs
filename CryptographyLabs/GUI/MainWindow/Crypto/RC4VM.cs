@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace CryptographyLabs.GUI
 {
-    class RC4VM : BaseViewModel
+    public class RC4VM : BaseViewModel
     {
         private MainWindowVM _owner;
 

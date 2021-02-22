@@ -22,6 +22,13 @@
             <gui:Task1_6VM x:Key="task1_6vm"/>
             <gui:Task1_7VM x:Key="task1_7vm"/>
             <gui:Task1_8VM x:Key="task1_8vm"/>
+            <gui:Task2_1VM x:Key="task2_1vm"/>
+            <gui:Task2_2VM x:Key="task2_2vm"/>
+            <gui:Task2_3VM x:Key="task2_3vm"/>
+            <gui:Task2_4VM x:Key="task2_4vm"/>
+            <gui:Task2_5VM x:Key="task2_5vm"/>
+            <gui:Task2_6VM x:Key="task2_6vm"/>
+            <gui:Task2_7VM x:Key="task2_7vm"/>
             <gui:Task3_1VM x:Key="task3_1vm"/>
             <gui:Task3_2VM x:Key="task3_2vm"/>
             <gui:Task3_3VM x:Key="task3_3vm"/>
@@ -41,11 +48,20 @@
                 <ResourceDictionary Source="Tasks1/Task1_6DataTemplate.xaml"/>
                 <ResourceDictionary Source="Tasks1/Task1_7DataTemplate.xaml"/>
                 <ResourceDictionary Source="Tasks1/Task1_8DataTemplate.xaml"/>
+                <ResourceDictionary Source="Tasks2/Task2_1.xaml"/>
+                <ResourceDictionary Source="Tasks2/Task2_2.xaml"/>
+                <ResourceDictionary Source="Tasks2/Task2_3.xaml"/>
+                <ResourceDictionary Source="Tasks2/Task2_4.xaml"/>
+                <ResourceDictionary Source="Tasks2/Task2_5.xaml"/>
+                <ResourceDictionary Source="Tasks2/Task2_6.xaml"/>
+                <ResourceDictionary Source="Tasks2/Task2_7.xaml"/>
                 <ResourceDictionary Source="Tasks3/Task3_1DataTemplate.xaml"/>
                 <ResourceDictionary Source="Tasks3/Task3_2DataTemplate.xaml"/>
                 <ResourceDictionary Source="Tasks3/Task3_3DataTemplate.xaml"/>
                 <ResourceDictionary Source="Tasks3/Task3_SpecDataTemplate.xaml"/>
                 <ResourceDictionary Source="Crypto/Rijndael.xaml"/>
+                <ResourceDictionary Source="Crypto/DesEncrypt.xaml"/>
+                <ResourceDictionary Source="Crypto/DesDecrypt.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -53,18 +69,31 @@
         <TabItem Header="Tasks 1 (1-8)">
             <ScrollViewer>
                 <StackPanel Margin="4 10">
-                    <ContentControl Grid.Row="0" Content="{StaticResource task1_11vm}"/>
-                    <ContentControl Grid.Row="1" Content="{StaticResource task1_12vm}"/>
-                    <ContentControl Grid.Row="2" Content="{StaticResource task1_13vm}"/>
-                    <ContentControl Grid.Row="3" Content="{StaticResource task1_14vm}"/>
-                    <ContentControl Grid.Row="4" Content="{StaticResource task1_21vm}"/>
-                    <ContentControl Grid.Row="5" Content="{StaticResource task1_22vm}"/>
-                    <ContentControl Grid.Row="6" Content="{StaticResource task1_3vm}"/>
-                    <ContentControl Grid.Row="7" Content="{StaticResource task1_4vm}"/>
-                    <ContentControl Grid.Row="8" Content="{StaticResource task1_5vm}"/>
-                    <ContentControl Grid.Row="9" Content="{StaticResource task1_6vm}"/>
-                    <ContentControl Grid.Row="10" Content="{StaticResource task1_7vm}"/>
-                    <ContentControl Grid.Row="11" Content="{StaticResource task1_8vm}"/>
+                    <ContentControl Content="{StaticResource task1_11vm}"/>
+                    <ContentControl Content="{StaticResource task1_12vm}"/>
+                    <ContentControl Content="{StaticResource task1_13vm}"/>
+                    <ContentControl Content="{StaticResource task1_14vm}"/>
+                    <ContentControl Content="{StaticResource task1_21vm}"/>
+                    <ContentControl Content="{StaticResource task1_22vm}"/>
+                    <ContentControl Content="{StaticResource task1_3vm}"/>
+                    <ContentControl Content="{StaticResource task1_4vm}"/>
+                    <ContentControl Content="{StaticResource task1_5vm}"/>
+                    <ContentControl Content="{StaticResource task1_6vm}"/>
+                    <ContentControl Content="{StaticResource task1_7vm}"/>
+                    <ContentControl Content="{StaticResource task1_8vm}"/>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Tasks 2 (1-7)" IsSelected="True">
+            <ScrollViewer>
+                <StackPanel Margin="4 10">
+                    <ContentControl Content="{StaticResource task2_1vm}"/>
+                    <ContentControl Content="{StaticResource task2_2vm}"/>
+                    <ContentControl Content="{StaticResource task2_3vm}"/>
+                    <ContentControl Content="{StaticResource task2_4vm}"/>
+                    <ContentControl Content="{StaticResource task2_5vm}"/>
+                    <ContentControl Content="{StaticResource task2_6vm}"/>
+                    <ContentControl Content="{StaticResource task2_7vm}"/>
                 </StackPanel>
             </ScrollViewer>
         </TabItem>
@@ -78,7 +107,7 @@
                 </StackPanel>
             </ScrollViewer>
         </TabItem>
-        <TabItem Header="Encrypt\Decrypt" IsSelected="True">
+        <TabItem Header="Encrypt\Decrypt">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -140,66 +169,16 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="DES">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0" Margin="0 0 0 4" Height="22">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
                                 <RadioButton Grid.Column="0" GroupName="DESDirection" Content="Encrypt"
-                                             IsChecked="{Binding DESVM.IsEncrypt}"
+                                             IsChecked="{Binding DesIsEncrypt}"
                                              VerticalAlignment="Center" Margin="0 0 10 0"/>
                                 <RadioButton Grid.Column="1" GroupName="DESDirection" Content="Decrypt"
                                              VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="2" Text="Mode: " Margin="20 0 0 0" 
-                                           VerticalAlignment="Center"/>
-                                <ComboBox Grid.Column="3" Width="60px" HorizontalAlignment="Left" 
-                                          SelectedIndex="{Binding DESVM.ModeIndex, Mode=TwoWay}">
-                                    <TextBlock Text="ECB"/>
-                                    <TextBlock Text="CBC"/>
-                                    <TextBlock Text="CFB"/>
-                                    <TextBlock Text="OFB"/>
-                                </ComboBox>
-                            </Grid>
-                            <Grid Grid.Row="1" Margin="0 4">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Filename: " VerticalAlignment="Center"/>
-                                <TextBox Grid.Column="1" Text="{Binding DESVM.Filename}"/>
-                                <Button Grid.Column="2" Content="..." Width="30"
-                                        Command="{Binding DESVM.ChangeFilenameCommand}"/>
-                            </Grid>
-                            <Grid Grid.Row="2" Margin="0 4">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Key (56bit, 0x..., 0b...): "/>
-                                <TextBox Grid.Column="1" Text="{Binding DESVM.Key}"/>
-                            </Grid>
-                            <Grid Grid.Row="3" Margin="0 4 0 0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Column="0" Content="delete file after" 
-                                          IsChecked="{Binding DESVM.IsDeleteFileAfter}"/>
-                                <Button Grid.Column="1" Content="Go" Width="50" HorizontalAlignment="Right"
-                                        Command="{Binding DESVM.GoCommand}"/>
-                            </Grid>
-                        </Grid>
+                            </StackPanel>
+                            <ContentControl Content="{Binding DesVM}"/>
+                        </StackPanel>
                     </TabItem>
                     <TabItem Header="RC4">
                         <Grid>
@@ -239,7 +218,10 @@
                             </Grid>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Rijndael" IsSelected="True">
+                    <TabItem Header="RSA" IsSelected="True">
+                        <TextBlock Text="TODO RSA" FontSize="40"/>
+                    </TabItem>
+                    <TabItem Header="Rijndael">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <RadioButton Grid.Column="0" GroupName="RijndaelDirection" Content="Encrypt"

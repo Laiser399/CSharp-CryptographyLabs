@@ -6,4 +6,33 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
   </ItemGroup>
+  <ItemGroup>
+    <Page Update="GUI\MainWindow\Crypto\DesDecrypt.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GUI\MainWindow\Crypto\DesEncrypt.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GUI\MainWindow\Tasks2\Task2_1.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GUI\MainWindow\Tasks2\Task2_2.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GUI\MainWindow\Tasks2\Task2_3.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GUI\MainWindow\Tasks2\Task2_4.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GUI\MainWindow\Tasks2\Task2_5.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GUI\MainWindow\Tasks2\Task2_6.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GUI\MainWindow\Tasks2\Task2_7.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 </Project>

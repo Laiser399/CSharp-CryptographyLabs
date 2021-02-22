@@ -9,7 +9,7 @@ namespace CryptographyLabs.Crypto
 {
     public static partial class DES_
     {
-        private static int _blockSize = 8;
+        public const int BlockSize = 8;
 
         public class DESEncryptTransform : INiceCryptoTransform, ICryptoTransform
         {
@@ -22,8 +22,8 @@ namespace CryptographyLabs.Crypto
 
             #region ICryptoTransform interface
 
-            public int InputBlockSize => _blockSize;
-            public int OutputBlockSize => _blockSize;
+            public int InputBlockSize => BlockSize;
+            public int OutputBlockSize => BlockSize;
             public bool CanTransformMultipleBlocks => true;
             public bool CanReuseTransform => false;
 
@@ -31,9 +31,9 @@ namespace CryptographyLabs.Crypto
 
             public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
             {
-                int blocksCount = inputCount / _blockSize;
+                int blocksCount = inputCount / BlockSize;
                 NiceTransform(inputBuffer, inputOffset, outputBuffer, outputOffset, blocksCount);
-                return blocksCount * _blockSize;
+                return blocksCount * BlockSize;
             }
 
             public byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount)
@@ -49,29 +49,29 @@ namespace CryptographyLabs.Crypto
             {
                 for (int i = 0; i < blocksCount; ++i)
                 {
-                    ulong text = BitConverter.ToUInt64(inputBuffer, inputOffset + i * _blockSize);
+                    ulong text = BitConverter.ToUInt64(inputBuffer, inputOffset + i * BlockSize);
                     ulong result = Encrypt(text, _keys48);
-                    Array.Copy(BitConverter.GetBytes(result), 0, outputBuffer, outputOffset + i * _blockSize, _blockSize);
+                    Array.Copy(BitConverter.GetBytes(result), 0, outputBuffer, outputOffset + i * BlockSize, BlockSize);
                 }
             }
 
             public byte[] NiceFinalTransform(byte[] inputBuffer, int inputOffset, int bytesCount)
             {
-                if (bytesCount == _blockSize)
+                if (bytesCount == BlockSize)
                 {
-                    byte[] tm = new byte[2 * _blockSize];
-                    Array.Copy(inputBuffer, inputOffset, tm, 0, _blockSize);
-                    tm[2 * _blockSize - 1] = 0;
-                    byte[] final = new byte[2 * _blockSize];
+                    byte[] tm = new byte[2 * BlockSize];
+                    Array.Copy(inputBuffer, inputOffset, tm, 0, BlockSize);
+                    tm[2 * BlockSize - 1] = 0;
+                    byte[] final = new byte[2 * BlockSize];
                     NiceTransform(tm, 0, final, 0, 2);
                     return final;
                 }
                 else
                 {
-                    byte[] tm = new byte[_blockSize];
+                    byte[] tm = new byte[BlockSize];
                     Array.Copy(inputBuffer, inputOffset, tm, 0, bytesCount);
-                    tm[_blockSize - 1] = (byte)bytesCount;
-                    byte[] final = new byte[_blockSize];
+                    tm[BlockSize - 1] = (byte)bytesCount;
+                    byte[] final = new byte[BlockSize];
                     NiceTransform(tm, 0, final, 0, 1);
                     return final;
                 }
@@ -84,7 +84,7 @@ namespace CryptographyLabs.Crypto
         {
             private ulong[] _keys48;
             private bool _isFirst = true;
-            private byte[] _lastBlock = new byte[_blockSize];
+            private byte[] _lastBlock = new byte[BlockSize];
 
             public DESDecryptTransform(ulong key56)
             {
@@ -93,8 +93,8 @@ namespace CryptographyLabs.Crypto
 
             #region ICryptoTransform interface
 
-            public int InputBlockSize => _blockSize;
-            public int OutputBlockSize => _blockSize;
+            public int InputBlockSize => BlockSize;
+            public int OutputBlockSize => BlockSize;
             public bool CanTransformMultipleBlocks => true;
             public bool CanReuseTransform => false;
 
@@ -102,31 +102,31 @@ namespace CryptographyLabs.Crypto
 
             public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
             {
-                int blocksCount = inputCount / _blockSize;
-                int offset = _isFirst ? 0 : _blockSize;
+                int blocksCount = inputCount / BlockSize;
+                int offset = _isFirst ? 0 : BlockSize;
                 if (!_isFirst)
                 {
                     ulong text = BitConverter.ToUInt64(_lastBlock, 0);
                     ulong result = Decrypt(text, _keys48);
-                    Array.Copy(BitConverter.GetBytes(result), 0, outputBuffer, outputOffset, _blockSize);
+                    Array.Copy(BitConverter.GetBytes(result), 0, outputBuffer, outputOffset, BlockSize);
                 }
 
                 for (int i = 0; i < blocksCount - 1; ++i)
                 {
-                    ulong text = BitConverter.ToUInt64(inputBuffer, inputOffset + i * _blockSize);
+                    ulong text = BitConverter.ToUInt64(inputBuffer, inputOffset + i * BlockSize);
                     ulong result = Decrypt(text, _keys48);
                     Array.Copy(BitConverter.GetBytes(result), 0,
-                        outputBuffer, outputOffset + i * _blockSize + offset, _blockSize);
+                        outputBuffer, outputOffset + i * BlockSize + offset, BlockSize);
                 }
-                Array.Copy(inputBuffer, inputOffset + blocksCount * _blockSize - _blockSize, _lastBlock, 0, _blockSize);
+                Array.Copy(inputBuffer, inputOffset + blocksCount * BlockSize - BlockSize, _lastBlock, 0, BlockSize);
 
                 if (_isFirst)
                 {
                     _isFirst = false;
-                    return (blocksCount - 1) * _blockSize;
+                    return (blocksCount - 1) * BlockSize;
                 }
                 else
-                    return blocksCount * _blockSize;
+                    return blocksCount * BlockSize;
             }
 
             public byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount)
@@ -141,7 +141,7 @@ namespace CryptographyLabs.Crypto
                 ulong decryptedText = Decrypt(text, _keys48);
                 byte[] decrypted = BitConverter.GetBytes(decryptedText);
 
-                byte bytesCount = decrypted[_blockSize - 1];
+                byte bytesCount = decrypted[BlockSize - 1];
                 byte[] result = new byte[bytesCount];
                 Array.Copy(decrypted, result, bytesCount);
                 return result;
@@ -155,21 +155,21 @@ namespace CryptographyLabs.Crypto
             {
                 for (int i = 0; i < blocksCount; ++i)
                 {
-                    ulong text = BitConverter.ToUInt64(inputBuffer, inputOffset + i * _blockSize);
+                    ulong text = BitConverter.ToUInt64(inputBuffer, inputOffset + i * BlockSize);
                     ulong result = Decrypt(text, _keys48);
                     Array.Copy(BitConverter.GetBytes(result), 0,
-                        outputBuffer, outputOffset + i * _blockSize, _blockSize);
+                        outputBuffer, outputOffset + i * BlockSize, BlockSize);
                 }
             }
 
             public byte[] NiceFinalTransform(byte[] inputBuffer, int inputOffset, int bytesCount)
             {
-                if (bytesCount != _blockSize)
+                if (bytesCount != BlockSize)
                     throw new CryptographicException("Wrong length of final block on NICE decryption.");
 
-                byte[] final = new byte[_blockSize];
+                byte[] final = new byte[BlockSize];
                 NiceTransform(inputBuffer, inputOffset, final, 0, 1);
-                Array.Resize(ref final, final[_blockSize - 1]);
+                Array.Resize(ref final, final[BlockSize - 1]);
                 return final;
             }
 

@@ -1,4 +1,5 @@
 ﻿using CryptographyLabs.Crypto;
+using CryptographyLabs.Crypto.BlockCouplingModes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -116,51 +117,28 @@ namespace CryptographyLabs.GUI
 
             try
             {
-                await Process(transform);
-                if (_isDeleteAfter)
-                {
-                    StatusString = "Deleting file";
-                    await Task.Run(() => File.Delete(SourceFilePath));
-                }
-                StatusString = "Done successfully";
+                await MakeTransform(transform);
+                await DeleteSourceIfNeeded();
+                OnDoneSuccessfully();
             }
             catch (OperationCanceledException)
             {
-                Reject();
-                StatusString = "Canceled";
+                OnCanceled();
             }
             catch (Exception e)
             {
-                Reject();
-                StatusString = "Error: " + e.Message;
+                OnError(e.Message);
             }
-
-            IsDone = true;
         }
 
-        private void Cancel()
-        {
-            _cts.Cancel();
-        }
-
-        protected virtual void Reject()
-        {
-            try
-            {
-                if (File.Exists(DestFilePath))
-                    File.Delete(DestFilePath);
-            }
-            catch { }
-        }
-
-        private async Task Process(ICryptoTransform transform)
+        private async Task MakeTransform(ICryptoTransform transform)
         {
             OperationCanceledException canceledException = null;
 
             try
             {
                 using (FileStream inStream = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
-                using (FileStream outStream = new FileStream(DestFilePath, FileMode.OpenOrCreate, FileAccess.Write))
+                using (FileStream outStream = new FileStream(DestFilePath, FileMode.Create, FileAccess.Write))
                 using (CryptoStream outCrypto = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
                 {
                     try
@@ -183,5 +161,85 @@ namespace CryptographyLabs.GUI
             if (canceledException is object)
                 throw canceledException;
         }
+
+        protected async void StartMultithread(INiceCryptoTransform transform)
+        {
+            try
+            {
+                StatusString = "Reading file...";
+                byte[] text = await File.ReadAllBytesAsync(SourceFilePath, _cts.Token);
+
+                if (_direction is null)
+                    StatusString = "Cryption...";
+                else if (_direction == CryptoDirection.Encrypt)
+                    StatusString = "Encryption...";
+                else
+                    StatusString = "Decryption...";
+                byte[] transformed = await ECB.TransformAsync(text, transform, _cts.Token, 4,
+                    progress => CryptoProgress = progress);
+
+                StatusString = "Saving to file...";
+                await File.WriteAllBytesAsync(DestFilePath, transformed, _cts.Token);
+
+                await DeleteSourceIfNeeded();
+
+                OnDoneSuccessfully();
+            }
+            catch (OperationCanceledException)
+            {
+                OnCanceled();
+                return;
+            }
+            catch (Exception e)
+            {
+                OnError(e.Message);
+                return;
+            }
+        }
+
+        private async Task DeleteSourceIfNeeded()
+        {
+            if (_isDeleteAfter)
+            {
+                StatusString = "Deleting file...";
+                await Task.Run(() => File.Delete(SourceFilePath));
+            }
+        }
+
+        private void Cancel()
+        {
+            _cts.Cancel();
+        }
+
+        private void OnCanceled()
+        {
+            Reject();
+            StatusString = "Canceled";
+            IsDone = true;
+        }
+
+        private void OnError(string msg)
+        {
+            Reject();
+            StatusString = "Error: " + msg;
+            IsDone = true;
+        }
+
+        private void OnDoneSuccessfully()
+        {
+            StatusString = "Done successfully";
+            IsDone = true;
+        }
+
+        protected virtual void Reject()
+        {
+            try
+            {
+                if (File.Exists(DestFilePath))
+                    File.Delete(DestFilePath);
+            }
+            catch { }
+        }
+
     }
 }

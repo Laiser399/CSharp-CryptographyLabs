@@ -10,7 +10,7 @@ namespace CryptographyLabs.Crypto
 {
     public static partial class DES_
     {
-        public static ICryptoTransform Get(ulong key56, Mode mode, CryptoDirection direction)
+        public static ICryptoTransform Get(ulong key56, byte[] IV, Mode mode, CryptoDirection direction)
         {
             switch (mode)
             {
@@ -18,11 +18,11 @@ namespace CryptographyLabs.Crypto
                 case Mode.ECB:
                     return Get(key56, direction);
                 case Mode.CBC:
-                    return CBC.Get(GetNice(key56, direction), direction);
+                    return CBC.Get(GetNice(key56, direction), IV, direction);
                 case Mode.CFB:
-                    return CFB.Get(GetNice(key56, CryptoDirection.Encrypt), direction);
+                    return CFB.Get(GetNice(key56, CryptoDirection.Encrypt), IV, direction);
                 case Mode.OFB:
-                    return OFB.Get(GetNice(key56, CryptoDirection.Encrypt), direction);
+                    return OFB.Get(GetNice(key56, CryptoDirection.Encrypt), IV, direction);
             }
         }
 

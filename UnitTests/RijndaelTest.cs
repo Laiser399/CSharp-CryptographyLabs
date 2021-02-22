@@ -9,18 +9,19 @@ namespace UnitTests
     {
         // 16 24 32
         private byte[][] _keys = new byte[3][];
+        private byte[][] _iv = new byte[3][];
 
         [SetUp]
         public void SetUp()
         {
             Random random = new Random(129);
-
-            _keys[0] = new byte[16];
-            _keys[1] = new byte[24];
-            _keys[2] = new byte[32];
-            random.NextBytes(_keys[0]);
-            random.NextBytes(_keys[1]);
-            random.NextBytes(_keys[2]);
+            for (int i = 0; i < 3; i++)
+            {
+                _keys[i] = new byte[16 + i * 8];
+                _iv[i] = new byte[16 + i * 8];
+                random.NextBytes(_keys[i]);
+                random.NextBytes(_iv[i]);
+            }
         }
 
         [Test]
@@ -30,8 +31,10 @@ namespace UnitTests
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    Func<ICryptoTransform> getEncryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, Rijndael_.Mode.ECB, CryptoDirection.Encrypt);
-                    Func<ICryptoTransform> getDecryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, Rijndael_.Mode.ECB, CryptoDirection.Decrypt);
+                    Func<ICryptoTransform> getEncryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, 
+                         CryptoDirection.Encrypt);
+                    Func<ICryptoTransform> getDecryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, 
+                         CryptoDirection.Decrypt);
 
                     General.Check(getEncryptor, getDecryptor, 10_001);
                     General.Check(getEncryptor, getDecryptor, 0);
@@ -47,8 +50,10 @@ namespace UnitTests
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    Func<ICryptoTransform> getEncryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, Rijndael_.Mode.CBC, CryptoDirection.Encrypt);
-                    Func<ICryptoTransform> getDecryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, Rijndael_.Mode.CBC, CryptoDirection.Decrypt);
+                    Func<ICryptoTransform> getEncryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, 
+                        _iv[j], Rijndael_.Mode.CBC, CryptoDirection.Encrypt);
+                    Func<ICryptoTransform> getDecryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j,
+                        _iv[j], Rijndael_.Mode.CBC, CryptoDirection.Decrypt);
 
                     General.Check(getEncryptor, getDecryptor, 10_001);
                     General.Check(getEncryptor, getDecryptor, 0);
@@ -64,8 +69,10 @@ namespace UnitTests
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    Func<ICryptoTransform> getEncryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, Rijndael_.Mode.CFB, CryptoDirection.Encrypt);
-                    Func<ICryptoTransform> getDecryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, Rijndael_.Mode.CFB, CryptoDirection.Decrypt);
+                    Func<ICryptoTransform> getEncryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, 
+                        _iv[j], Rijndael_.Mode.CFB, CryptoDirection.Encrypt);
+                    Func<ICryptoTransform> getDecryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j,
+                        _iv[j], Rijndael_.Mode.CFB, CryptoDirection.Decrypt);
 
                     General.Check(getEncryptor, getDecryptor, 10_001);
                     General.Check(getEncryptor, getDecryptor, 0);
@@ -81,8 +88,10 @@ namespace UnitTests
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    Func<ICryptoTransform> getEncryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, Rijndael_.Mode.OFB, CryptoDirection.Encrypt);
-                    Func<ICryptoTransform> getDecryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j, Rijndael_.Mode.OFB, CryptoDirection.Decrypt);
+                    Func<ICryptoTransform> getEncryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j,
+                        _iv[j], Rijndael_.Mode.OFB, CryptoDirection.Encrypt);
+                    Func<ICryptoTransform> getDecryptor = () => Rijndael_.Get(_keys[i], (Rijndael_.Size)j,
+                        _iv[j], Rijndael_.Mode.OFB, CryptoDirection.Decrypt);
 
                     General.Check(getEncryptor, getDecryptor, 10_001);
                     General.Check(getEncryptor, getDecryptor, 0);

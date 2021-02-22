@@ -9,12 +9,13 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
 {
     public static class CBC
     {
-        public static ICryptoTransform Get(INiceCryptoTransform transform, CryptoDirection direction)
+        /// <exception cref="ArgumentException">Wrong length of IV</exception>
+        public static ICryptoTransform Get(INiceCryptoTransform transform, byte[] IV, CryptoDirection direction)
         {
             if (direction == CryptoDirection.Encrypt)
-                return new CBCEncryptTransform(transform);
+                return new CBCEncryptTransform(transform, IV);
             else
-                return new CBCDecryptTransform(transform);
+                return new CBCDecryptTransform(transform, IV);
         }
     }
 
@@ -22,9 +23,14 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
     {
         private byte[] _initVector;
 
-        public CBCEncryptTransform(INiceCryptoTransform transform) : base(transform)
+        /// <exception cref="ArgumentException">Wrong length of IV</exception>
+        public CBCEncryptTransform(INiceCryptoTransform transform, byte[] IV) : base(transform)
         {
+            if (IV.Length != InputBlockSize)
+                throw new ArgumentException("Wrong length of IV.");
+
             _initVector = new byte[InputBlockSize];
+            Array.Copy(IV, _initVector, InputBlockSize);
         }
 
         #region BaseEncryptTransform
@@ -44,9 +50,14 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
     {
         private byte[] _initVector;
 
-        public CBCDecryptTransform(INiceCryptoTransform transform) : base(transform)
+        /// <exception cref="ArgumentException">Wrong length of IV</exception>
+        public CBCDecryptTransform(INiceCryptoTransform transform, byte[] IV) : base(transform)
         {
+            if (IV.Length != InputBlockSize)
+                throw new ArgumentException("Wrong length of IV.");
+
             _initVector = new byte[InputBlockSize];
+            Array.Copy(IV, _initVector, InputBlockSize);
         }
 
         #region ICryptoTransform interface
