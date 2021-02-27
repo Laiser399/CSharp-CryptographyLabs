@@ -13,6 +13,15 @@
     <Page Update="GUI\MainWindow\Crypto\DesEncrypt.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="GUI\MainWindow\Crypto\FROG\Frog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GUI\MainWindow\Crypto\FROG\FrogDecrypt.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="GUI\MainWindow\Crypto\FROG\FrogEncrypt.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="GUI\MainWindow\Tasks2\Task2_1.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -29,9 +38,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="GUI\MainWindow\Tasks2\Task2_6.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="GUI\MainWindow\Tasks2\Task2_7.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

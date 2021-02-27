@@ -9,7 +9,6 @@ using System.ComponentModel;
 
 namespace CryptographyLabs.GUI
 {
-    // TODO multithreading ECB (gui)
     public class MainWindowVM : BaseViewModel
     {
         #region Bindings
@@ -81,6 +80,10 @@ namespace CryptographyLabs.GUI
             }
         }
 
+        // FROG
+        private FrogVM _frogVM;
+        public FrogVM FrogVM => _frogVM;
+
         // 
         private ObservableCollection<BaseTransformVM> _progressViewModels;
         public ObservableCollection<BaseTransformVM> ProgressViewModels =>
@@ -96,6 +99,8 @@ namespace CryptographyLabs.GUI
             var desVM = new DesVM();
             _desEncryptVM = new DesEncryptVM(desVM, this);
             _desDecryptVM = new DesDecryptVM(desVM, this);
+
+            _frogVM = new FrogVM(this);
 
             UpdateRijndaelVM();
             UpdateDesVM();

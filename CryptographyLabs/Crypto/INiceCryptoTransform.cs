@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.Crypto
 {
+    // TODOL NiceFinalTransform with bytesCount equals 0 (if text is empty)
     public interface INiceCryptoTransform
     {
         int InputBlockSize { get; }

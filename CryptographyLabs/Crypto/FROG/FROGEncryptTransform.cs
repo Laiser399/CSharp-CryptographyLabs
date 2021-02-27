@@ -11,7 +11,7 @@ namespace CryptographyLabs.Crypto
         {
             private byte[][][] _roundKeys;
 
-            public FROGEncryptTransform(byte[][][] roundKeys) : base(_blockSize)
+            public FROGEncryptTransform(byte[][][] roundKeys) : base(BlockSize)
             {
                 _roundKeys = roundKeys;
             }
@@ -22,7 +22,7 @@ namespace CryptographyLabs.Crypto
             {
 
             }
-
+            
             protected override void Transform(byte[] inputBuffer, int inputOffset, byte[] outputBuffer, int outputOffset)
             {
                 Array.Copy(inputBuffer, inputOffset, outputBuffer, outputOffset, InputBlockSize);

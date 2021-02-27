@@ -11,7 +11,7 @@ namespace CryptographyLabs.Crypto
         {
             private byte[][][] _roundKeys;
 
-            public FROGDecryptTransform(byte[][][] roundKeys) : base(_blockSize)
+            public FROGDecryptTransform(byte[][][] roundKeys) : base(BlockSize)
             {
                 _roundKeys = roundKeys;
             }

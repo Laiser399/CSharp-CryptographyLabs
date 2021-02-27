@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using CryptographyLabs.Crypto.BlockCouplingModes;
 using CryptographyLabs.Extensions;
 
 namespace CryptographyLabs.Crypto
@@ -13,6 +14,8 @@ namespace CryptographyLabs.Crypto
         private byte[][][] _encryptRoundKeys;
         private byte[][][] _decryptRoundKeys;
 
+        /// <param name="key">Key with length from MinKeyLength to MaxKeyLength.</param>
+        /// <exception cref="ArgumentException">Wrong length of key.</exception>
         public FROGProvider(byte[] key)
         {
             if (key.Length < MinKeyLength || key.Length > MaxKeyLength)
@@ -23,29 +26,61 @@ namespace CryptographyLabs.Crypto
 
         public ICryptoTransform Create(CryptoDirection direction)
         {
+            InitRoundKey(direction);
+
             if (direction == CryptoDirection.Encrypt)
-            {
-                if (_encryptRoundKeys is null)
-                    _encryptRoundKeys = GenerateKey(_key, CryptoDirection.Encrypt);
                 return new FROGEncryptTransform(_encryptRoundKeys);
-            }
             else
-            {
-                if (_decryptRoundKeys is null)
-                    _decryptRoundKeys = GenerateKey(_key, CryptoDirection.Decrypt);
                 return new FROGDecryptTransform(_decryptRoundKeys);
+        }
+
+        /// <exception cref="ArgumentException">Wrong length of IV.</exception>
+        public ICryptoTransform Create(CryptoDirection direction, Mode mode, byte[] iv)
+        {
+            if (iv.Length != BlockSize)
+                throw new ArgumentException("Wrong length of IV.");
+
+            InitRoundKey(direction);
+
+            switch (mode)
+            {
+                default:
+                case Mode.ECB:
+                    if (direction == CryptoDirection.Encrypt)
+                        return new FROGEncryptTransform(_encryptRoundKeys);
+                    else
+                        return new FROGDecryptTransform(_decryptRoundKeys);
+                case Mode.CBC:
+                    return CBC.Get(CreateNice(direction), iv, direction);
+                case Mode.CFB:
+                    return CFB.Get(CreateNice(CryptoDirection.Encrypt), iv, direction);
+                case Mode.OFB:
+                    return OFB.Get(CreateNice(CryptoDirection.Encrypt), iv, direction);
             }
         }
 
         public INiceCryptoTransform CreateNice(CryptoDirection direction)
         {
-            throw new NotImplementedException();
+            InitRoundKey(direction);
+
+            if (direction == CryptoDirection.Encrypt)
+                return new FROGEncryptTransform(_encryptRoundKeys);
+            else
+                return new FROGDecryptTransform(_decryptRoundKeys);
+        }
+
+        private void InitRoundKey(CryptoDirection direction)
+        {
+            if (direction == CryptoDirection.Encrypt && _encryptRoundKeys is null)
+                _encryptRoundKeys = GenerateKey(_key, CryptoDirection.Encrypt);
+            if (direction == CryptoDirection.Decrypt && _decryptRoundKeys is null)
+                _decryptRoundKeys = GenerateKey(_key, CryptoDirection.Decrypt);
         }
 
         // static
         public static int MinKeyLength => 5;
         public static int MaxKeyLength => 125;
-        private const int _blockSize = 16;
+        public const int BlockSize = 16;
         private static byte[] _masterKey = new byte[]
         {
             113,  21, 232,  18, 113,  92,  63, 157, 124, 193, 166, 197, 126,  56, 229, 229,
@@ -66,14 +101,10 @@ namespace CryptographyLabs.Crypto
             118, 177, 121, 180,  27,  83, 131,  26,  39,  46,  12
         };
 
-        private static T[] Expand<T>(T[] array, int newLength)
-        {
-            T[] result = new T[newLength];
-            for (int i = 0; i < newLength; i++)
-                result[i] = array[i % array.Length];
-            return result;
-        }
-
+        /// <summary>
+        /// Key expansion procedure
+        /// </summary>
+        /// <returns>keys with indices: round index, key index (16b, 256b, 16b), byte in key index</returns>
         private static byte[][][] GenerateKey(byte[] key, CryptoDirection direction)
         {
             // 1
@@ -84,15 +115,32 @@ namespace CryptographyLabs.Crypto
             for (int i = 0; i < 2304; i++)
                 keyExpanded[i] = (byte)(keyExpanded[i] ^ masterKeyExpanded[i]);
             // 4
-            return FormatExpandedKey(keyExpanded, direction);
+            byte[][][] preliminaryKey = FormatExpandedKey(keyExpanded, CryptoDirection.Encrypt);
+            // 5
+            byte[] iv = new byte[BlockSize];
+            Array.Copy(keyExpanded, iv, BlockSize);
+            iv[0] ^= (byte)key.Length;
+
+            byte[] result = TransformEmptyText(preliminaryKey, iv);
+            // 6
+            return FormatExpandedKey(result, direction);
+        }
+        
+        private static T[] Expand<T>(T[] array, int newLength)
+        {
+            T[] result = new T[newLength];
+            for (int i = 0; i < newLength; i++)
+                result[i] = array[i % array.Length];
+            return result;
         }
 
         private static byte[][][] FormatExpandedKey(byte[] expandedKey, CryptoDirection direction)
         {
             int bytesInKey = 288;// 16 + 256 + 16
-            byte[][][] result = new byte[8][][];
+            byte[][][] result = new byte[8][][];// indices: round, key(16, 256, 16), byteIndex
             for (int i = 0; i < 8; i++)
             {
+                // 4.1, 4.2
                 byte[] key1 = new byte[16];
                 byte[] key2 = new byte[256];
                 byte[] key3 = new byte[16];
@@ -101,7 +149,7 @@ namespace CryptographyLabs.Crypto
                 Array.Copy(expandedKey, i * bytesInKey + 16, key2, 0, 256);
                 Array.Copy(expandedKey, i * bytesInKey + 272, key3, 0, 16);
 
-                // 4.1
+                // 4.3
                 Format(key2);
                 if (direction == CryptoDirection.Decrypt)
                     key2 = Invert(key2);
@@ -177,6 +225,21 @@ namespace CryptographyLabs.Crypto
                     used[index] = true;
                 } while (cycles[index] != nextStartIndex);
             }
+        }
+
+        private static byte[] TransformEmptyText(byte[][][] preliminaryKey, byte[] iv)
+        {
+            int blocksCount = 2304 / BlockSize;
+
+            byte[] buf = new byte[BlockSize];
+            byte[] result = new byte[2304];
+            ICryptoTransform transform = CBC.Get(new FROGEncryptTransform(preliminaryKey), iv, CryptoDirection.Encrypt);
+            for (int i = 0; i < blocksCount; i++)
+            {
+                Array.Fill<byte>(buf, 0);
+                transform.TransformBlock(buf, 0, BlockSize, result, i * BlockSize);
+            }
+            return result;
         }
 
     }

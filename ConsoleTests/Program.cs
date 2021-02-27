@@ -64,7 +64,7 @@ namespace ConsoleTests
                 // TODOL to another func   transform_simple_block
                 Array.Copy(inputBuffer, inputOffset + i * _inputBlockSize, _inputBuf, 0, _inputBlockSize);
                 BigInteger text = new BigInteger(_inputBuf);
-                BigInteger transformed = Program.BinPowMod(text, _e, _n);
+                BigInteger transformed = RSAAlg.BinPowMod(text, _e, _n);
                 byte[] bytes = transformed.ToByteArrayWithoutZero();
                 Array.Copy(bytes, 0, outputBuffer, outputOffset + i * _outputBlockSize, bytes.Length);
                 for (int j = bytes.Length; j < _outputBlockSize; ++j)
@@ -81,10 +81,10 @@ namespace ConsoleTests
         // static
         private static bool TryFindExponents(BigInteger eulerFuncN, out BigInteger e, out BigInteger d)
         {
-            List<int> primes = Program.CalcPrimes(100);
+            List<int> primes = RSAAlg.CalcPrimes(100);
             Random random = new Random(123); // TODOL remove seed
             e = primes[random.Next(2, primes.Count)];
-            if (Program.GCD(e, eulerFuncN, out d, out BigInteger _) == 1)
+            if (RSAAlg.GCD(e, eulerFuncN, out d, out BigInteger _) == 1)
             {
                 if (d < 0)
                     d = (d % eulerFuncN) + eulerFuncN;
@@ -345,7 +345,7 @@ namespace ConsoleTests
             LoadPrimesFromFiles(out BigInteger p, out BigInteger q);
             BigInteger n = p * q;
             BigInteger phi_n = (p - 1) * (q - 1);
-            List<int> primes = CalcPrimes(1000);
+            List<int> primes = RSAAlg.CalcPrimes(1000);
             BigInteger e, d;
             do
             {
@@ -353,7 +353,7 @@ namespace ConsoleTests
                 e = primes[index];
                 primes.RemoveAt(index);
                 Console.WriteLine("check for e");
-            } while (GCD(e, phi_n, out d, out BigInteger _) != 1);
+            } while (RSAAlg.GCD(e, phi_n, out d, out BigInteger _) != 1);
 
             if (d < 0)
                 d = (d % phi_n) + phi_n;
@@ -414,7 +414,7 @@ namespace ConsoleTests
             BigInteger exponent, BigInteger modulus)
         {
             BigInteger value = new BigInteger(inputBlock);
-            BigInteger result = BinPowMod(value, exponent, modulus);
+            BigInteger result = RSAAlg.BinPowMod(value, exponent, modulus);
             byte[] resultBytes = result.ToByteArray();
             if (resultBytes.Length <= outputBlock.Length)
             {
@@ -483,7 +483,7 @@ namespace ConsoleTests
             for (; roundsCount > 0; --roundsCount)
             {
                 BigInteger a = RandomBigInteger(2, nMinus1);
-                BigInteger x = BinPowMod(a, d, n);
+                BigInteger x = RSAAlg.BinPowMod(a, d, n);
                 if (x == 1 || x == nMinus1)
                     continue;
 

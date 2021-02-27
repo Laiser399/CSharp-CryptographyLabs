@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using CryptographyLabs.Crypto;
+using CryptographyLabs.Crypto.BlockCouplingModes;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +26,24 @@ namespace UnitTests
 
             LongText1 = new byte[800_001];
             random.NextBytes(LongText1);
+        }
+
+        public static async Task CheckMultithread(Func<INiceCryptoTransform> getEncryptor, 
+            Func<INiceCryptoTransform> getDecryptor)
+        {
+            await CheckMultithread(ShortText0, getEncryptor, getDecryptor);
+            await CheckMultithread(LongText1, getEncryptor, getDecryptor);
+        }
+
+        private static async Task CheckMultithread(byte[] text, Func<INiceCryptoTransform> getEncryptor,
+            Func<INiceCryptoTransform> getDecryptor)
+        {
+            byte[] encrypted = await ECB.TransformAsync(text, getEncryptor());
+            byte[] decrypted = await ECB.TransformAsync(encrypted, getDecryptor());
+
+            Assert.AreEqual(text.Length, decrypted.Length);
+            for (int i = 0; i < text.Length; i++)
+                Assert.AreEqual(text[i], decrypted[i]);
         }
 
         public static void Check(Func<ICryptoTransform> getEncryptor, Func<ICryptoTransform> getDecryptor, int bytesCount)
