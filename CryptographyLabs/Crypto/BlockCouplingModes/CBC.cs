@@ -60,7 +60,7 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
             Array.Copy(IV, _initVector, InputBlockSize);
         }
 
-        #region ICryptoTransform interface
+        #region BaseDecryptTransform
 
         protected override void Transform(byte[] inputBuffer, int inputOffset, byte[] outputBuffer, int outputOffset)
         {

@@ -78,6 +78,8 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
             }
         }
 
+        // задерживать 2 блока необходимо, т.к. в последнем хранится 
+        // только количество действительных байт предпоследнего блока
         public byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount)
         {
             if(inputCount != 0)

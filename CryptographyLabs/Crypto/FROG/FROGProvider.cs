@@ -134,13 +134,16 @@ namespace CryptographyLabs.Crypto
             return result;
         }
 
+        /// <summary>
+        /// Процедура форматирования ключа
+        /// </summary>
         private static byte[][][] FormatExpandedKey(byte[] expandedKey, CryptoDirection direction)
         {
             int bytesInKey = 288;// 16 + 256 + 16
             byte[][][] result = new byte[8][][];// indices: round, key(16, 256, 16), byteIndex
             for (int i = 0; i < 8; i++)
             {
-                // 4.1, 4.2
+                // 1
                 byte[] key1 = new byte[16];
                 byte[] key2 = new byte[256];
                 byte[] key3 = new byte[16];
@@ -149,16 +152,16 @@ namespace CryptographyLabs.Crypto
                 Array.Copy(expandedKey, i * bytesInKey + 16, key2, 0, 256);
                 Array.Copy(expandedKey, i * bytesInKey + 272, key3, 0, 16);
 
-                // 4.3
+                // 2
                 Format(key2);
                 if (direction == CryptoDirection.Decrypt)
                     key2 = Invert(key2);
 
-                // 4.4
+                // 3.a
                 Format(key3);
-                // 4.5
+                // 3.b
                 MakeSingleCycle(key3);
-                // 4.6
+                // 3.c
                 for (int j = 0; j < 16; j++)
                     if (key3[j] == j + 1)
                         key3[j] = (byte)((j + 2) % 16);
@@ -195,35 +198,26 @@ namespace CryptographyLabs.Crypto
             return result;
         }
 
-        private static void MakeSingleCycle(byte[] cycles)
+        private static void MakeSingleCycle(byte[] permTable)
         {
-            BitArray used = new BitArray(16, false);
+            BitArray inCycle = new BitArray(permTable.Length, false);
 
-            int startIndex = 0;
-            byte index = (byte)startIndex;
-            used[index] = true;
-            while (cycles[index] != startIndex)
-            {
-                index = cycles[index];
-                used[index] = true;
-            }
-
+            int index = 0;
             while (true)
             {
-                int nextStartIndex = used.FirstIndexOf(false);
-                if (nextStartIndex == -1)
+                inCycle[index] = true;
+                if (inCycle[permTable[index]])
                 {
-                    cycles[index] = 0;
-                    break;
+                    int nextCycleStart = inCycle.FirstIndexOf(false);
+                    if (nextCycleStart == -1)
+                    {
+                        permTable[index] = 0;
+                        break;
+                    }
+                    else
+                        permTable[index] = (byte)nextCycleStart;
                 }
-                cycles[index] = (byte)nextStartIndex;
-                index = cycles[index];
-                used[index] = true;
-                do
-                {
-                    index = cycles[index];
-                    used[index] = true;
-                } while (cycles[index] != nextStartIndex);
+                index = permTable[index];
             }
         }
 

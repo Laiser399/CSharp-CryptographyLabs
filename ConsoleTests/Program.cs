@@ -99,13 +99,26 @@ namespace ConsoleTests
     {
         private static string pFilename = "p";
         private static string qFilename = "q";
+        private static Random _random = new Random(123);
 
         static void Main(string[] args)
         {
+            
 
             Console.WriteLine();
             Console.WriteLine("Press...");
             Console.ReadKey();
+        }
+
+        private static void Shaffle(byte[] arr)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                int swapIndex = _random.Next(0, arr.Length);
+                byte tm = arr[swapIndex];
+                arr[swapIndex] = arr[i];
+                arr[i] = tm;
+            }
         }
 
         private static void NiceStreamTest()
