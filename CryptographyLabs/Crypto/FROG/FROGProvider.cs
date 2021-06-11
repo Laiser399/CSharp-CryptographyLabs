@@ -180,13 +180,12 @@ namespace CryptographyLabs.Crypto
             for (int i = 0; i < values.Length; i++)
                 U.Add((byte)i);
 
-            int prevIndex = 0;
+            int index = 0;
             for (int i = 0; i < values.Length; i++)
             {
-                int currentIndex = (prevIndex + values[i]) % U.Count;
-                prevIndex = currentIndex;
-                values[i] = U[currentIndex];
-                U.RemoveAt(currentIndex);
+                index = (index + values[i]) % U.Count;
+                values[i] = U[index];
+                U.RemoveAt(index);
             }
         }
 
