@@ -60,7 +60,7 @@ namespace CryptographyLabs.GUI
                 if (isFirst)
                     isFirst = false;
                 else
-                    builder.Append(" + ");
+                    builder.Append(" * ");
                 builder.Append(primes[i]);
                 builder.Append("^");
                 builder.Append(degrees[i]);
