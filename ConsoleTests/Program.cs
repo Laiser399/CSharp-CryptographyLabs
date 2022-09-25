@@ -487,6 +487,7 @@ namespace ConsoleTests
             return result;
         }
 
+        // todo Удалить при возможности, Реализовано в MillerRabinPrimalityTester
         // Тест Миллера-Рабина
         private static bool IsPrimeTest(BigInteger n, int roundsCount)
         {
@@ -518,6 +519,7 @@ namespace ConsoleTests
             return true;
         }
 
+        // todo Удалить при возможности, Реализовано в BigIntegerCalculationService
         private static void Factor2Out(BigInteger value, out int exponent2, out BigInteger remainder)
         {
             exponent2 = 0;
@@ -529,6 +531,7 @@ namespace ConsoleTests
             }
         }
 
+        // todo Удалить при возможности, Реализовано в RandomBigIntegerGenerator и эта реализация плохая
         /// <summary>
         /// Generate random BigInteger from minValue to maxValue (exclude maxValue)
         /// </summary>

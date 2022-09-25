@@ -39,6 +39,7 @@ namespace CryptographyLabs.Crypto
             return res;
         }
 
+        // todo Удалить при возможности, Реализовано в BigIntegerCalculationService
         public static BigInteger BinPowMod(BigInteger a, BigInteger pow, BigInteger mod)
         {
             if (a == 0 && pow == 0)
