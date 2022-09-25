@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.RSA.UnitTests", "Module.RSA.UnitTests\Module.RSA.UnitTests.csproj", "{52C1C836-49BA-4F53-9CA6-F7A2E550EEBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{BC32831F-F4FB-477D-96D5-7567CDFDDD60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC32831F-F4FB-477D-96D5-7567CDFDDD60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC32831F-F4FB-477D-96D5-7567CDFDDD60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52C1C836-49BA-4F53-9CA6-F7A2E550EEBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C1C836-49BA-4F53-9CA6-F7A2E550EEBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C1C836-49BA-4F53-9CA6-F7A2E550EEBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C1C836-49BA-4F53-9CA6-F7A2E550EEBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
