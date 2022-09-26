@@ -1,5 +1,6 @@
 group Main
 source https://api.nuget.org/v3/index.json
-framework: net6.0
-    nuget NUnit
+framework: net6.0, netstandard2.1
+    nuget Autofac
     nuget Microsoft.NET.Test.Sdk
+    nuget NUnit
