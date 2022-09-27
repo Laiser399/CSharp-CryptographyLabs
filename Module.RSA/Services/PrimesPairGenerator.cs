@@ -7,21 +7,21 @@ namespace Module.RSA.Services;
 
 public class PrimesPairGenerator : IPrimesPairGenerator
 {
+    private readonly IRandomProvider _randomProvider;
     private readonly IPrimesPairGeneratorParameters _parameters;
     private readonly IPrimalityTester _primalityTester;
-
-    private readonly Random _random;
 
     private readonly BigInteger _maxValue;
 
     public PrimesPairGenerator(
+        IRandomProvider randomProvider,
         IPrimesPairGeneratorParameters parameters,
         IPrimalityTester primalityTester)
     {
+        _randomProvider = randomProvider;
         _parameters = parameters;
         _primalityTester = primalityTester;
 
-        _random = new Random();
         _maxValue = GetMaxValue();
     }
 
@@ -40,14 +40,8 @@ public class PrimesPairGenerator : IPrimesPairGenerator
 
     public void Generate(out BigInteger p, out BigInteger q)
     {
-        while (true)
-        {
-            p = GenerateP();
-            if (TryGenerateQ(p, out q))
-            {
-                return;
-            }
-        }
+        p = GenerateP();
+        q = GenerateQ(p);
     }
 
     private BigInteger GenerateP()
@@ -66,9 +60,9 @@ public class PrimesPairGenerator : IPrimesPairGenerator
     {
         p = initialP;
 
-        for (var i = 0; i < _parameters.StepTriesCount; i++)
+        for (var i = 0; i < _parameters.AddingTriesCount; i++)
         {
-            if (_primalityTester.TestIsPrime(p, _parameters.PrimalityProbability))
+            if (_primalityTester.TestIsPrime(p))
             {
                 return true;
             }
@@ -86,23 +80,21 @@ public class PrimesPairGenerator : IPrimesPairGenerator
     private BigInteger GetInitialP()
     {
         var pBytes = new byte[_parameters.ByteCount + 1];
-        _random.NextBytes(pBytes);
+        _randomProvider.Random.NextBytes(pBytes);
         PrepareBytes(pBytes);
         return new BigInteger(pBytes);
     }
 
-    private bool TryGenerateQ(BigInteger p, out BigInteger q)
+    private BigInteger GenerateQ(BigInteger p)
     {
-        for (var i = 0; i < _parameters.StepTriesCount; i++)
+        while (true)
         {
             var initialQ = GetInitialQ(p);
-            if (TryGenerateQByAdding(p, initialQ, out q))
+            if (TryGenerateQByAdding(p, initialQ, out var q))
             {
-                return true;
+                return q;
             }
         }
-
-        return false;
     }
 
     private BigInteger GetInitialQ(BigInteger p)
@@ -110,7 +102,7 @@ public class PrimesPairGenerator : IPrimesPairGenerator
         var pSecondSignificantByte = p.ToByteArray()[^2];
 
         var qBytes = new byte[_parameters.ByteCount + 1];
-        _random.NextBytes(qBytes);
+        _randomProvider.Random.NextBytes(qBytes);
         PrepareBytes(qBytes);
         qBytes[^2] ^= (byte)(~(pSecondSignificantByte ^ qBytes[^2]) & 0b01000000);
 
@@ -121,12 +113,14 @@ public class PrimesPairGenerator : IPrimesPairGenerator
     {
         q = initialQ;
 
-        for (var i = 0; i < _parameters.StepTriesCount; i++)
+        for (var i = 0; i < _parameters.AddingTriesCount; i++)
         {
-            if (p != q
-                && !HasWienerAttackVulnerability(p, q)
-                && HasEnoughDifference(p, q)
-                && _primalityTester.TestIsPrime(q, _parameters.PrimalityProbability))
+            if (!HasEnoughDifference(p, q))
+            {
+                return false;
+            }
+
+            if (p != q && _primalityTester.TestIsPrime(q))
             {
                 return true;
             }
@@ -141,24 +135,14 @@ public class PrimesPairGenerator : IPrimesPairGenerator
         return false;
     }
 
-    private static bool HasWienerAttackVulnerability(BigInteger a, BigInteger b)
+    private bool HasEnoughDifference(BigInteger p, BigInteger q)
     {
-        if (a > b)
+        if (p > q)
         {
-            (a, b) = (b, a);
+            (p, q) = (q, p);
         }
 
-        return b <= 2 * a;
-    }
-
-    private bool HasEnoughDifference(BigInteger a, BigInteger b)
-    {
-        if (a > b)
-        {
-            (a, b) = (b, a);
-        }
-
-        var diff = b - a;
+        var diff = q - p;
         var bitCount = diff.GetBitCount();
 
         return bitCount >= _parameters.PQDifferenceMinBitCount;

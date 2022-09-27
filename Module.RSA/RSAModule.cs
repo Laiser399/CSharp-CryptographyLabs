@@ -13,8 +13,7 @@ public class RSAModule : Autofac.Module
             .As<IPrimesPairGenerator>();
         builder
             .RegisterType<MillerRabinPrimalityTester>()
-            .As<IPrimalityTester>()
-            .SingleInstance();
+            .As<IPrimalityTester>();
         builder
             .RegisterType<RoundCountCalculator>()
             .As<IRoundCountCalculator>()

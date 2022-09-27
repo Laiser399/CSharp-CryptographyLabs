@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Module.RSA.Entities.Abstract;
 using Module.RSA.Services.Abstract;
 
 namespace Module.RSA.Services;
@@ -7,32 +8,32 @@ public class MillerRabinPrimalityTester : IPrimalityTester
 {
     private const double WrongResultProbability = 0.25;
 
-    private readonly IRoundCountCalculator _roundCountCalculator;
+    private readonly IRandomProvider _randomProvider;
     private readonly IBigIntegerCalculationService _bigIntegerCalculationService;
     private readonly IRandomBigIntegerGenerator _randomBigIntegerGenerator;
 
-    private readonly Random _random;
+    private readonly int _roundCount;
 
     public MillerRabinPrimalityTester(
+        IPrimalityTesterParameters parameters,
+        IRandomProvider randomProvider,
         IRoundCountCalculator roundCountCalculator,
         IBigIntegerCalculationService bigIntegerCalculationService,
         IRandomBigIntegerGenerator randomBigIntegerGenerator)
     {
-        _roundCountCalculator = roundCountCalculator;
+        _randomProvider = randomProvider;
         _bigIntegerCalculationService = bigIntegerCalculationService;
         _randomBigIntegerGenerator = randomBigIntegerGenerator;
 
-        _random = new Random();
+        _roundCount = roundCountCalculator.GetRoundCount(parameters.PrimalityProbability, WrongResultProbability);
     }
 
-    public bool TestIsPrime(BigInteger value, double probability)
+    public bool TestIsPrime(BigInteger value)
     {
-        var roundCount = _roundCountCalculator.GetRoundCount(probability, WrongResultProbability);
-
         var valueMinus1 = value - 1;
         _bigIntegerCalculationService.Factor2Out(valueMinus1, out var s, out var d);
 
-        for (var i = 0; i < roundCount; i++)
+        for (var i = 0; i < _roundCount; i++)
         {
             if (!TestIsPrimeSingleRound(value, valueMinus1, s, d))
             {
@@ -44,30 +45,30 @@ public class MillerRabinPrimalityTester : IPrimalityTester
     }
 
     private bool TestIsPrimeSingleRound(
-        BigInteger value,
-        BigInteger valueMinus1,
+        BigInteger n,
+        BigInteger nMinus1,
         int s,
         BigInteger d)
     {
-        var a = _randomBigIntegerGenerator.Generate(2, valueMinus1, _random);
+        var a = _randomBigIntegerGenerator.Generate(2, nMinus1, _randomProvider.Random);
 
-        if (_bigIntegerCalculationService.GreatestCommonDivisor(value, a) != 1)
+        if (_bigIntegerCalculationService.GreatestCommonDivisor(n, a) != 1)
         {
             return false;
         }
 
-        var x = _bigIntegerCalculationService.BinPowMod(a, d, value);
+        var x = _bigIntegerCalculationService.BinPowMod(a, d, n);
 
         // Второе условие - это нулевой шаг из последующего цикла
-        if (x == 1 || x == valueMinus1)
+        if (x == 1 || x == nMinus1)
         {
             return true;
         }
 
         for (var r = 1; r < s; ++r)
         {
-            x = (x * x) % value;
-            if (x == valueMinus1)
+            x = (x * x) % n;
+            if (x == nMinus1)
             {
                 return true;
             }

@@ -8,9 +8,9 @@ public interface IPrimalityTester
     /// Производит вероятностную проверку на то, является ли число простым.
     /// </summary>
     /// <returns>
-    /// true: Число простое с вероятностью <paramref name="probability"/>
+    /// true: Число простое с заданной вероятностью
     /// <br/>
     /// false: Число (точно) составное
     /// </returns>
-    bool TestIsPrime(BigInteger value, double probability);
+    bool TestIsPrime(BigInteger value);
 }

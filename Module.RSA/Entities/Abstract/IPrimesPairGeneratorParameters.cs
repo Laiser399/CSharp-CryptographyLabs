@@ -3,7 +3,6 @@
 public interface IPrimesPairGeneratorParameters
 {
     int ByteCount { get; }
-    double PrimalityProbability { get; }
     int PQDifferenceMinBitCount { get; }
-    int StepTriesCount { get; }
+    int AddingTriesCount { get; }
 }
