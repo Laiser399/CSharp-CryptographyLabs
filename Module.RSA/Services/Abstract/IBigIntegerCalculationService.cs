@@ -20,4 +20,15 @@ public interface IBigIntegerCalculationService
     void Factor2Out(BigInteger value, out int exponent2, out BigInteger remainder);
 
     BigInteger GreatestCommonDivisor(BigInteger a, BigInteger b);
+
+    /// <summary>
+    /// Помимо НОД вычисляет коэффициенты <paramref name="x"/>, <paramref name="y"/> такие, что<br/>
+    /// x*a + y*b = gcd(a, b)
+    /// </summary>
+    BigInteger GreatestCommonDivisor(BigInteger a, BigInteger b, out BigInteger x, out BigInteger y);
+
+    /// <summary>
+    /// Корень четвертой степени
+    /// </summary>
+    BigInteger FourthRoot(BigInteger value);
 }

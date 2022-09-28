@@ -61,10 +61,38 @@ public class BigIntegerCalculationServiceTests
     [TestCase(7, 49, 7)]
     [TestCase(14, 21, 7)]
     [TestCase(1024, 1024, 1024)]
-    public void GreatestCommonDivisor_Test(int a, int b, int expected)
+    public void GreatestCommonDivisor_Test(int a, int b, int expectedGCD)
     {
-        var actual = _bigIntegerCalculationService!.GreatestCommonDivisor(a, b);
+        var actualGCD1 = _bigIntegerCalculationService!.GreatestCommonDivisor(a, b);
+        var actualGCD2 = _bigIntegerCalculationService!.GreatestCommonDivisor(a, b, out var x, out var y);
 
-        Assert.AreEqual((BigInteger)expected, actual);
+        Assert.AreEqual((BigInteger)expectedGCD, actualGCD1);
+        Assert.AreEqual((BigInteger)expectedGCD, actualGCD2);
+        Assert.AreEqual(actualGCD2, x * a + y * b);
+    }
+
+    [Test]
+    [TestCase(0, 0)]
+    [TestCase(1, 1)]
+    [TestCase(4)]
+    [TestCase(13)]
+    [TestCase(16, 2)]
+    [TestCase(49)]
+    [TestCase(8887348)]
+    public void FourthRoot_Test(int value, int? expectedExactResult = null)
+    {
+        var actualResult = _bigIntegerCalculationService!.FourthRoot(value);
+
+        if (expectedExactResult is not null)
+        {
+            Assert.AreEqual(expectedExactResult, actualResult);
+        }
+        else
+        {
+            var leftBound = BigInteger.Pow(actualResult, 4);
+            var rightBound = BigInteger.Pow(actualResult + 1, 4);
+            Assert.GreaterOrEqual(actualResult, leftBound);
+            Assert.LessOrEqual(actualResult, rightBound);
+        }
     }
 }

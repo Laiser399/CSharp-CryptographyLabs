@@ -72,4 +72,14 @@ public class BigIntegerCalculationService : IBigIntegerCalculationService
 
         return a;
     }
+
+    public BigInteger GreatestCommonDivisor(BigInteger a, BigInteger b, out BigInteger x, out BigInteger y)
+    {
+        throw new NotImplementedException();
+    }
+
+    public BigInteger FourthRoot(BigInteger value)
+    {
+        throw new NotImplementedException();
+    }
 }
