@@ -54,13 +54,18 @@ public class BigIntegerCalculationServiceTests
     }
 
     [Test]
+    [TestCase(7, 0, 7)]
+    [TestCase(0, 5, 5)]
     [TestCase(1, 1, 1)]
     [TestCase(1, 3, 1)]
     [TestCase(3, 1, 1)]
     [TestCase(49, 7, 7)]
     [TestCase(7, 49, 7)]
     [TestCase(14, 21, 7)]
+    [TestCase(21, 14, 7)]
     [TestCase(1024, 1024, 1024)]
+    [TestCase(5 * 13 * 17 * 17, 3 * 5 * 17, 5 * 17)]
+    [TestCase(3 * 5 * 17, 5 * 13 * 17 * 17, 5 * 17)]
     public void GreatestCommonDivisor_Test(int a, int b, int expectedGCD)
     {
         var actualGCD1 = _bigIntegerCalculationService!.GreatestCommonDivisor(a, b);

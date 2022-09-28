@@ -53,21 +53,19 @@ public class BigIntegerCalculationService : IBigIntegerCalculationService
 
     public BigInteger GreatestCommonDivisor(BigInteger a, BigInteger b)
     {
-        if (a <= 0)
+        if (a < 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(a), "Value must be > 0.");
+            throw new ArgumentOutOfRangeException(nameof(a), "Value must be >= 0.");
         }
 
-        if (b <= 0)
+        if (b < 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(b), "Value must be > 0.");
+            throw new ArgumentOutOfRangeException(nameof(b), "Value must be >= 0.");
         }
 
         while (b > 0)
         {
-            var tm = a;
-            a = b;
-            b = tm % b;
+            (a, b) = (b, a % b);
         }
 
         return a;
@@ -75,7 +73,29 @@ public class BigIntegerCalculationService : IBigIntegerCalculationService
 
     public BigInteger GreatestCommonDivisor(BigInteger a, BigInteger b, out BigInteger x, out BigInteger y)
     {
-        throw new NotImplementedException();
+        if (a < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(a), "Value must be >= 0.");
+        }
+
+        if (b < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(b), "Value must be >= 0.");
+        }
+
+        // Считаем их предыдущими. На каждом шаге принимают такие значения, что a = x * a0 + y * b0.
+        (x, y) = (1, 0);
+        // Считаем их текущими. На каждом шаге принимают такие значения, что b = xCurrent * a0 + yCurrent * b0.
+        var (xCurrent, yCurrent) = ((BigInteger)0, (BigInteger)1);
+        while (b > 0)
+        {
+            var q = a / b;
+            (a, b) = (b, a % b);
+            (xCurrent, x) = (x - q * xCurrent, xCurrent);
+            (yCurrent, y) = (y - q * yCurrent, yCurrent);
+        }
+
+        return a;
     }
 
     public BigInteger FourthRoot(BigInteger value)
