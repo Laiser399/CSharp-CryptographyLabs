@@ -77,27 +77,30 @@ public class BigIntegerCalculationServiceTests
     }
 
     [Test]
-    [TestCase(0, 0)]
-    [TestCase(1, 1)]
-    [TestCase(4)]
-    [TestCase(13)]
-    [TestCase(16, 2)]
-    [TestCase(49)]
-    [TestCase(8887348)]
-    public void FourthRoot_Test(int value, int? expectedExactResult = null)
+    [TestCase("0", 0)]
+    [TestCase("1", 1)]
+    [TestCase("4")]
+    [TestCase("13")]
+    [TestCase("16", 2)]
+    [TestCase("49")]
+    [TestCase("8887348", 54)]
+    [TestCase("5867945618446744073709551615")]
+    [TestCase("410529583717306063201", 142343)]
+    public void FourthRoot_Test(string valueStr, int? expectedExactResult = null)
     {
+        var value = BigInteger.Parse(valueStr);
         var actualResult = _bigIntegerCalculationService!.FourthRoot(value);
 
         if (expectedExactResult is not null)
         {
-            Assert.AreEqual(expectedExactResult, actualResult);
+            Assert.AreEqual((BigInteger)expectedExactResult, actualResult);
         }
         else
         {
             var leftBound = BigInteger.Pow(actualResult, 4);
             var rightBound = BigInteger.Pow(actualResult + 1, 4);
-            Assert.GreaterOrEqual(actualResult, leftBound);
-            Assert.LessOrEqual(actualResult, rightBound);
+            Assert.GreaterOrEqual(value, leftBound);
+            Assert.LessOrEqual(value, rightBound);
         }
     }
 }

@@ -98,8 +98,41 @@ public class BigIntegerCalculationService : IBigIntegerCalculationService
         return a;
     }
 
+    // Alternatives: https://stackoverflow.com/questions/3432412/calculate-square-root-of-a-biginteger-system-numerics-biginteger
     public BigInteger FourthRoot(BigInteger value)
     {
-        throw new NotImplementedException();
+        if (value < 0)
+        {
+            throw new ArgumentException("Value could not be negative.", nameof(value));
+        }
+
+        if (value <= ulong.MaxValue)
+        {
+            return (BigInteger)Math.Pow((double)value, 0.25);
+        }
+
+        var left = (BigInteger)Math.Pow(ulong.MaxValue, 0.25);
+        var right = value / (left * left * left);
+
+        while (true)
+        {
+            var middle = (left + right) >> 1;
+
+            var middle4 = BigInteger.Pow(middle, 4);
+            if (value >= middle4
+                && value <= BigInteger.Pow(middle + 1, 4))
+            {
+                return middle;
+            }
+
+            if (middle4 < value)
+            {
+                left = middle;
+            }
+            else
+            {
+                right = middle;
+            }
+        }
     }
 }

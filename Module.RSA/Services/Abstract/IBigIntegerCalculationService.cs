@@ -28,7 +28,7 @@ public interface IBigIntegerCalculationService
     BigInteger GreatestCommonDivisor(BigInteger a, BigInteger b, out BigInteger x, out BigInteger y);
 
     /// <summary>
-    /// Корень четвертой степени
+    /// Корень четвертой степени. Округляет до целого в меньшую сторону.
     /// </summary>
     BigInteger FourthRoot(BigInteger value);
 }
