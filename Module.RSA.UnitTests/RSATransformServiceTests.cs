@@ -38,7 +38,6 @@ public class RSATransformServiceTests
         _random = new Random(123);
     }
 
-
     [Test]
     [TestCase(1)]
     [TestCase(2)]
@@ -50,8 +49,8 @@ public class RSATransformServiceTests
     }
 
     [Test]
-    [TestCase(1000, 0)]
-    [TestCase(1000.5, 0)]
+    [TestCase(10, 0)]
+    [TestCase(10.5, 0)]
     [TestCase(1, -2)]
     [TestCase(1, -1)]
     [TestCase(1, 0)]
@@ -76,7 +75,10 @@ public class RSATransformServiceTests
     public void Transform_InvalidArgumentTest()
     {
         Assert.Throws<ArgumentException>(() =>
-            _rsaTransformService!.Transform(Array.Empty<byte>(), PublicKey)
+            _rsaTransformService!.Encrypt(Array.Empty<byte>(), PublicKey)
+        );
+        Assert.Throws<ArgumentException>(() =>
+            _rsaTransformService!.Decrypt(Array.Empty<byte>(), PublicKey)
         );
     }
 
@@ -90,10 +92,10 @@ public class RSATransformServiceTests
 
     private void TestTransform(byte[] data)
     {
-        var encrypted = _rsaTransformService!.Transform(data, PublicKey);
+        var encrypted = _rsaTransformService!.Encrypt(data, PublicKey);
         Assert.That(encrypted, Is.Not.EqualTo(data));
 
-        var decrypted = _rsaTransformService!.Transform(encrypted, PrivateKey);
+        var decrypted = _rsaTransformService!.Decrypt(encrypted, PrivateKey);
         Assert.That(decrypted, Is.EqualTo(data));
     }
 }
