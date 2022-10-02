@@ -46,7 +46,7 @@ public class RSATransformServiceTests
     [TestCase(1000)]
     public void Transform_DefaultTest(int byteCount)
     {
-        TestTransform(byteCount);
+        TestTransformWithRandom(byteCount);
     }
 
     [Test]
@@ -60,7 +60,16 @@ public class RSATransformServiceTests
     public void Transform_NSizeBasedTest(double byteCountMultiplier, int byteCountShift)
     {
         var byteCount = (int)(N.GetByteCount(true) * byteCountMultiplier) + byteCountShift;
-        TestTransform(byteCount);
+        TestTransformWithRandom(byteCount);
+    }
+
+    [Test]
+    public void Transform_Test()
+    {
+        var dataValue = PublicKey.Modulus + 2;
+        var data = dataValue.ToByteArray(true);
+
+        TestTransform(data);
     }
 
     [Test]
@@ -71,11 +80,16 @@ public class RSATransformServiceTests
         );
     }
 
-    private void TestTransform(int byteCount)
+    private void TestTransformWithRandom(int byteCount)
     {
         var data = new byte[byteCount];
         _random!.NextBytes(data);
 
+        TestTransform(data);
+    }
+
+    private void TestTransform(byte[] data)
+    {
         var encrypted = _rsaTransformService!.Transform(data, PublicKey);
         Assert.That(encrypted, Is.Not.EqualTo(data));
 
