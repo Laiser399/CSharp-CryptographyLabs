@@ -1,100 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
-using System.IO;
-using System.Reflection;
-using System.Globalization;
-using System.Threading;
-using System.Numerics;
-using CryptographyLabs;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Numerics;
+using System.Security.Cryptography;
+using CryptographyLabs;
 using CryptographyLabs.Crypto;
-using CryptographyLabs.Extensions;
 using CryptographyLabs.Crypto.IO;
-using CryptographyLabs.Crypto.BlockCouplingModes;
+using CryptographyLabs.Extensions;
 
 namespace ConsoleTests
 {
-
-    public class RSACryptoTransform : ICryptoTransform
-    {
-        private int _inputBlockSize;
-        public int InputBlockSize => _inputBlockSize;
-
-        private int _outputBlockSize;
-        public int OutputBlockSize => _outputBlockSize;
-
-        public bool CanTransformMultipleBlocks => true;
-
-        public bool CanReuseTransform => false;
-
-        private BigInteger _n, _e, _d;
-        private byte[] _inputBuf;
-
-
-        public RSACryptoTransform()
-        {
-            Random random = new Random(123);// TODOL seed
-            BigInteger p = Program.RandomPrime(128, 5, random);
-            BigInteger q = Program.RandomPrime(128, 5, random);
-            _n = p * q;
-            BigInteger phi_n = (p - 1) * (q - 1);
-            if (!TryFindExponents(phi_n, out _e, out _d))
-                throw new Exception(); // TODOL regenerate p, q
-            
-
-            _inputBlockSize = Math.Min(p.BytesCount(), q.BytesCount()) - 1;
-            _outputBlockSize = _n.BytesCount();
-
-            _inputBuf = new byte[_inputBlockSize + 1];
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
-        {
-            for (int i = 0; i < inputCount; ++i)
-            {
-                // TODOL to another func   transform_simple_block
-                Array.Copy(inputBuffer, inputOffset + i * _inputBlockSize, _inputBuf, 0, _inputBlockSize);
-                BigInteger text = new BigInteger(_inputBuf);
-                BigInteger transformed = RSAAlg.BinPowMod(text, _e, _n);
-                byte[] bytes = transformed.ToByteArrayWithoutZero();
-                Array.Copy(bytes, 0, outputBuffer, outputOffset + i * _outputBlockSize, bytes.Length);
-                for (int j = bytes.Length; j < _outputBlockSize; ++j)
-                    outputBuffer[outputOffset + i * _outputBlockSize + j] = 0;
-            }
-            return inputCount;
-        }
-
-        public byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount)
-        {
-            throw new NotImplementedException();
-        }
-
-        // static
-        private static bool TryFindExponents(BigInteger eulerFuncN, out BigInteger e, out BigInteger d)
-        {
-            List<int> primes = RSAAlg.CalcPrimes(100);
-            Random random = new Random(123); // TODOL remove seed
-            e = primes[random.Next(2, primes.Count)];
-            if (RSAAlg.GCD(e, eulerFuncN, out d, out BigInteger _) == 1)
-            {
-                if (d < 0)
-                    d = (d % eulerFuncN) + eulerFuncN;
-                return true;
-            }
-            else
-                return false;
-        }
-    }
-
     class Program
     {
         private static string pFilename = "p";
@@ -108,17 +25,6 @@ namespace ConsoleTests
             Console.WriteLine();
             Console.WriteLine("Press...");
             Console.ReadKey();
-        }
-
-        private static void Shaffle(byte[] arr)
-        {
-            for (int i = 0; i < arr.Length; i++)
-            {
-                int swapIndex = _random.Next(0, arr.Length);
-                byte tm = arr[swapIndex];
-                arr[swapIndex] = arr[i];
-                arr[i] = tm;
-            }
         }
 
         private static void NiceStreamTest()
@@ -450,21 +356,6 @@ namespace ConsoleTests
                 return bytes.Length;
         }
 
-        private static void GeneratePrimesInFiles()
-        {
-            int bytesCount = 128;
-            Random random = new Random(123);
-            BigInteger p = RandomPrime(bytesCount, 5, random);
-            BigInteger q = RandomPrime(bytesCount, 5, random);
-
-            File.WriteAllBytes(pFilename, p.ToByteArray());
-            File.WriteAllBytes(qFilename, q.ToByteArray());
-            Console.WriteLine("Generated");
-            Console.WriteLine(p);
-            Console.WriteLine();
-            Console.WriteLine(q);
-        }
-
         private static void LoadPrimesFromFiles(out BigInteger p, out BigInteger q)
         {
             byte[] bytes = File.ReadAllBytes(pFilename);
@@ -472,88 +363,6 @@ namespace ConsoleTests
             bytes = File.ReadAllBytes(qFilename);
             q = new BigInteger(bytes);
         }
-
-        public static BigInteger RandomPrime(int bytesCount, int roundsCount, Random random)
-        {
-            byte[] bytes = new byte[bytesCount + 1];
-            BigInteger result;
-            do
-            {
-                random.NextBytes(bytes);
-                bytes[bytes.Length - 1] = 0;
-                result = new BigInteger(bytes);
-            } while (!IsPrimeTest(result, roundsCount));
-
-            return result;
-        }
-
-        // todo Удалить при возможности, Реализовано в MillerRabinPrimalityTester
-        // Тест Миллера-Рабина
-        private static bool IsPrimeTest(BigInteger n, int roundsCount)
-        {
-            BigInteger nMinus1 = n - 1;
-            Factor2Out(nMinus1, out int r, out BigInteger d);
-
-            for (; roundsCount > 0; --roundsCount)
-            {
-                BigInteger a = RandomBigInteger(2, nMinus1);
-                BigInteger x = RSAAlg.BinPowMod(a, d, n);
-                if (x == 1 || x == nMinus1)
-                    continue;
-
-                bool flag = true;
-                for (int i = 1; i < r; ++i)
-                {
-                    x = (x * x) % n;
-                    if (x == nMinus1)
-                    {
-                        flag = false;
-                        break;
-                    }
-                }
-
-                if (flag)
-                    return false;
-            }
-
-            return true;
-        }
-
-        // todo Удалить при возможности, Реализовано в BigIntegerCalculationService
-        private static void Factor2Out(BigInteger value, out int exponent2, out BigInteger remainder)
-        {
-            exponent2 = 0;
-            remainder = value;
-            while ((remainder & 1) == 0)
-            {
-                ++exponent2;
-                remainder >>= 1;
-            }
-        }
-
-        // todo Удалить при возможности, Реализовано в RandomBigIntegerGenerator и эта реализация плохая
-        /// <summary>
-        /// Generate random BigInteger from minValue to maxValue (exclude maxValue)
-        /// </summary>
-        private static BigInteger RandomBigInteger(BigInteger minValue, BigInteger maxValue)
-        {
-            Random random = new Random(123);// TODOL seed
-
-            maxValue = maxValue - minValue;
-            byte[] bytes = maxValue.ToByteArray();
-            bool withSign = bytes.Length > 1 && bytes[bytes.Length - 1] == 0;
-
-            random.NextBytes(bytes);
-            if (withSign)
-                bytes[bytes.Length - 1] = 0;
-            BigInteger result = new BigInteger(bytes);
-            if (result >= maxValue)
-                result = maxValue - 1;
-
-            return minValue + result;
-        }
-
-        
 
         private static ulong[] CalcPermMasks64(byte[] myTransposition)
         {
@@ -615,7 +424,4 @@ namespace ConsoleTests
         }
 
     }
-
-
-
 }
