@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Module.RSA.Entities;
 using Module.RSA.Entities.Abstract;
+using Module.RSA.Services;
 using Module.RSA.Services.Abstract;
 using NUnit.Framework;
 
@@ -29,7 +30,7 @@ public class RSATransformServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        throw new NotImplementedException();
+        _rsaTransformService = new RSATransformService(new BigIntegerCalculationService());
     }
 
     [SetUp]
