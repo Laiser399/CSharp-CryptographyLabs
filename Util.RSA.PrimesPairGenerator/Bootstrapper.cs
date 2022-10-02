@@ -8,7 +8,11 @@ public static class Bootstrapper
     public static ILifetimeScope BuildLifetimeScope()
     {
         var builder = new ContainerBuilder();
-        builder.RegisterModule<RSAModule>();
+        builder.RegisterModule(new RSAModule
+        {
+            RegisterPrimesGenerator = true
+        });
+
         return builder.Build();
     }
 }
