@@ -4,5 +4,13 @@ namespace Module.RSA.Services.Abstract;
 
 public interface IRSATransformService
 {
-    byte[] Transform(byte[] data, IRSAKey key);
+    /// <summary>
+    /// Подразумевается, что данные могут поступить любые.
+    /// </summary>
+    byte[] Encrypt(byte[] data, IRSAKey key);
+
+    /// <summary>
+    /// Подразумевается, что сюда поступают данные, возвращенные из <see cref="Encrypt"/>
+    /// </summary>
+    byte[] Decrypt(byte[] data, IRSAKey key);
 }
