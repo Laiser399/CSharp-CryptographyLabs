@@ -1,5 +1,5 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
+using System.Windows;
 using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
 using PropertyChanged;
@@ -20,11 +20,11 @@ public class PrimesGenerationResultsVM : IPrimesGenerationResultsVM
 
     private void CopyPToClipboard_Internal()
     {
-        throw new NotImplementedException();
+        Clipboard.SetText(P.ToString());
     }
 
     private void CopyQToClipboard_Internal()
     {
-        throw new NotImplementedException();
+        Clipboard.SetText(Q.ToString());
     }
 }
