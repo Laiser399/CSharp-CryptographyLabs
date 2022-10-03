@@ -5,18 +5,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:views="clr-namespace:CryptographyLabs.GUI.Views"
+    xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
     mc:Ignorable="d"
-    d:DesignHeight="Auto" d:DesignWidth="300">
+    d:DesignHeight="Auto" d:DesignWidth="300"
+    d:DataContext="{d:DesignInstance dtvm:PrimesGenerationDTVM}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical">
-            <views:PrimesGenerationParameters />
+            <views:PrimesGenerationParameters
+                DataContext="{Binding Parameters}" />
 
             <Button
                 HorizontalAlignment="Center" Margin="0 12"
-                Content="Generate" />
+                Content="Generate"
+                Command="{Binding Generate}" />
 
-            <views:PrimesGenerationResults />
+            <views:PrimesGenerationResults
+                DataContext="{Binding Results}" />
         </StackPanel>
     </ScrollViewer>
 </Grid>
