@@ -3,21 +3,20 @@
 using System.Diagnostics;
 using System.Numerics;
 using Autofac;
+using Module.RSA.Entities;
 using Module.RSA.Entities.Abstract;
 using Module.RSA.Services.Abstract;
 using Util.RSA.PrimesPairGenerator;
-using Util.RSA.PrimesPairGenerator.Entities;
 
 var lifetimeScope = Bootstrapper.BuildLifetimeScope();
 
-var parameters = new GeneratorParameters
-{
-    Random = new Random(),
-    ByteCount = 256,
-    PQDifferenceMinBitCount = 256 * 8 - 1,
-    AddingTriesCount = 100,
-    PrimalityProbability = 0.995
-};
+var parameters = new PrimesPairGeneratorCombinedParameters(
+    new Random(),
+    256,
+    256 * 8 - 1,
+    100,
+    0.995
+);
 
 GeneratePQ(lifetimeScope, parameters, out var p, out var q);
 
@@ -34,7 +33,11 @@ File.WriteAllText(Path.Combine(saveDirectoryName, $"{timeStr} q.txt"), q.ToStrin
 Console.WriteLine("Result saved");
 
 
-static void GeneratePQ(ILifetimeScope lifetimeScope, GeneratorParameters parameters, out BigInteger p, out BigInteger q)
+static void GeneratePQ(
+    ILifetimeScope lifetimeScope,
+    PrimesPairGeneratorCombinedParameters parameters,
+    out BigInteger p,
+    out BigInteger q)
 {
     using var scope = RegisterParameters(lifetimeScope, parameters);
     var generator = scope.Resolve<IPrimesPairGenerator>();
@@ -47,7 +50,9 @@ static void GeneratePQ(ILifetimeScope lifetimeScope, GeneratorParameters paramet
 }
 
 
-static ILifetimeScope RegisterParameters(ILifetimeScope scope, GeneratorParameters parameters)
+static ILifetimeScope RegisterParameters(
+    ILifetimeScope scope,
+    PrimesPairGeneratorCombinedParameters parameters)
 {
     return scope.BeginLifetimeScope(builder =>
     {
