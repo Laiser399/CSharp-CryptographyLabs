@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -20,6 +21,7 @@ public class PrimesGenerationVM : IPrimesGenerationVM
     public IPrimesGenerationResultsVM Results { get; }
 
     public bool IsInProgress { get; private set; }
+    public string GenerationTextAnimation { get; private set; } = string.Empty;
     public ICommand Generate => _generate ??= new AsyncRelayCommand(_ => GenerateAsync());
     private ICommand? _generate;
 
@@ -44,14 +46,45 @@ public class PrimesGenerationVM : IPrimesGenerationVM
 
         IsInProgress = true;
 
+        var cancellationTokenSource = new CancellationTokenSource();
+        var animeTask = StartGenerationAnimation(cancellationTokenSource.Token);
+
         try
         {
             await GenerateAsync_Internal();
+            cancellationTokenSource.Cancel();
+            await animeTask;
         }
         finally
         {
             IsInProgress = false;
         }
+    }
+
+    private async Task StartGenerationAnimation(CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            if (GenerationTextAnimation.Length < 10)
+            {
+                GenerationTextAnimation += "-";
+            }
+            else
+            {
+                GenerationTextAnimation = string.Empty;
+            }
+
+            try
+            {
+                await Task.Delay(100, cancellationToken);
+            }
+            catch (TaskCanceledException)
+            {
+                break;
+            }
+        }
+
+        GenerationTextAnimation = string.Empty;
     }
 
     private async Task GenerateAsync_Internal()

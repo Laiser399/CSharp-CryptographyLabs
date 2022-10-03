@@ -9,5 +9,6 @@ public class PrimesGenerationDTVM : IPrimesGenerationVM
     public IPrimesGenerationResultsVM Results { get; } = new PrimesGenerationResultsDTVM();
 
     public bool IsInProgress => true;
+    public string GenerationTextAnimation => "-----";
     public ICommand Generate { get; } = new RelayCommand(_ => { });
 }

@@ -25,14 +25,31 @@
                 }"
                 DataContext="{Binding Parameters}" />
 
-            <Button
-                HorizontalAlignment="Center" Margin="0 12"
-                Content="Generate"
-                IsEnabled="{
-                    Binding IsInProgress, 
-                    Converter={StaticResource InverseBooleanConverter}
-                }"
-                Command="{Binding Generate}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center" HorizontalAlignment="Right"
+                    Text="{Binding GenerationTextAnimation}" />
+                <Button
+                    Grid.Column="1"
+                    HorizontalAlignment="Center" Margin="0 12"
+                    Content="Generate"
+                    IsEnabled="{
+                        Binding IsInProgress, 
+                        Converter={StaticResource InverseBooleanConverter}
+                    }"
+                    Command="{Binding Generate}" />
+                <TextBlock
+                    Grid.Column="2"
+                    VerticalAlignment="Center" HorizontalAlignment="Left"
+                    Text="{Binding GenerationTextAnimation}" />
+            </Grid>
 
             <views:PrimesGenerationResults
                 DataContext="{Binding Results}" />

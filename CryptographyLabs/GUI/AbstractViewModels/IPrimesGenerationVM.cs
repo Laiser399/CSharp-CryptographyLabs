@@ -8,5 +8,6 @@ public interface IPrimesGenerationVM
     IPrimesGenerationResultsVM Results { get; }
 
     bool IsInProgress { get; }
+    string GenerationTextAnimation { get; }
     ICommand Generate { get; }
 }
