@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Numerics;
+using System.Windows;
 using System.Windows.Input;
 using Autofac;
 using CryptographyLabs.GUI.AbstractViewModels;
@@ -53,5 +56,46 @@ public class PrimesGenerationVM : IPrimesGenerationVM
 
         Results.P = p;
         Results.Q = q;
+
+        SaveToFileIfConfigured(p, q);
+    }
+
+    private void SaveToFileIfConfigured(BigInteger p, BigInteger q)
+    {
+        if (!Parameters.IsSaveToFile)
+        {
+            return;
+        }
+
+        if (!Directory.Exists(Parameters.SaveDirectory))
+        {
+            MessageBox.Show(
+                $"Directory \"{Parameters.SaveDirectory}\" does not exists.",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error
+            );
+            return;
+        }
+
+        var timeStr = DateTime.Now.ToString("yyyy.MM.dd HH-mm-ss.fff");
+        var pFilePath = Path.Combine(Parameters.SaveDirectory, $"{timeStr} p.txt");
+        var qFilePath = Path.Combine(Parameters.SaveDirectory, $"{timeStr} q.txt");
+
+        try
+        {
+            File.WriteAllText(pFilePath, p.ToString());
+            File.WriteAllText(qFilePath, q.ToString());
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(
+                $"Error save results to files: {e.Message}\n\n" +
+                $"{e.StackTrace}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error
+            );
+        }
     }
 }
