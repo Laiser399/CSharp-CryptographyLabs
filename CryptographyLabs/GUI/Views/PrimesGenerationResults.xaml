@@ -30,7 +30,8 @@
                 Text="{Binding P, Mode=OneWay}" />
             <Button
                 Grid.Row="0" Grid.Column="2"
-                Content="Copy to clipboard" />
+                Content="Copy to clipboard"
+                Command="{Binding CopyPToClipboard}" />
 
             <TextBlock
                 Grid.Row="1" Grid.Column="0"
@@ -41,7 +42,8 @@
                 Text="{Binding Q, Mode=OneWay}" />
             <Button
                 Grid.Row="1" Grid.Column="2"
-                Content="Copy to clipboard" />
+                Content="Copy to clipboard"
+                Command="{Binding CopyQToClipboard}" />
         </Grid>
     </GroupBox>
 </Grid>
