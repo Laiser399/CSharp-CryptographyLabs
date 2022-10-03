@@ -6,18 +6,32 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:views="clr-namespace:CryptographyLabs.GUI.Views"
     xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
+    xmlns:gui="clr-namespace:CryptographyLabs.GUI"
     mc:Ignorable="d"
     d:DesignHeight="Auto" d:DesignWidth="300"
     d:DataContext="{d:DesignInstance dtvm:PrimesGenerationDTVM}">
 
+    <Grid.Resources>
+        <gui:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    </Grid.Resources>
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical">
             <views:PrimesGenerationParameters
+                IsEnabled="{
+                    Binding DataContext.IsInProgress, 
+                    RelativeSource={RelativeSource AncestorType=Grid},
+                    Converter={StaticResource InverseBooleanConverter}
+                }"
                 DataContext="{Binding Parameters}" />
 
             <Button
                 HorizontalAlignment="Center" Margin="0 12"
                 Content="Generate"
+                IsEnabled="{
+                    Binding IsInProgress, 
+                    Converter={StaticResource InverseBooleanConverter}
+                }"
                 Command="{Binding Generate}" />
 
             <views:PrimesGenerationResults

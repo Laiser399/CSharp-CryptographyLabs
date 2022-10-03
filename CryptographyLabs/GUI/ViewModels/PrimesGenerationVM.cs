@@ -9,14 +9,17 @@ using CryptographyLabs.GUI.AbstractViewModels;
 using Module.RSA.Entities;
 using Module.RSA.Entities.Abstract;
 using Module.RSA.Services.Abstract;
+using PropertyChanged;
 
 namespace CryptographyLabs.GUI.ViewModels;
 
+[AddINotifyPropertyChangedInterface]
 public class PrimesGenerationVM : IPrimesGenerationVM
 {
     public IPrimesGenerationParametersVM Parameters { get; }
     public IPrimesGenerationResultsVM Results { get; }
 
+    public bool IsInProgress { get; private set; }
     public ICommand Generate => _generate ??= new AsyncRelayCommand(_ => GenerateAsync());
     private ICommand? _generate;
 
@@ -33,6 +36,25 @@ public class PrimesGenerationVM : IPrimesGenerationVM
     }
 
     private async Task GenerateAsync()
+    {
+        if (IsInProgress)
+        {
+            return;
+        }
+
+        IsInProgress = true;
+
+        try
+        {
+            await GenerateAsync_Internal();
+        }
+        finally
+        {
+            IsInProgress = false;
+        }
+    }
+
+    private async Task GenerateAsync_Internal()
     {
         var parameters = new PrimesPairGeneratorCombinedParameters(
             new Random(Parameters.Seed),

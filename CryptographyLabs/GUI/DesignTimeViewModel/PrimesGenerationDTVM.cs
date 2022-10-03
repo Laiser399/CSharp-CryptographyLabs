@@ -8,5 +8,6 @@ public class PrimesGenerationDTVM : IPrimesGenerationVM
     public IPrimesGenerationParametersVM Parameters { get; } = new PrimesGenerationParametersDTVM();
     public IPrimesGenerationResultsVM Results { get; } = new PrimesGenerationResultsDTVM();
 
+    public bool IsInProgress => true;
     public ICommand Generate { get; } = new RelayCommand(_ => { });
 }
