@@ -1,45 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CryptographyLabs.GUI
 {
     public class RelayCommand : ICommand
     {
-        private Action<object> _execute;
-        private Predicate<object> _canExecute;
-
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
+        public event EventHandler? CanExecuteChanged
         {
-            if (execute == null)
-                throw new ArgumentNullException("execute");
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
 
+        private readonly Action<object?> _execute;
+        private readonly Predicate<object?>? _canExecute;
+
+        public RelayCommand(Action<object?> execute, Predicate<object?>? canExecute = null)
+        {
             _execute = execute;
             _canExecute = canExecute;
         }
 
-        event EventHandler ICommand.CanExecuteChanged
+        public bool CanExecute(object? parameter)
         {
-            add
-            {
-                CommandManager.RequerySuggested += value;
-            }
-
-            remove
-            {
-                CommandManager.RequerySuggested -= value;
-            }
+            return _canExecute is null || _canExecute(parameter);
         }
 
-        bool ICommand.CanExecute(object parameter)
-        {
-            return _canExecute == null || _canExecute(parameter);
-        }
-
-        void ICommand.Execute(object parameter)
+        public void Execute(object? parameter)
         {
             _execute(parameter);
         }
