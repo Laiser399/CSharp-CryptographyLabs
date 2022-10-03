@@ -4,8 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
     mc:Ignorable="d"
-    d:DesignHeight="Auto" d:DesignWidth="300">
+    d:DesignHeight="Auto" d:DesignWidth="300"
+    d:DataContext="{d:DesignInstance dtvm:PrimesGenerationParametersDTVM}">
 
     <GroupBox Header="Parameters">
         <Grid>
@@ -30,21 +32,21 @@
                     Text="Seed" />
                 <TextBox
                     Grid.Row="0" Grid.Column="1"
-                    Text="" />
+                    Text="{Binding Seed}" />
 
                 <TextBlock
                     Grid.Row="1" Grid.Column="0"
                     Text="Byte count" />
                 <TextBox
                     Grid.Row="1" Grid.Column="1"
-                    Text="" />
+                    Text="{Binding ByteCount}" />
 
                 <TextBlock
                     Grid.Row="2" Grid.Column="0"
                     Text="Probability" />
                 <TextBox
                     Grid.Row="2" Grid.Column="1"
-                    Text="" />
+                    Text="{Binding Probability}" />
             </Grid>
 
             <Grid Grid.Row="1" Margin="0 12 0 0">
@@ -60,15 +62,20 @@
 
                 <CheckBox
                     Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
-                    Content="Save to files" />
+                    Content="Save to files"
+                    IsChecked="{Binding IsSaveToFile}" />
                 <TextBlock
                     Grid.Row="1" Grid.Column="0"
                     Text="Save directory" />
-                <TextBox Grid.Row="1" Grid.Column="1" />
+                <TextBox
+                    Grid.Row="1" Grid.Column="1"
+                    Text="{Binding SaveDirectory}"
+                    IsEnabled="{Binding IsSaveToFile}" />
                 <Button
                     Grid.Row="1" Grid.Column="2"
                     Padding="6 0"
-                    Content="..." />
+                    Content="..."
+                    IsEnabled="{Binding IsSaveToFile}" />
             </Grid>
         </Grid>
     </GroupBox>
