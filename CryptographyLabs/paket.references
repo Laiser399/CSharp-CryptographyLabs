@@ -1,0 +1,5 @@
+﻿group Main
+    Fody
+    Newtonsoft.Json
+    PropertyChanged.Fody
+    WindowsAPICodePack

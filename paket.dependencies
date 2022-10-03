@@ -1,6 +1,10 @@
 group Main
 source https://api.nuget.org/v3/index.json
-framework: net6.0, netstandard2.1
+framework: net6.0, net6.0-windows, netstandard2.1
     nuget Autofac
+    nuget Fody
     nuget Microsoft.NET.Test.Sdk
     nuget NUnit
+    nuget Newtonsoft.Json
+    nuget PropertyChanged.Fody
+    nuget WindowsAPICodePack
