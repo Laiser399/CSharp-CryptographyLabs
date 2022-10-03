@@ -2,6 +2,7 @@
 using CryptographyLabs.GUI;
 using CryptographyLabs.GUI.AbstractViewModels;
 using CryptographyLabs.GUI.ViewModels;
+using Module.RSA;
 
 namespace CryptographyLabs;
 
@@ -23,6 +24,11 @@ public static class Bootstrapper
         builder
             .RegisterType<PrimesGenerationResultsVM>()
             .As<IPrimesGenerationResultsVM>();
+
+        builder.RegisterModule(new RSAModule
+        {
+            RegisterPrimesGenerator = true
+        });
 
         return builder.Build();
     }
