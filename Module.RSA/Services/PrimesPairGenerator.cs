@@ -38,6 +38,15 @@ public class PrimesPairGenerator : IPrimesPairGenerator
         return new BigInteger(bytes);
     }
 
+    public Task<(BigInteger p, BigInteger q)> GenerateAsync()
+    {
+        return Task.Run(() =>
+        {
+            Generate(out var p, out var q);
+            return (p, q);
+        });
+    }
+
     public void Generate(out BigInteger p, out BigInteger q)
     {
         p = GenerateP();

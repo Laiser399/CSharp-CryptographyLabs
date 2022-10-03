@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Autofac;
@@ -16,7 +17,7 @@ public class PrimesGenerationVM : IPrimesGenerationVM
     public IPrimesGenerationParametersVM Parameters { get; }
     public IPrimesGenerationResultsVM Results { get; }
 
-    public ICommand Generate => _generate ??= new RelayCommand(_ => Generate_Internal());
+    public ICommand Generate => _generate ??= new AsyncRelayCommand(_ => GenerateAsync());
     private ICommand? _generate;
 
     private readonly ILifetimeScope _lifetimeScope;
@@ -31,7 +32,7 @@ public class PrimesGenerationVM : IPrimesGenerationVM
         Results = resultsVM;
     }
 
-    private void Generate_Internal()
+    private async Task GenerateAsync()
     {
         var parameters = new PrimesPairGeneratorCombinedParameters(
             new Random(Parameters.Seed),
@@ -52,7 +53,7 @@ public class PrimesGenerationVM : IPrimesGenerationVM
         });
 
         var generator = registeredParametersLifetimeScope.Resolve<IPrimesPairGenerator>();
-        generator.Generate(out var p, out var q);
+        var (p, q) = await generator.GenerateAsync();
 
         Results.P = p;
         Results.Q = q;
