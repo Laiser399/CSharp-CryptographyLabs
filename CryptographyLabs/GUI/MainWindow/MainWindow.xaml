@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:gui="clr-namespace:CryptographyLabs.GUI"
+        xmlns:views="clr-namespace:CryptographyLabs.GUI.Views"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
@@ -217,7 +218,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="RSA">
-                        <TextBlock Text="TODO RSA" FontSize="40"/>
+                        <views:PrimesGeneration DataContext="{Binding PrimesGeneration}"/>
                     </TabItem>
                     <TabItem Header="Rijndael">
                         <StackPanel>
@@ -231,7 +232,7 @@
                             <ContentControl Content="{Binding RijndaelVM}"/>
                         </StackPanel>
                     </TabItem>
-                    <TabItem Header="FROG" IsSelected="True">
+                    <TabItem Header="FROG">
                         <ContentControl Content="{Binding FrogVM}"/>
                     </TabItem>
                 </TabControl>

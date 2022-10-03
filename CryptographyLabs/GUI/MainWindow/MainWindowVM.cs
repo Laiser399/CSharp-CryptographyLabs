@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using CryptographyLabs.GUI.AbstractViewModels;
 
 namespace CryptographyLabs.GUI
 {
@@ -51,6 +45,9 @@ namespace CryptographyLabs.GUI
         private RC4VM _rc4VM;
         public RC4VM RC4VM => _rc4VM ?? (_rc4VM = new RC4VM(this));
 
+        // RSA
+        public IPrimesGenerationVM PrimesGeneration { get; }
+        
         // Rijndael
         private RijndaelEncryptVM _rijndaelEncryptVM;
         private RijndaelDecryptVM _rijndaelDecryptVM;
@@ -91,8 +88,10 @@ namespace CryptographyLabs.GUI
 
         #endregion
 
-        public MainWindowVM()
+        public MainWindowVM(IPrimesGenerationVM primesGenerationVM)
         {
+            PrimesGeneration = primesGenerationVM;
+
             _rijndaelEncryptVM = new RijndaelEncryptVM(this);
             _rijndaelDecryptVM = new RijndaelDecryptVM(this);
 
