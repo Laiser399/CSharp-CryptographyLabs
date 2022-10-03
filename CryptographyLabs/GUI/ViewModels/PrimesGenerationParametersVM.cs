@@ -1,6 +1,6 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using PropertyChanged;
 
 namespace CryptographyLabs.GUI.ViewModels;
@@ -22,6 +22,15 @@ public class PrimesGenerationParametersVM : IPrimesGenerationParametersVM
 
     private void ChangeSaveDirectory_Internal()
     {
-        throw new NotImplementedException();
+        var dialog = new CommonOpenFileDialog
+        {
+            IsFolderPicker = true,
+            EnsurePathExists = true
+        };
+
+        if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+        {
+            SaveDirectory = dialog.FileName;
+        }
     }
 }
