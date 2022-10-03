@@ -1,4 +1,5 @@
-﻿using CryptographyLabs.GUI.AbstractViewModels;
+﻿using System.Windows.Input;
+using CryptographyLabs.GUI.AbstractViewModels;
 
 namespace CryptographyLabs.GUI.DesignTimeViewModel;
 
@@ -10,4 +11,5 @@ public class PrimesGenerationParametersDTVM : IPrimesGenerationParametersVM
 
     public bool IsSaveToFile { get; set; } = true;
     public string SaveDirectory { get; set; } = @"Path\To\Some\Directory";
+    public ICommand ChangeSaveDirectory { get; } = new RelayCommand(_ => { });
 }

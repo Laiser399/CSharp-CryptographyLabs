@@ -1,4 +1,6 @@
-﻿namespace CryptographyLabs.GUI.AbstractViewModels;
+﻿using System.Windows.Input;
+
+namespace CryptographyLabs.GUI.AbstractViewModels;
 
 public interface IPrimesGenerationParametersVM
 {
@@ -8,4 +10,5 @@ public interface IPrimesGenerationParametersVM
 
     bool IsSaveToFile { get; set; }
     string SaveDirectory { get; set; }
+    ICommand ChangeSaveDirectory { get; }
 }
