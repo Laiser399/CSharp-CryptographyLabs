@@ -4,6 +4,6 @@ namespace CryptographyLabs.GUI.AbstractViewModels;
 
 public interface IPrimesGenerationResultsVM
 {
-    BigInteger P { get; }
-    BigInteger Q { get; }
+    BigInteger P { get; set; }
+    BigInteger Q { get; set; }
 }
