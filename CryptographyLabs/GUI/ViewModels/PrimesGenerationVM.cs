@@ -89,6 +89,9 @@ public class PrimesGenerationVM : IPrimesGenerationVM
 
     private async Task GenerateAsync_Internal()
     {
+        Results.P = 0;
+        Results.Q = 0;
+
         var parameters = new PrimesPairGeneratorCombinedParameters(
             new Random(Parameters.Seed),
             Parameters.ByteCount,
