@@ -3,6 +3,7 @@ NUGET
   remote: https://api.nuget.org/v3/index.json
     Autofac (6.4)
       System.Diagnostics.DiagnosticSource (>= 4.7.1)
+    FluentValidation (11.2.2)
     Fody (6.6.4)
     Microsoft.CodeCoverage (17.3.2) - restriction: || (== net6.0) (== net6.0-windows7.0) (&& (== netstandard2.1) (>= net45)) (&& (== netstandard2.1) (>= netcoreapp1.0))
     Microsoft.NET.Test.Sdk (17.3.2)

@@ -2,6 +2,7 @@ group Main
 source https://api.nuget.org/v3/index.json
 framework: net6.0, net6.0-windows, netstandard2.1
     nuget Autofac
+    nuget FluentValidation
     nuget Fody
     nuget Microsoft.NET.Test.Sdk
     nuget NUnit

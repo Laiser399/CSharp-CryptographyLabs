@@ -32,21 +32,21 @@
                     Text="Seed" />
                 <TextBox
                     Grid.Row="0" Grid.Column="1"
-                    Text="{Binding Seed}" />
+                    Text="{Binding SeedStr, UpdateSourceTrigger=PropertyChanged}" />
 
                 <TextBlock
                     Grid.Row="1" Grid.Column="0"
                     Text="Byte count" />
                 <TextBox
                     Grid.Row="1" Grid.Column="1"
-                    Text="{Binding ByteCount}" />
+                    Text="{Binding ByteCountStr, UpdateSourceTrigger=PropertyChanged}" />
 
                 <TextBlock
                     Grid.Row="2" Grid.Column="0"
                     Text="Probability" />
                 <TextBox
                     Grid.Row="2" Grid.Column="1"
-                    Text="{Binding Probability}" />
+                    Text="{Binding ProbabilityStr, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
             <Grid Grid.Row="1" Margin="0 12 0 0">
