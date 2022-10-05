@@ -13,7 +13,7 @@ public class RSATransformService : IRSATransformService
         _bigIntegerCalculationService = bigIntegerCalculationService;
     }
 
-    public byte[] Encrypt(byte[] data, IRSAKey key)
+    public byte[] Encrypt(byte[] data, IRSAKey key, Action<double>? progressCallback)
     {
         if (data.Length == 0)
         {
@@ -23,10 +23,10 @@ public class RSATransformService : IRSATransformService
         var nByteCount = key.Modulus.GetByteCount(true);
         var inputBlockSize = nByteCount - 1;
 
-        return Transform(data, key, inputBlockSize, nByteCount);
+        return Transform(data, key, inputBlockSize, nByteCount, progressCallback);
     }
 
-    public byte[] Decrypt(byte[] data, IRSAKey key)
+    public byte[] Decrypt(byte[] data, IRSAKey key, Action<double>? progressCallback)
     {
         if (data.Length == 0)
         {
@@ -36,10 +36,15 @@ public class RSATransformService : IRSATransformService
         var nByteCount = key.Modulus.GetByteCount(true);
         var outputBlockSize = nByteCount - 1;
 
-        return Transform(data, key, nByteCount, outputBlockSize);
+        return Transform(data, key, nByteCount, outputBlockSize, progressCallback);
     }
 
-    private byte[] Transform(byte[] data, IRSAKey key, int inputBlockSize, int outputBlockSize)
+    private byte[] Transform(
+        byte[] data,
+        IRSAKey key,
+        int inputBlockSize,
+        int outputBlockSize,
+        Action<double>? progressCallback)
     {
         var blockCount = (int)Math.Ceiling((double)data.Length / inputBlockSize);
 
@@ -48,6 +53,8 @@ public class RSATransformService : IRSATransformService
         var result = new List<byte>();
         for (var i = 0; i < blockCount; i++)
         {
+            progressCallback?.Invoke((double)i / blockCount);
+
             var bytesCountToCopy = i < blockCount - 1
                 ? inputBlockSize
                 : data.Length - i * inputBlockSize;
@@ -63,6 +70,8 @@ public class RSATransformService : IRSATransformService
                 result.AddRange(Enumerable.Repeat((byte)0, outputBlockSize - transformedBlock.Length));
             }
         }
+
+        progressCallback?.Invoke(1);
 
         return result.ToArray();
     }
