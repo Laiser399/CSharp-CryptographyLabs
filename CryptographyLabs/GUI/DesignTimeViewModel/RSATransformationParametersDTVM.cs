@@ -1,4 +1,7 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Collections;
+using System.ComponentModel;
+using System.Numerics;
 using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
 
@@ -6,6 +9,10 @@ namespace CryptographyLabs.GUI.DesignTimeViewModel;
 
 public class RSATransformationParametersDTVM : IRSATransformationParametersVM
 {
+    public event PropertyChangedEventHandler? PropertyChanged;
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+    public bool HasErrors => false;
+
     public bool IsEncryption { get; set; } = false;
 
     public BigInteger? Exponent { get; } = BigInteger.Parse("98798435734");
@@ -19,4 +26,9 @@ public class RSATransformationParametersDTVM : IRSATransformationParametersVM
     public ICommand SetPublicKeyFromGenerationResults { get; } = new RelayCommand(_ => { });
     public ICommand SetPrivateKeyFromGenerationResults { get; } = new RelayCommand(_ => { });
     public ICommand ChangeFilePath { get; } = new RelayCommand(_ => { });
+
+    public IEnumerable GetErrors(string? propertyName)
+    {
+        return Array.Empty<object>();
+    }
 }

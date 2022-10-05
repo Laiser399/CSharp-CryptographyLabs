@@ -1,9 +1,10 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel;
+using System.Numerics;
 using System.Windows.Input;
 
 namespace CryptographyLabs.GUI.AbstractViewModels;
 
-public interface IRSATransformationParametersVM
+public interface IRSATransformationParametersVM : INotifyPropertyChanged, INotifyDataErrorInfo
 {
     bool IsEncryption { get; set; }
 

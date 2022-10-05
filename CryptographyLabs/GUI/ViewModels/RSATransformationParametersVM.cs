@@ -1,4 +1,7 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Collections;
+using System.ComponentModel;
+using System.Numerics;
 using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -9,6 +12,16 @@ namespace CryptographyLabs.GUI.ViewModels;
 [AddINotifyPropertyChangedInterface]
 public class RSATransformationParametersVM : IRSATransformationParametersVM
 {
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged
+    {
+        add => _validationTemplate.ErrorsChanged += value;
+        remove => _validationTemplate.ErrorsChanged -= value;
+    }
+
+    public bool HasErrors => _validationTemplate.HasErrors;
+
     public bool IsEncryption { get; set; }
 
     #region Exponent
@@ -65,11 +78,20 @@ public class RSATransformationParametersVM : IRSATransformationParametersVM
     private ICommand? _setPrivateKeyFromGenerationResults;
     private ICommand? _changeFilePath;
 
+    private readonly INotifyDataErrorInfo _validationTemplate;
     private readonly IRSAKeyGenerationResultsVM _rsaKeyGenerationResultsVM;
 
-    public RSATransformationParametersVM(IRSAKeyGenerationResultsVM rsaKeyGenerationResultsVM)
+    public RSATransformationParametersVM(
+        ValidationTemplateFactory<IRSATransformationParametersVM> validationTemplateFactory,
+        IRSAKeyGenerationResultsVM rsaKeyGenerationResultsVM)
     {
+        _validationTemplate = validationTemplateFactory(this);
         _rsaKeyGenerationResultsVM = rsaKeyGenerationResultsVM;
+    }
+
+    public IEnumerable GetErrors(string? propertyName)
+    {
+        return _validationTemplate.GetErrors(propertyName);
     }
 
     private void SetPublicKeyFromGenerationResults_Internal()
