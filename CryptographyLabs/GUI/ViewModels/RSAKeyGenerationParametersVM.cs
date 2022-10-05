@@ -2,6 +2,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Numerics;
+using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
 using PropertyChanged;
 
@@ -62,12 +63,20 @@ public class RSAKeyGenerationParametersVM : IRSAKeyGenerationParametersVM
 
     #endregion
 
+    public ICommand SetFromPrimesGenerationResults => _setFromPrimesGenerationResults ??=
+        new RelayCommand(_ => SetFromPrimesGenerationResults_Internal());
+
+    private ICommand? _setFromPrimesGenerationResults;
+
     private readonly INotifyDataErrorInfo _validationTemplate;
+    private readonly IPrimesGenerationResultsVM _primesGenerationResultsVM;
 
     public RSAKeyGenerationParametersVM(
-        ValidationTemplateFactory<IRSAKeyGenerationParametersVM> validationTemplateFactory)
+        ValidationTemplateFactory<IRSAKeyGenerationParametersVM> validationTemplateFactory,
+        IPrimesGenerationResultsVM primesGenerationResultsVM)
     {
         _validationTemplate = validationTemplateFactory(this);
+        _primesGenerationResultsVM = primesGenerationResultsVM;
 
         PStr = "17";
         QStr = "19";
@@ -76,5 +85,11 @@ public class RSAKeyGenerationParametersVM : IRSAKeyGenerationParametersVM
     public IEnumerable GetErrors(string? propertyName)
     {
         return _validationTemplate.GetErrors(propertyName);
+    }
+
+    private void SetFromPrimesGenerationResults_Internal()
+    {
+        PStr = _primesGenerationResultsVM.P.ToString();
+        QStr = _primesGenerationResultsVM.Q.ToString();
     }
 }

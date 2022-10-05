@@ -25,7 +25,8 @@ public static class Bootstrapper
             .As<IPrimesGenerationParametersVM>();
         builder
             .RegisterType<PrimesGenerationResultsVM>()
-            .As<IPrimesGenerationResultsVM>();
+            .As<IPrimesGenerationResultsVM>()
+            .InstancePerMatchingLifetimeScope(nameof(MainWindowVM));
         builder
             .RegisterType<RSAKeyGenerationVM>()
             .As<IRSAKeyGenerationVM>();

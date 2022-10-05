@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
     mc:Ignorable="d"
-    d:DesignHeight="Auto" d:DesignWidth="300"
+    d:DesignHeight="Auto" d:DesignWidth="400"
     d:DataContext="{d:DesignInstance dtvm:RSAKeyGenerationParametersDTVM}">
 
     <GroupBox Header="Parameters">
@@ -18,6 +18,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="p" />
@@ -29,6 +30,15 @@
             <TextBox
                 Grid.Row="1" Grid.Column="1"
                 Text="{Binding QStr, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Button
+                Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Width="110px"
+                Command="{Binding SetFromPrimesGenerationResults}">
+
+                <Button.Content>
+                    <TextBlock Text="Set from primes generation results" TextWrapping="Wrap" TextAlignment="Center" />
+                </Button.Content>
+            </Button>
         </Grid>
     </GroupBox>
 </Grid>
