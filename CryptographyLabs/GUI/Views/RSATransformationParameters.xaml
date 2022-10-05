@@ -4,8 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
+    xmlns:gui="clr-namespace:CryptographyLabs.GUI"
     mc:Ignorable="d"
-    d:DesignHeight="Auto" d:DesignWidth="300">
+    d:DesignHeight="Auto" d:DesignWidth="300"
+    d:DataContext="{d:DesignInstance dtvm:RSATransformationParametersDTVM}">
+
+    <Grid.Resources>
+        <gui:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    </Grid.Resources>
 
     <GroupBox Header="Parameters">
         <Grid>
@@ -16,8 +23,16 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Margin="0 6" Orientation="Horizontal">
-                <RadioButton Margin="0 0 12 0" Content="Encrypt" />
-                <RadioButton Content="Decrypt" />
+                <RadioButton
+                    Margin="0 0 12 0"
+                    Content="Encrypt"
+                    IsChecked="{Binding IsEncryption}" />
+                <RadioButton
+                    Content="Decrypt"
+                    IsChecked="{
+                        Binding IsEncryption,
+                        Converter={StaticResource InverseBooleanConverter
+                    }}" />
             </StackPanel>
 
             <Grid Grid.Row="1" Margin="0 6">
@@ -33,16 +48,18 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Exponent" />
-                <TextBox Grid.Row="0" Grid.Column="1" />
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ExponentStr}" />
                 <Button
                     Grid.Row="0" Grid.Column="3"
-                    Content="Set public" ToolTip="Set public RSA key from key generation results" />
+                    Content="Set public" ToolTip="Set public RSA key from key generation results"
+                    Command="{Binding SetPublicKeyFromGenerationResults}" />
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Modulus" />
-                <TextBox Grid.Row="1" Grid.Column="1" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ModulusStr}" />
                 <Button
                     Grid.Row="1" Grid.Column="3"
-                    Content="Set private" ToolTip="Set private RSA key from key generation results" />
+                    Content="Set private" ToolTip="Set private RSA key from key generation results"
+                    Command="{Binding SetPrivateKeyFromGenerationResults}" />
             </Grid>
 
             <Grid Grid.Row="2" Margin="0 6">
@@ -53,8 +70,11 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" Text="File path" />
-                <TextBox Grid.Column="1" />
-                <Button Grid.Column="2" Padding="6 0" Content="..." />
+                <TextBox Grid.Column="1" Text="{Binding FilePath}" />
+                <Button
+                    Grid.Column="2" Padding="6 0"
+                    Content="..."
+                    Command="{Binding ChangeFilePath}" />
             </Grid>
         </Grid>
     </GroupBox>
