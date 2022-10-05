@@ -4,8 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
     mc:Ignorable="d"
-    d:DesignHeight="Auto" d:DesignWidth="300">
+    d:DesignHeight="Auto" d:DesignWidth="300"
+    d:DataContext="{d:DesignInstance dtvm:RSAKeyGenerationParametersDTVM}">
 
     <GroupBox Header="Parameters">
         <Grid>
@@ -19,10 +21,10 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="p" />
-            <TextBox Grid.Row="0" Grid.Column="1" />
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PStr}" />
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="q" />
-            <TextBox Grid.Row="1" Grid.Column="1" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding QStr}" />
         </Grid>
     </GroupBox>
 </Grid>
