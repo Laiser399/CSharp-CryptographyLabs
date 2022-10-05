@@ -5,12 +5,30 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:views="clr-namespace:CryptographyLabs.GUI.Views"
+    xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
+    xmlns:gui="clr-namespace:CryptographyLabs.GUI"
+    xmlns:conv="clr-namespace:CryptographyLabs.GUI.Converters"
     mc:Ignorable="d"
-    d:DesignHeight="Auto" d:DesignWidth="500">
+    d:DesignHeight="Auto" d:DesignWidth="500"
+    d:DataContext="{d:DesignInstance dtvm:RSATransformationDTVM}">
 
-    <ScrollViewer>
+    <Grid.Resources>
+        <gui:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <conv:BoolToVisibilityConverter
+            x:Key="BoolToVisibilityConverter"
+            VisibilityOnTrue="Visible"
+            VisibilityOnFalse="Collapsed" />
+    </Grid.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical">
-            <views:RSATransformationParameters />
+            <views:RSATransformationParameters
+                DataContext="{Binding Parameters}"
+                IsEnabled="{
+                    Binding DataContext.IsInProgress,
+                    RelativeSource={RelativeSource AncestorType=Grid},
+                    Converter={StaticResource InverseBooleanConverter}
+                }" />
 
             <Grid Margin="0 12 0 0">
                 <Grid.ColumnDefinitions>
@@ -18,9 +36,18 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Content="Transform" />
+                <Button
+                    Grid.Column="0"
+                    Content="Transform"
+                    Command="{Binding Transform}"
+                    IsEnabled="{Binding IsInProgress, Converter={StaticResource InverseBooleanConverter}}" />
 
-                <ProgressBar Grid.Column="1" Margin="12 6" />
+                <ProgressBar
+                    Grid.Column="1"
+                    Margin="12 6"
+                    Minimum="0" Maximum="1"
+                    Value="{Binding Progress, Mode=OneWay}"
+                    Visibility="{Binding IsInProgress, Converter={StaticResource BoolToVisibilityConverter}}" />
             </Grid>
         </StackPanel>
     </ScrollViewer>
