@@ -21,10 +21,14 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="p" />
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PStr}" />
+            <TextBox
+                Grid.Row="0" Grid.Column="1"
+                Text="{Binding PStr, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="q" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding QStr}" />
+            <TextBox
+                Grid.Row="1" Grid.Column="1"
+                Text="{Binding QStr, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </GroupBox>
 </Grid>

@@ -31,10 +31,9 @@ public class RSAKeyGenerationParametersVM : IRSAKeyGenerationParametersVM
         set
         {
             _pStr = value;
-            if (BigInteger.TryParse(value, out var p))
-            {
-                P = p;
-            }
+            P = BigInteger.TryParse(value, out var p)
+                ? p
+                : null;
         }
     }
 
@@ -53,10 +52,9 @@ public class RSAKeyGenerationParametersVM : IRSAKeyGenerationParametersVM
         set
         {
             _qStr = value;
-            if (BigInteger.TryParse(value, out var q))
-            {
-                Q = q;
-            }
+            Q = BigInteger.TryParse(value, out var q)
+                ? q
+                : null;
         }
     }
 
@@ -70,6 +68,9 @@ public class RSAKeyGenerationParametersVM : IRSAKeyGenerationParametersVM
         ValidationTemplateFactory<IRSAKeyGenerationParametersVM> validationTemplateFactory)
     {
         _validationTemplate = validationTemplateFactory(this);
+
+        PStr = "17";
+        QStr = "19";
     }
 
     public IEnumerable GetErrors(string? propertyName)
