@@ -44,6 +44,18 @@ public class PrimesGenerationVM : IPrimesGenerationVM
             return;
         }
 
+        if (Parameters.HasErrors)
+        {
+            MessageBox.Show("Parameters is not configured correctly.");
+            return;
+        }
+
+        if (Parameters.IsSaveToFile && !Directory.Exists(Parameters.SaveDirectory))
+        {
+            MessageBox.Show("Specified saving directory does not exists.");
+            return;
+        }
+
         IsInProgress = true;
 
         var cancellationTokenSource = new CancellationTokenSource();
@@ -93,11 +105,11 @@ public class PrimesGenerationVM : IPrimesGenerationVM
         Results.Q = 0;
 
         var parameters = new PrimesPairGeneratorCombinedParameters(
-            new Random(Parameters.Seed),
-            Parameters.ByteCount,
-            Parameters.ByteCount * 8 - 1,
+            new Random(Parameters.Seed!.Value),
+            Parameters.ByteCount!.Value,
+            Parameters.ByteCount!.Value * 8 - 1,
             100,
-            Parameters.Probability
+            Parameters.Probability!.Value
         );
 
         var registeredParametersLifetimeScope = _lifetimeScope.BeginLifetimeScope(x =>
