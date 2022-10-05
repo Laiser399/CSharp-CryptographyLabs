@@ -1,0 +1,27 @@
+﻿<Grid
+    x:Class="CryptographyLabs.GUI.Views.RSATransformation"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:views="clr-namespace:CryptographyLabs.GUI.Views"
+    mc:Ignorable="d"
+    d:DesignHeight="Auto" d:DesignWidth="500">
+
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical">
+            <views:RSATransformationParameters />
+
+            <Grid Margin="0 12 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Content="Transform" />
+
+                <ProgressBar Grid.Column="1" Margin="12 6" />
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Grid>
