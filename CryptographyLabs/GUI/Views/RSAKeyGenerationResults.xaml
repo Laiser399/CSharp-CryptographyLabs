@@ -4,8 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
+    xmlns:cmd="clr-namespace:CryptographyLabs.GUI.Commands"
     mc:Ignorable="d"
-    d:DesignHeight="Auto" d:DesignWidth="500">
+    d:DesignHeight="Auto" d:DesignWidth="500"
+    d:DataContext="{d:DesignInstance dtvm:RSAKeyGenerationResultsDTVM}">
+
+    <Grid.Resources>
+        <cmd:CopyToClipboardCommand x:Key="CopyToClipboardCommand" />
+    </Grid.Resources>
 
     <GroupBox Header="Results">
         <Grid>
@@ -21,16 +28,34 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Public exponent" />
-            <TextBox Grid.Row="0" Grid.Column="1" />
-            <Button Grid.Row="0" Grid.Column="2" Content="Copy to clipboard" />
+            <TextBox
+                Grid.Row="0" Grid.Column="1"
+                Text="{Binding PublicExponent, Mode=OneWay}" />
+            <Button
+                Grid.Row="0" Grid.Column="2"
+                Content="Copy to clipboard"
+                Command="{StaticResource CopyToClipboardCommand}"
+                CommandParameter="{Binding PublicExponent}" />
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Private exponent" />
-            <TextBox Grid.Row="1" Grid.Column="1" />
-            <Button Grid.Row="1" Grid.Column="2" Content="Copy to clipboard" />
+            <TextBox
+                Grid.Row="1" Grid.Column="1"
+                Text="{Binding PrivateExponent, Mode=OneWay}" />
+            <Button
+                Grid.Row="1" Grid.Column="2"
+                Content="Copy to clipboard"
+                Command="{StaticResource CopyToClipboardCommand}"
+                CommandParameter="{Binding PrivateExponent}" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Modulus" />
-            <TextBox Grid.Row="2" Grid.Column="1" />
-            <Button Grid.Row="2" Grid.Column="2" Content="Copy to clipboard" />
+            <TextBox
+                Grid.Row="2" Grid.Column="1"
+                Text="{Binding Modulus, Mode=OneWay}" />
+            <Button
+                Grid.Row="2" Grid.Column="2"
+                Content="Copy to clipboard"
+                Command="{StaticResource CopyToClipboardCommand}"
+                CommandParameter="{Binding Modulus}" />
         </Grid>
     </GroupBox>
 </Grid>
