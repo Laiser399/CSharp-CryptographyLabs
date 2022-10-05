@@ -47,6 +47,7 @@ namespace CryptographyLabs.GUI
 
         // RSA
         public IPrimesGenerationVM PrimesGeneration { get; }
+        public IRSAKeyGenerationVM RSAKeyGeneration { get; }
         
         // Rijndael
         private RijndaelEncryptVM _rijndaelEncryptVM;
@@ -88,9 +89,12 @@ namespace CryptographyLabs.GUI
 
         #endregion
 
-        public MainWindowVM(IPrimesGenerationVM primesGenerationVM)
+        public MainWindowVM(
+            IPrimesGenerationVM primesGenerationVM,
+            IRSAKeyGenerationVM rsaKeyGenerationVM)
         {
             PrimesGeneration = primesGenerationVM;
+            RSAKeyGeneration = rsaKeyGenerationVM;
 
             _rijndaelEncryptVM = new RijndaelEncryptVM(this);
             _rijndaelDecryptVM = new RijndaelDecryptVM(this);

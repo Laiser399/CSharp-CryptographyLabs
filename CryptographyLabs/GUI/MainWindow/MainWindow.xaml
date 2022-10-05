@@ -106,7 +106,7 @@
                 </StackPanel>
             </ScrollViewer>
         </TabItem>
-        <TabItem Header="Encrypt\Decrypt" IsSelected="True">
+        <TabItem Header="Encrypt\Decrypt">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -217,9 +217,6 @@
                             </Grid>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="RSA">
-                        <views:PrimesGeneration DataContext="{Binding PrimesGeneration}"/>
-                    </TabItem>
                     <TabItem Header="Rijndael">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
@@ -240,6 +237,16 @@
                     <ItemsControl ItemsSource="{Binding Source={StaticResource SortedCryptoProgressVM}}"/>
                 </ScrollViewer>
             </Grid>
+        </TabItem>
+        <TabItem Header="RSA (resurrection)" IsSelected="True">
+            <TabControl>
+                <TabItem Header="Primes generation">
+                    <views:PrimesGeneration DataContext="{Binding PrimesGeneration}"/>
+                </TabItem>
+                <TabItem Header="Key generation">
+                    <views:RSAKeyGeneration DataContext="{Binding RSAKeyGeneration}"/>
+                </TabItem>
+            </TabControl>
         </TabItem>
     </TabControl>
 </Window>
