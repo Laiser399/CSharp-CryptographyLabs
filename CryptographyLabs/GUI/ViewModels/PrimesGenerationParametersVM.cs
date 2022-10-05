@@ -13,7 +13,11 @@ namespace CryptographyLabs.GUI.ViewModels;
 public class PrimesGenerationParametersVM : IPrimesGenerationParametersVM
 {
     public event PropertyChangedEventHandler? PropertyChanged;
-    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged
+    {
+        add => _validationTemplate.ErrorsChanged += value;
+        remove => _validationTemplate.ErrorsChanged -= value;
+    }
 
     public bool HasErrors => _validationTemplate.HasErrors;
 
@@ -33,7 +37,7 @@ public class PrimesGenerationParametersVM : IPrimesGenerationParametersVM
         }
     }
 
-    private string _seedStr = "0";
+    private string _seedStr = string.Empty;
 
     #endregion
 
@@ -53,7 +57,7 @@ public class PrimesGenerationParametersVM : IPrimesGenerationParametersVM
         }
     }
 
-    private string _byteCountStr = "16";
+    private string _byteCountStr = string.Empty;
 
     #endregion
 
@@ -73,7 +77,7 @@ public class PrimesGenerationParametersVM : IPrimesGenerationParametersVM
         }
     }
 
-    private string _probabilityStr = "0.995";
+    private string _probabilityStr = string.Empty;
 
     #endregion
 
@@ -91,7 +95,10 @@ public class PrimesGenerationParametersVM : IPrimesGenerationParametersVM
         ValidationTemplateFactory<IPrimesGenerationParametersVM> validationTemplateFactory)
     {
         _validationTemplate = validationTemplateFactory(this);
-        _validationTemplate.ErrorsChanged += ErrorsChanged;
+
+        SeedStr = "0";
+        ByteCountStr = "16";
+        ProbabilityStr = "0.995";
     }
 
     public IEnumerable GetErrors(string? propertyName)
