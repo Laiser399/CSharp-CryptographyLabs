@@ -246,6 +246,9 @@
                 <TabItem Header="Key generation">
                     <views:RSAKeyGeneration DataContext="{Binding RSAKeyGeneration}"/>
                 </TabItem>
+                <TabItem Header="Transformation">
+                    <views:RSATransformation DataContext="{Binding RSATransformation}"/>
+                </TabItem>
             </TabControl>
         </TabItem>
     </TabControl>

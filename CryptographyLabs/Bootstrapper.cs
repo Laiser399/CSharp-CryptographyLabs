@@ -35,7 +35,14 @@ public static class Bootstrapper
             .As<IRSAKeyGenerationParametersVM>();
         builder
             .RegisterType<RSAKeyGenerationResultsVM>()
-            .As<IRSAKeyGenerationResultsVM>();
+            .As<IRSAKeyGenerationResultsVM>()
+            .InstancePerMatchingLifetimeScope(nameof(MainWindowVM));
+        builder
+            .RegisterType<RSATransformationVM>()
+            .As<IRSATransformationVM>();
+        builder
+            .RegisterType<RSATransformationParametersVM>()
+            .As<IRSATransformationParametersVM>();
 
         builder
             .RegisterGeneric(typeof(ValidationTemplate<>))
@@ -47,11 +54,15 @@ public static class Bootstrapper
         builder
             .RegisterType<RSAKeyGenerationParametersVMValidator>()
             .As<IValidator<IRSAKeyGenerationParametersVM>>();
+        builder
+            .RegisterType<RSATransformationParametersVMValidator>()
+            .As<IValidator<IRSATransformationParametersVM>>();
 
         builder.RegisterModule(new RSAModule
         {
             RegisterPrimesGenerator = true,
-            RegisterRsaKeyGenerator = true
+            RegisterRsaKeyGenerator = true,
+            RegisterRsaCore = true
         });
 
         return builder.Build();

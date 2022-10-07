@@ -48,14 +48,18 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Exponent" />
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ExponentStr}" />
+                <TextBox
+                    Grid.Row="0" Grid.Column="1"
+                    Text="{Binding ExponentStr, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
                     Grid.Row="0" Grid.Column="3"
                     Content="Set public" ToolTip="Set public RSA key from key generation results"
                     Command="{Binding SetPublicKeyFromGenerationResults}" />
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Modulus" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ModulusStr}" />
+                <TextBox
+                    Grid.Row="1" Grid.Column="1"
+                    Text="{Binding ModulusStr, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
                     Grid.Row="1" Grid.Column="3"
                     Content="Set private" ToolTip="Set private RSA key from key generation results"

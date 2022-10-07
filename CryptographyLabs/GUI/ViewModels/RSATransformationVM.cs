@@ -124,7 +124,9 @@ public class RSATransformationVM : IRSATransformationVM
         var extension = Path.GetExtension(Parameters.FilePath).ToLower();
         if (extension == ".bin")
         {
-            return Path.GetFileNameWithoutExtension(Parameters.FilePath);
+            var saveFileName = Path.GetFileNameWithoutExtension(Parameters.FilePath);
+            var saveDirectoryPath = Path.GetDirectoryName(Parameters.FilePath) ?? string.Empty;
+            return Path.Combine(saveDirectoryPath, saveFileName);
         }
 
         return Parameters.FilePath + ".decrypted";

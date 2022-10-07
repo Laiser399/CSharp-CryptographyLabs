@@ -22,25 +22,20 @@ public class RSATransformationParametersVM : IRSATransformationParametersVM
 
     public bool HasErrors => _validationTemplate.HasErrors;
 
-    public bool IsEncryption { get; set; }
+    public bool IsEncryption { get; set; } = true;
 
     #region Exponent
 
     public BigInteger? Exponent { get; private set; }
 
-    public string ExponentStr
-    {
-        get => _exponentStr;
-        set
-        {
-            _exponentStr = value;
-            Exponent = BigInteger.TryParse(value, out var exponent)
-                ? exponent
-                : null;
-        }
-    }
+    public string ExponentStr { get; set; }
 
-    private string _exponentStr = string.Empty;
+    public void OnExponentStrChanged()
+    {
+        Exponent = BigInteger.TryParse(ExponentStr, out var exponent)
+            ? exponent
+            : null;
+    }
 
     #endregion
 
@@ -48,19 +43,14 @@ public class RSATransformationParametersVM : IRSATransformationParametersVM
 
     public BigInteger? Modulus { get; private set; }
 
-    public string ModulusStr
-    {
-        get => _modulusStr;
-        set
-        {
-            _modulusStr = value;
-            Modulus = BigInteger.TryParse(value, out var modulus)
-                ? modulus
-                : null;
-        }
-    }
+    public string ModulusStr { get; set; }
 
-    private string _modulusStr = string.Empty;
+    public void OnModulusStrChanged()
+    {
+        Modulus = BigInteger.TryParse(ModulusStr, out var modulus)
+            ? modulus
+            : null;
+    }
 
     #endregion
 
@@ -87,6 +77,9 @@ public class RSATransformationParametersVM : IRSATransformationParametersVM
     {
         _validationTemplate = validationTemplateFactory(this);
         _rsaKeyGenerationResultsVM = rsaKeyGenerationResultsVM;
+
+        ExponentStr = "2";
+        ModulusStr = "137";
     }
 
     public IEnumerable GetErrors(string? propertyName)
