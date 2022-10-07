@@ -1,13 +1,17 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
 using Module.RSA.Entities;
+using Module.RSA.Exceptions;
 using Module.RSA.Services.Abstract;
+using PropertyChanged;
 
 namespace CryptographyLabs.GUI.ViewModels;
 
+[AddINotifyPropertyChangedInterface]
 public class RSATransformationVM : IRSATransformationVM
 {
     public IRSATransformationParametersVM Parameters { get; }
@@ -15,7 +19,7 @@ public class RSATransformationVM : IRSATransformationVM
     public bool IsInProgress { get; private set; }
     public double Progress { get; private set; }
 
-    public ICommand Transform => _transform ??= new RelayCommand(_ => Transform_Internal());
+    public ICommand Transform => _transform ??= new AsyncRelayCommand(_ => Transform_Internal());
     private ICommand? _transform;
 
     private readonly IRSATransformService _rsaTransformService;
@@ -28,7 +32,7 @@ public class RSATransformationVM : IRSATransformationVM
         _rsaTransformService = rsaTransformService;
     }
 
-    private void Transform_Internal()
+    private async Task Transform_Internal()
     {
         if (IsInProgress)
         {
@@ -51,24 +55,19 @@ public class RSATransformationVM : IRSATransformationVM
 
         try
         {
-            if (!TryReadInputFile(out var data))
+            var data = await ReadInputFileAsync();
+            if (data == null)
             {
                 return;
             }
 
-            if (data.Length == 0)
+            var transformedData = await TransformAsync(data);
+            if (transformedData == null)
             {
-                MessageBox.Show("Input file is empty.");
                 return;
             }
 
-            var key = new RSAKey(Parameters.Exponent!.Value, Parameters.Modulus!.Value);
-
-            var transformedData = Parameters.IsEncryption
-                ? _rsaTransformService.Encrypt(data, key, x => Progress = x)
-                : _rsaTransformService.Decrypt(data, key, x => Progress = x);
-
-            SaveResult(transformedData);
+            await SaveResultAsync(transformedData);
         }
         finally
         {
@@ -76,33 +75,55 @@ public class RSATransformationVM : IRSATransformationVM
         }
     }
 
-    private bool TryReadInputFile(out byte[] data)
+    private async Task<byte[]?> ReadInputFileAsync()
     {
+        byte[] data;
         try
         {
-            data = File.ReadAllBytes(Parameters.FilePath);
-            return true;
+            data = await File.ReadAllBytesAsync(Parameters.FilePath);
         }
         catch (IOException e)
         {
             MessageBox.Show($"IO error on reading input file.\n\n{e}");
-            data = null!;
-            return false;
+            return null;
         }
         catch (SystemException e)
         {
             MessageBox.Show($"System error on reading input file.\n\n{e}");
-            data = null!;
-            return false;
+            return null;
+        }
+
+        if (data.Length == 0)
+        {
+            MessageBox.Show("Input file is empty.");
+            return null;
+        }
+
+        return data;
+    }
+
+    private async Task<byte[]?> TransformAsync(byte[] data)
+    {
+        var key = new RSAKey(Parameters.Exponent!.Value, Parameters.Modulus!.Value);
+        try
+        {
+            return Parameters.IsEncryption
+                ? await _rsaTransformService.EncryptAsync(data, key, x => Progress = x)
+                : await _rsaTransformService.DecryptAsync(data, key, x => Progress = x);
+        }
+        catch (CryptoTransformException e)
+        {
+            MessageBox.Show($"Error on RSA transformation:\n\n{e}");
+            return null;
         }
     }
 
-    private void SaveResult(byte[] transformedData)
+    private async Task SaveResultAsync(byte[] transformedData)
     {
         var saveFilePath = GetSaveFilePath();
         try
         {
-            File.WriteAllBytes(saveFilePath, transformedData);
+            await File.WriteAllBytesAsync(saveFilePath, transformedData);
         }
         catch (IOException e)
         {

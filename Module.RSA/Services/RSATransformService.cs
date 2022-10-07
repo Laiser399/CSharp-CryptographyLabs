@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Module.RSA.Entities.Abstract;
+using Module.RSA.Exceptions;
 using Module.RSA.Services.Abstract;
 
 namespace Module.RSA.Services;
@@ -13,7 +14,7 @@ public class RSATransformService : IRSATransformService
         _bigIntegerCalculationService = bigIntegerCalculationService;
     }
 
-    public byte[] Encrypt(byte[] data, IRSAKey key, Action<double>? progressCallback)
+    public Task<byte[]> EncryptAsync(byte[] data, IRSAKey key, Action<double>? progressCallback)
     {
         if (data.Length == 0)
         {
@@ -23,10 +24,10 @@ public class RSATransformService : IRSATransformService
         var nByteCount = key.Modulus.GetByteCount(true);
         var inputBlockSize = nByteCount - 1;
 
-        return Transform(data, key, inputBlockSize, nByteCount, progressCallback);
+        return TransformAsync(data, key, inputBlockSize, nByteCount, progressCallback);
     }
 
-    public byte[] Decrypt(byte[] data, IRSAKey key, Action<double>? progressCallback)
+    public Task<byte[]> DecryptAsync(byte[] data, IRSAKey key, Action<double>? progressCallback)
     {
         if (data.Length == 0)
         {
@@ -36,10 +37,10 @@ public class RSATransformService : IRSATransformService
         var nByteCount = key.Modulus.GetByteCount(true);
         var outputBlockSize = nByteCount - 1;
 
-        return Transform(data, key, nByteCount, outputBlockSize, progressCallback);
+        return TransformAsync(data, key, nByteCount, outputBlockSize, progressCallback);
     }
 
-    private byte[] Transform(
+    private async Task<byte[]> TransformAsync(
         byte[] data,
         IRSAKey key,
         int inputBlockSize,
@@ -62,7 +63,12 @@ public class RSATransformService : IRSATransformService
             Array.Copy(data, i * inputBlockSize, block, 0, bytesCountToCopy);
             Array.Fill(block, (byte)0, bytesCountToCopy, inputBlockSize - bytesCountToCopy);
 
-            var transformedBlock = TransformBlock(block, key);
+            var transformedBlock = await TransformBlockAsync(block, key);
+
+            if (transformedBlock.Length > outputBlockSize)
+            {
+                throw new CryptoTransformException("Invalid state of input data.");
+            }
 
             result.AddRange(transformedBlock);
             if (i < blockCount - 1)
@@ -76,11 +82,14 @@ public class RSATransformService : IRSATransformService
         return result.ToArray();
     }
 
-    private byte[] TransformBlock(byte[] block, IRSAKey key)
+    private Task<byte[]> TransformBlockAsync(byte[] block, IRSAKey key)
     {
-        var value = new BigInteger(block, true);
+        return Task.Run(() =>
+        {
+            var value = new BigInteger(block, true);
 
-        var transformedValue = _bigIntegerCalculationService.BinPowMod(value, key.Exponent, key.Modulus);
-        return transformedValue.ToByteArray(true);
+            var transformedValue = _bigIntegerCalculationService.BinPowMod(value, key.Exponent, key.Modulus);
+            return transformedValue.ToByteArray(true);
+        });
     }
 }
