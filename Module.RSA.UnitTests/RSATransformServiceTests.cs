@@ -46,7 +46,7 @@ public class RSATransformServiceTests
     [TestCase(1000)]
     public void Transform_DefaultTest(int byteCount)
     {
-        TestTransformWithRandom(byteCount);
+        TestTransformWithRandomAsync(byteCount);
     }
 
     [Test]
@@ -57,46 +57,46 @@ public class RSATransformServiceTests
     [TestCase(1, 0)]
     [TestCase(1, 1)]
     [TestCase(1, 2)]
-    public void Transform_NSizeBasedTest(double byteCountMultiplier, int byteCountShift)
+    public Task Transform_NSizeBasedTestAsync(double byteCountMultiplier, int byteCountShift)
     {
         var byteCount = (int)(N.GetByteCount(true) * byteCountMultiplier) + byteCountShift;
-        TestTransformWithRandom(byteCount);
+        return TestTransformWithRandomAsync(byteCount);
     }
 
     [Test]
-    public void Transform_Test()
+    public Task Transform_TestAsync()
     {
         var dataValue = PublicKey.Modulus + 2;
         var data = dataValue.ToByteArray(true);
 
-        TestTransform(data);
+        return TestTransformAsync(data);
     }
 
     [Test]
     public void Transform_InvalidArgumentTest()
     {
-        Assert.Throws<ArgumentException>(() =>
-            _rsaTransformService!.Encrypt(Array.Empty<byte>(), PublicKey)
+        Assert.ThrowsAsync<ArgumentException>(async () =>
+            await _rsaTransformService!.EncryptAsync(Array.Empty<byte>(), PublicKey)
         );
-        Assert.Throws<ArgumentException>(() =>
-            _rsaTransformService!.Decrypt(Array.Empty<byte>(), PublicKey)
+        Assert.ThrowsAsync<ArgumentException>(async () =>
+            await _rsaTransformService!.DecryptAsync(Array.Empty<byte>(), PublicKey)
         );
     }
 
-    private void TestTransformWithRandom(int byteCount)
+    private Task TestTransformWithRandomAsync(int byteCount)
     {
         var data = new byte[byteCount];
         _random!.NextBytes(data);
 
-        TestTransform(data);
+        return TestTransformAsync(data);
     }
 
-    private void TestTransform(byte[] data)
+    private async Task TestTransformAsync(byte[] data)
     {
-        var encrypted = _rsaTransformService!.Encrypt(data, PublicKey);
+        var encrypted = await _rsaTransformService!.EncryptAsync(data, PublicKey);
         Assert.That(encrypted, Is.Not.EqualTo(data));
 
-        var decrypted = _rsaTransformService!.Decrypt(encrypted, PrivateKey);
+        var decrypted = await _rsaTransformService!.DecryptAsync(encrypted, PrivateKey);
         Assert.That(decrypted, Is.EqualTo(data));
     }
 }
