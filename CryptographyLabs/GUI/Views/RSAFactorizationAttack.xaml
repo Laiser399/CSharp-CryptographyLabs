@@ -4,12 +4,30 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:views="clr-namespace:CryptographyLabs.GUI.Views"
+      xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
+      xmlns:gui="clr-namespace:CryptographyLabs.GUI"
+      xmlns:conv="clr-namespace:CryptographyLabs.GUI.Converters"
       mc:Ignorable="d"
-      d:DesignHeight="Auto" d:DesignWidth="300">
+      d:DesignHeight="Auto" d:DesignWidth="300"
+      d:DataContext="{d:DesignInstance dtvm:RSAFactorizationAttackDTVM}">
+
+    <Grid.Resources>
+        <gui:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <conv:BoolToVisibilityConverter
+            x:Key="BoolToVisibilityConverter"
+            VisibilityOnTrue="Visible"
+            VisibilityOnFalse="Collapsed" />
+    </Grid.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical">
-            <views:RSAFactorizationAttackParameters />
+            <views:RSAFactorizationAttackParameters
+                DataContext="{Binding Parameters}"
+                IsEnabled="{
+                    Binding DataContext.IsInProgress, 
+                    RelativeSource={RelativeSource AncestorType=Grid},
+                    Converter={StaticResource InverseBooleanConverter}
+                }" />
 
             <Grid Margin="0 12">
                 <Grid.ColumnDefinitions>
@@ -18,11 +36,27 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Padding="6 0" Content="Attack" />
-                <Button Grid.Column="2" Padding="6 0" Content="Cancel" />
+                <Button
+                    Grid.Column="0" Padding="6 0"
+                    Content="Attack"
+                    IsEnabled="{
+                        Binding IsInProgress,
+                        Converter={StaticResource InverseBooleanConverter}
+                    }"
+                    Command="{Binding Attack}" />
+                <Button
+                    Grid.Column="2" Padding="6 0"
+                    Content="Cancel"
+                    IsEnabled="{Binding IsInProgress}"
+                    Visibility="{
+                        Binding IsInProgress,
+                        Converter={StaticResource BoolToVisibilityConverter}
+                    }"
+                    Command="{Binding Cancel}" />
             </Grid>
 
-            <views:RSAFactorizationAttackResults />
+            <views:RSAFactorizationAttackResults
+                DataContext="{Binding Results}" />
         </StackPanel>
     </ScrollViewer>
 </Grid>
