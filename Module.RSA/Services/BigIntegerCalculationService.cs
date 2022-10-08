@@ -98,6 +98,11 @@ public class BigIntegerCalculationService : IBigIntegerCalculationService
         return a;
     }
 
+    public BigInteger SquareRoot(BigInteger value)
+    {
+        throw new NotImplementedException();
+    }
+
     // Alternatives: https://stackoverflow.com/questions/3432412/calculate-square-root-of-a-biginteger-system-numerics-biginteger
     public BigInteger FourthRoot(BigInteger value)
     {

@@ -77,6 +77,38 @@ public class BigIntegerCalculationServiceTests
     }
 
     [Test]
+    [TestCase("0", "0")]
+    [TestCase("1", "1")]
+    [TestCase("4", "2")]
+    [TestCase("16", "4")]
+    [TestCase("13")]
+    [TestCase("51")]
+    [TestCase("8887348", "2981")]
+    [TestCase("5867945618446744073709551615")]
+    [TestCase("410529583717306063201", "20261529649")]
+    [TestCase("29348752039485723094586213045976134059826345039274865203847565654")]
+    public void SquareRoot_Test(string valueStr, string? expectedExactResultStr = null)
+    {
+        var value = BigInteger.Parse(valueStr);
+        var expectedExactResult = expectedExactResultStr is not null
+            ? BigInteger.Parse(expectedExactResultStr)
+            : (BigInteger?)null;
+        var actualResult = _bigIntegerCalculationService!.SquareRoot(value);
+
+        if (expectedExactResult is not null)
+        {
+            Assert.AreEqual((BigInteger)expectedExactResult, actualResult);
+        }
+        else
+        {
+            var leftBound = actualResult * actualResult;
+            var rightBound = (actualResult + 1) * (actualResult + 1);
+            Assert.GreaterOrEqual(value, leftBound);
+            Assert.LessOrEqual(value, rightBound);
+        }
+    }
+
+    [Test]
     [TestCase("0", 0)]
     [TestCase("1", 1)]
     [TestCase("4")]
