@@ -23,7 +23,7 @@ public class RSAFactorizationAttackParametersVM : IRSAFactorizationAttackParamet
     #region Modulus
 
     public BigInteger? Modulus { get; private set; }
-    public string ModulusStr { get; set; } = string.Empty;
+    public string ModulusStr { get; set; }
 
     public void OnModulusStrChanged()
     {
@@ -40,6 +40,8 @@ public class RSAFactorizationAttackParametersVM : IRSAFactorizationAttackParamet
         ValidationTemplateFactory<IRSAFactorizationAttackParametersVM> validationTemplateFactory)
     {
         _validationTemplate = validationTemplateFactory(this);
+
+        ModulusStr = "15";
     }
 
     public IEnumerable GetErrors(string? propertyName)

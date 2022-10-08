@@ -53,7 +53,7 @@ public class RSAFactorizationAttackVM : IRSAFactorizationAttackVM
 
         IsInProgress = true;
         Results.FirstFactor = 0;
-        Results.FirstFactor = 0;
+        Results.SecondFactor = 0;
 
         _tokenSource = new CancellationTokenSource();
         try
