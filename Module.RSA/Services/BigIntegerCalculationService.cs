@@ -123,14 +123,20 @@ public class BigIntegerCalculationService : IBigIntegerCalculationService
         {
             var middle = (left + right) >> 1;
 
-            var middle4 = BigInteger.Pow(middle, 4);
-            if (value >= middle4
-                && value <= BigInteger.Pow(middle + 1, 4))
+            var leftBoundDegree = BigInteger.Pow(middle, 4);
+            var rightBoundDegree = BigInteger.Pow(middle + 1, 4);
+
+            if (value == rightBoundDegree)
+            {
+                return middle + 1;
+            }
+
+            if (value >= leftBoundDegree && value < rightBoundDegree)
             {
                 return middle;
             }
 
-            if (middle4 < value)
+            if (leftBoundDegree < value)
             {
                 left = middle;
             }
