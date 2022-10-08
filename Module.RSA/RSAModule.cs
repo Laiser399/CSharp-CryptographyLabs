@@ -6,9 +6,10 @@ namespace Module.RSA;
 
 public class RSAModule : Autofac.Module
 {
-    public bool RegisterRsaCore { get; set; } = false;
-    public bool RegisterRsaKeyGenerator { get; set; } = false;
-    public bool RegisterPrimesGenerator { get; set; } = false;
+    public bool RegisterRsaCore { get; set; }
+    public bool RegisterRsaKeyGenerator { get; set; }
+    public bool RegisterPrimesGenerator { get; set; }
+    public bool RegisterRsaAttackServices { get; set; }
 
     protected override void Load(ContainerBuilder builder)
     {
@@ -46,7 +47,15 @@ public class RSAModule : Autofac.Module
                 .SingleInstance();
         }
 
-        if (RegisterRsaCore || RegisterRsaKeyGenerator || RegisterPrimesGenerator)
+        if (RegisterRsaAttackServices)
+        {
+            builder
+                .RegisterType<RSAAttackService>()
+                .As<IRSAAttackService>()
+                .SingleInstance();
+        }
+
+        if (RegisterRsaCore || RegisterRsaKeyGenerator || RegisterPrimesGenerator || RegisterRsaAttackServices)
         {
             builder
                 .RegisterType<BigIntegerCalculationService>()

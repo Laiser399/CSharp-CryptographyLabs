@@ -43,6 +43,15 @@ public static class Bootstrapper
         builder
             .RegisterType<RSATransformationParametersVM>()
             .As<IRSATransformationParametersVM>();
+        builder
+            .RegisterType<RSAFactorizationAttackVM>()
+            .As<IRSAFactorizationAttackVM>();
+        builder
+            .RegisterType<RSAFactorizationAttackParametersVM>()
+            .As<IRSAFactorizationAttackParametersVM>();
+        builder
+            .RegisterType<RSAFactorizationAttackResultsVM>()
+            .As<IRSAFactorizationAttackResultsVM>();
 
         builder
             .RegisterGeneric(typeof(ValidationTemplate<>))
@@ -57,12 +66,16 @@ public static class Bootstrapper
         builder
             .RegisterType<RSATransformationParametersVMValidator>()
             .As<IValidator<IRSATransformationParametersVM>>();
+        builder
+            .RegisterType<RSAFactorizationAttackParametersVMValidator>()
+            .As<IValidator<IRSAFactorizationAttackParametersVM>>();
 
         builder.RegisterModule(new RSAModule
         {
             RegisterPrimesGenerator = true,
             RegisterRsaKeyGenerator = true,
-            RegisterRsaCore = true
+            RegisterRsaCore = true,
+            RegisterRsaAttackServices = true
         });
 
         return builder.Build();

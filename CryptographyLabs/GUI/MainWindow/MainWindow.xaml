@@ -241,13 +241,16 @@
         <TabItem Header="RSA (resurrection)" IsSelected="True">
             <TabControl>
                 <TabItem Header="Primes generation">
-                    <views:PrimesGeneration DataContext="{Binding PrimesGeneration}"/>
+                    <views:PrimesGeneration DataContext="{Binding PrimesGeneration}" />
                 </TabItem>
                 <TabItem Header="Key generation">
-                    <views:RSAKeyGeneration DataContext="{Binding RSAKeyGeneration}"/>
+                    <views:RSAKeyGeneration DataContext="{Binding RSAKeyGeneration}" />
                 </TabItem>
                 <TabItem Header="Transformation">
-                    <views:RSATransformation DataContext="{Binding RSATransformation}"/>
+                    <views:RSATransformation DataContext="{Binding RSATransformation}" />
+                </TabItem>
+                <TabItem Header="Factorization attack">
+                    <views:RSAFactorizationAttack DataContext="{Binding RSAFactorizationAttack}" />
                 </TabItem>
             </TabControl>
         </TabItem>

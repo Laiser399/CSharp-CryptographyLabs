@@ -49,6 +49,7 @@ namespace CryptographyLabs.GUI
         public IPrimesGenerationVM PrimesGeneration { get; }
         public IRSAKeyGenerationVM RSAKeyGeneration { get; }
         public IRSATransformationVM RSATransformation { get; }
+        public IRSAFactorizationAttackVM RSAFactorizationAttack { get; }
         
         // Rijndael
         private RijndaelEncryptVM _rijndaelEncryptVM;
@@ -93,11 +94,13 @@ namespace CryptographyLabs.GUI
         public MainWindowVM(
             IPrimesGenerationVM primesGenerationVM,
             IRSAKeyGenerationVM rsaKeyGenerationVM,
-            IRSATransformationVM rsaTransformation)
+            IRSATransformationVM rsaTransformation,
+            IRSAFactorizationAttackVM rsaFactorizationAttack)
         {
             PrimesGeneration = primesGenerationVM;
             RSAKeyGeneration = rsaKeyGenerationVM;
             RSATransformation = rsaTransformation;
+            RSAFactorizationAttack = rsaFactorizationAttack;
 
             _rijndaelEncryptVM = new RijndaelEncryptVM(this);
             _rijndaelDecryptVM = new RijndaelDecryptVM(this);
