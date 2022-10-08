@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
+using Module.RSA.Exceptions;
 using Module.RSA.Services.Abstract;
 using PropertyChanged;
 
@@ -65,6 +66,10 @@ public class RSAFactorizationAttackVM : IRSAFactorizationAttackVM
         }
         catch (OperationCanceledException)
         {
+        }
+        catch (FactorizationException e)
+        {
+            MessageBox.Show($"Factorization error:\n\n{e}");
         }
         finally
         {

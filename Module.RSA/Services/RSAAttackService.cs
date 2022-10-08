@@ -14,7 +14,7 @@ public class RSAAttackService : IRSAAttackService
         _bigIntegerCalculationService = bigIntegerCalculationService;
     }
 
-    public Task<FactorizationResult> FactorizeModulusAsync(
+    public async Task<FactorizationResult> FactorizeModulusAsync(
         BigInteger modulus,
         CancellationToken? cancellationToken)
     {
@@ -22,14 +22,14 @@ public class RSAAttackService : IRSAAttackService
 
         if ((modulus & 1) == 0)
         {
-            return Task.FromResult(new FactorizationResult(2, modulus >> 1));
+            return new FactorizationResult(2, modulus >> 1);
         }
 
         var modulusSquareRoot = _bigIntegerCalculationService.SquareRoot(modulus);
 
         if (modulusSquareRoot * modulusSquareRoot == modulus)
         {
-            return Task.FromResult(new FactorizationResult(modulusSquareRoot, modulusSquareRoot));
+            return new FactorizationResult(modulusSquareRoot, modulusSquareRoot);
         }
 
         if ((modulusSquareRoot & 1) == 0)
@@ -37,7 +37,7 @@ public class RSAAttackService : IRSAAttackService
             modulusSquareRoot--;
         }
 
-        return Task.Run(() =>
+        var factorizationResult = await Task.Run(() =>
         {
             for (var i = modulusSquareRoot; i > 2; i -= 2)
             {
@@ -49,8 +49,10 @@ public class RSAAttackService : IRSAAttackService
                 }
             }
 
-            throw new FactorizationException("Factors not found. Maybe modulus is prime.");
+            return null;
         });
+
+        return factorizationResult ?? throw new FactorizationException("Factors not found. Maybe modulus is prime.");
     }
 
     private static void ValidateModulus(BigInteger modulus)
