@@ -100,7 +100,46 @@ public class BigIntegerCalculationService : IBigIntegerCalculationService
 
     public BigInteger SquareRoot(BigInteger value)
     {
-        throw new NotImplementedException();
+        if (value < 0)
+        {
+            throw new ArgumentException("Value could not be negative.", nameof(value));
+        }
+
+        if (value <= ulong.MaxValue)
+        {
+            return (BigInteger)Math.Pow((double)value, 0.5);
+        }
+
+        var left = (BigInteger)Math.Pow(ulong.MaxValue, 0.5);
+        var right = value / left;
+
+        while (true)
+        {
+            var middle = (left + right) >> 1;
+
+            var leftBoundDegree = middle * middle;
+            // Раскрытые скобки: (middle + 1) * (middle + 1) = middle**2 + 2 * middle + 1
+            var rightBoundDegree = leftBoundDegree + (middle << 1) + 1;
+
+            if (value == rightBoundDegree)
+            {
+                return middle + 1;
+            }
+
+            if (value >= leftBoundDegree && value < rightBoundDegree)
+            {
+                return middle;
+            }
+
+            if (leftBoundDegree < value)
+            {
+                left = middle;
+            }
+            else
+            {
+                right = middle;
+            }
+        }
     }
 
     // Alternatives: https://stackoverflow.com/questions/3432412/calculate-square-root-of-a-biginteger-system-numerics-biginteger
