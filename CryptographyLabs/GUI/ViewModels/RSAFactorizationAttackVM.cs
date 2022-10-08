@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
+using Module.RSA.Services.Abstract;
+using PropertyChanged;
 
 namespace CryptographyLabs.GUI.ViewModels;
 
+[AddINotifyPropertyChangedInterface]
 public class RSAFactorizationAttackVM : IRSAFactorizationAttackVM
 {
     public IRSAFactorizationAttackParametersVM Parameters { get; }
@@ -11,27 +17,65 @@ public class RSAFactorizationAttackVM : IRSAFactorizationAttackVM
 
     public bool IsInProgress { get; private set; }
 
-    public ICommand Attack => _attack ??= new RelayCommand(_ => Attack_Internal());
+    public ICommand Attack => _attack ??= new AsyncRelayCommand(_ => Attack_Internal());
     public ICommand Cancel => _cancel ??= new RelayCommand(_ => Cancel_Internal());
 
     private ICommand? _attack;
     private ICommand? _cancel;
 
+    private readonly IRSAAttackService _rsaAttackService;
+
+    private CancellationTokenSource? _tokenSource;
+
     public RSAFactorizationAttackVM(
         IRSAFactorizationAttackParametersVM parameters,
-        IRSAFactorizationAttackResultsVM results)
+        IRSAFactorizationAttackResultsVM results,
+        IRSAAttackService rsaAttackService)
     {
         Parameters = parameters;
         Results = results;
+        _rsaAttackService = rsaAttackService;
     }
 
-    private void Attack_Internal()
+    private async Task Attack_Internal()
     {
-        throw new NotImplementedException();
+        if (IsInProgress)
+        {
+            return;
+        }
+
+        if (Parameters.HasErrors)
+        {
+            MessageBox.Show("Parameters has invalid state.");
+            return;
+        }
+
+        IsInProgress = true;
+        Results.FirstFactor = 0;
+        Results.FirstFactor = 0;
+
+        _tokenSource = new CancellationTokenSource();
+        try
+        {
+            var factorizationResult =
+                await _rsaAttackService.FactorizeModulusAsync(Parameters.Modulus!.Value, _tokenSource.Token);
+
+            Results.FirstFactor = factorizationResult.LowerFactor;
+            Results.SecondFactor = factorizationResult.HigherFactor;
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        finally
+        {
+            _tokenSource.Dispose();
+            _tokenSource = null;
+            IsInProgress = false;
+        }
     }
 
     private void Cancel_Internal()
     {
-        throw new NotImplementedException();
+        _tokenSource?.Cancel();
     }
 }
