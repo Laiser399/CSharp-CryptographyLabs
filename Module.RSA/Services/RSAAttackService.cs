@@ -41,6 +41,8 @@ public class RSAAttackService : IRSAAttackService
         {
             for (var i = modulusSquareRoot; i > 2; i -= 2)
             {
+                cancellationToken?.ThrowIfCancellationRequested();
+
                 if (modulus % i == 0)
                 {
                     return new FactorizationResult(i, modulus / i);

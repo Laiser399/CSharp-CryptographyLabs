@@ -11,5 +11,6 @@ public interface IRSAAttackService
     /// </summary>
     /// <exception cref="ArgumentException">Модуль меньше или равен 1.</exception>
     /// <exception cref="FactorizationException">Модуль является простым числом. Или, возможно, произошла неизвестная ошибка)</exception>
+    /// <exception cref="OperationCanceledException">Кого-то отменили.</exception>
     Task<FactorizationResult> FactorizeModulusAsync(BigInteger modulus, CancellationToken? cancellationToken = null);
 }
