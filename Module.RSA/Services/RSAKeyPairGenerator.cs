@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Module.RSA.Entities;
 using Module.RSA.Entities.Abstract;
+using Module.RSA.Extensions;
 using Module.RSA.Services.Abstract;
 
 namespace Module.RSA.Services;
@@ -31,11 +32,7 @@ public class RSAKeyPairGenerator : IRSAKeyPairGenerator
                 e += 2;
             }
 
-            d %= phiN;
-            if (d < 0)
-            {
-                d += phiN;
-            }
+            d = d.NormalizedMod(phiN);
 
             if (d > wienerAttackVulnerabilityThreshold)
             {

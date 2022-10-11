@@ -50,7 +50,7 @@ public class RSAModule : Autofac.Module
         if (RegisterRsaAttackServices)
         {
             builder
-                .RegisterType<RSAAttackService>()
+                .RegisterType<RSAFactorizationAttackService>()
                 .As<IRSAAttackService>()
                 .SingleInstance();
         }

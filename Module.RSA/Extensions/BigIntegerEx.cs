@@ -25,4 +25,19 @@ public static class BigIntegerEx
 
         return bitCount;
     }
+
+    /// <summary>
+    /// Вычисляет остаток от деления.
+    /// Приводит результат в диапазон [0; divider - 1].
+    /// </summary>
+    public static BigInteger NormalizedMod(this BigInteger value, BigInteger divider)
+    {
+        var result = value % divider;
+        if (result < 0)
+        {
+            result += divider;
+        }
+
+        return result;
+    }
 }

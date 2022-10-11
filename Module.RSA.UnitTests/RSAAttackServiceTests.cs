@@ -14,7 +14,7 @@ public class RSAAttackServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _rsaAttackService = new RSAAttackService(new BigIntegerCalculationService());
+        _rsaAttackService = new RSAFactorizationAttackService(new BigIntegerCalculationService());
     }
 
     [Test]
