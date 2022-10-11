@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Autofac;
 using Module.RSA.Exceptions;
 using Module.RSA.Services;
 using Module.RSA.Services.Abstract;
@@ -6,15 +7,23 @@ using NUnit.Framework;
 
 namespace Module.RSA.UnitTests;
 
-[TestFixture]
-public class RSAAttackServiceTests
+[TestFixture(typeof(RSAFactorizationAttackService))]
+[TestFixture(typeof(RSAWienerAttackService))]
+public class RSAAttackServiceTests<T> where T : IRSAAttackService
 {
+    private readonly IContainer _container;
+
     private IRSAAttackService? _rsaAttackService;
+
+    public RSAAttackServiceTests()
+    {
+        _container = BuildContainer();
+    }
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _rsaAttackService = new RSAFactorizationAttackService(new BigIntegerCalculationService());
+        _rsaAttackService = _container.Resolve<T>();
     }
 
     [Test]
@@ -68,5 +77,23 @@ public class RSAAttackServiceTests
         Assert.ThrowsAsync<CryptographyAttackException>(
             async () => await _rsaAttackService!.AttackAsync(65537, modulus)
         );
+    }
+
+    private static IContainer BuildContainer()
+    {
+        var builder = new ContainerBuilder();
+
+        builder
+            .RegisterType<RSAFactorizationAttackService>()
+            .AsSelf();
+        builder
+            .RegisterType<RSAWienerAttackService>()
+            .AsSelf();
+        builder
+            .RegisterType<BigIntegerCalculationService>()
+            .As<IBigIntegerCalculationService>()
+            .SingleInstance();
+
+        return builder.Build();
     }
 }

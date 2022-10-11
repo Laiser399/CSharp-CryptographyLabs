@@ -1,3 +1,4 @@
 ﻿group Main
     NUnit
     Microsoft.NET.Test.Sdk
+    Autofac
