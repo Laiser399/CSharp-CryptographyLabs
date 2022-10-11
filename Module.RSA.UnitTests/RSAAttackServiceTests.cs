@@ -18,23 +18,32 @@ public class RSAAttackServiceTests
     }
 
     [Test]
-    [TestCase("9", "3", "3")]
-    [TestCase("15", "3", "5")]
-    [TestCase("2118100319", "35869", "59051")]
-    [TestCase("111309534155653", "8575969", "12979237")]
-    public async Task FactorizeModulus_TestAsync(
+    [TestCase("2118100319", "65537", "34450673")]
+    [TestCase("111309534155653", "65537", "107803968648065")]
+    public async Task Attack_TestAsync(
         string modulusStr,
-        string expectedLowerFactorStr,
-        string expectedHigherFactorStr)
+        string publicExponentStr,
+        string expectedPrivateExponentStr)
     {
         var modulus = BigInteger.Parse(modulusStr);
-        var expectedLowerFactor = BigInteger.Parse(expectedLowerFactorStr);
-        var expectedHigherFactor = BigInteger.Parse(expectedHigherFactorStr);
+        var publicExponent = BigInteger.Parse(publicExponentStr);
+        var expectedPrivateExponent = BigInteger.Parse(expectedPrivateExponentStr);
 
-        var factorizationResult = await _rsaAttackService!.FactorizeModulusAsync(modulus);
+        var actualPrivateExponent = await _rsaAttackService!.AttackAsync(publicExponent, modulus);
 
-        Assert.AreEqual(expectedLowerFactor, factorizationResult.LowerFactor);
-        Assert.AreEqual(expectedHigherFactor, factorizationResult.HigherFactor);
+        Assert.AreEqual(expectedPrivateExponent, actualPrivateExponent);
+    }
+
+    [Test]
+    [TestCase(0)]
+    [TestCase(-1)]
+    [TestCase(-2)]
+    [TestCase(-928734)]
+    public void Attack_InvalidPublicExponentTest(int publicExponent)
+    {
+        Assert.ThrowsAsync<ArgumentException>(
+            () => _rsaAttackService!.AttackAsync(publicExponent, 2118100319)
+        );
     }
 
     [Test]
@@ -42,23 +51,22 @@ public class RSAAttackServiceTests
     [TestCase(1)]
     [TestCase(-1)]
     [TestCase(-2)]
-    [TestCase(-928734)]
-    public void FactorizeModulus_InvalidArgumentTest(int modulus)
+    [TestCase(-3295634)]
+    public void Attack_InvalidModulusTest(int modulus)
     {
         Assert.ThrowsAsync<ArgumentException>(
-            async () => await _rsaAttackService!.FactorizeModulusAsync(modulus)
+            () => _rsaAttackService!.AttackAsync(65537, modulus)
         );
     }
 
     [Test]
-    [TestCase(2)]
-    [TestCase(3)]
-    [TestCase(17)]
-    [TestCase(35869)]
-    public void FactorizeModulus_PrimeTest(int modulus)
+    [TestCase(4937)]
+    [TestCase(933931)]
+    [TestCase(66476491)]
+    public void Attack_PrimeTest(int modulus)
     {
-        Assert.ThrowsAsync<FactorizationException>(
-            async () => await _rsaAttackService!.FactorizeModulusAsync(modulus)
+        Assert.ThrowsAsync<CryptographyAttackException>(
+            async () => await _rsaAttackService!.AttackAsync(65537, modulus)
         );
     }
 }

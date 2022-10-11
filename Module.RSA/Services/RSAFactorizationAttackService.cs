@@ -20,7 +20,7 @@ public class RSAFactorizationAttackService : IRSAAttackService
         BigInteger modulus,
         CancellationToken? cancellationToken = null)
     {
-        ValidateModulus(modulus);
+        ValidateArguments(publicExponent, modulus);
 
         if ((modulus & 1) == 0)
         {
@@ -57,8 +57,13 @@ public class RSAFactorizationAttackService : IRSAAttackService
         return privateExponent ?? throw new CryptographyAttackException("Factors not found. Maybe modulus is prime.");
     }
 
-    private static void ValidateModulus(BigInteger modulus)
+    private static void ValidateArguments(BigInteger publicExponent, BigInteger modulus)
     {
+        if (publicExponent < 2)
+        {
+            throw new ArgumentException($"Invalid public exponent value: {publicExponent}.");
+        }
+
         if (modulus < 2)
         {
             throw new ArgumentException($"Invalid modulus value: {modulus}.");
