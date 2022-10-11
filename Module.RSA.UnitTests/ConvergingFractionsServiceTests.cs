@@ -56,16 +56,14 @@ public class ConvergingFractionsServiceTests
     }
 
     [Test]
-    public void EnumerateConvergingFractions_InvalidArgumentTest()
+    [TestCase("-1")]
+    [TestCase("1", "0", "3", "-37")]
+    [TestCase("7", "7", "-9", "7", "7")]
+    public void EnumerateConvergingFractions_InvalidArgumentTest(params string[] continuedFractionStr)
     {
+        var continuedFraction = continuedFractionStr.Select(BigInteger.Parse);
         Assert.Throws<ArgumentException>(() =>
-            _convergingFractionsService!.EnumerateConvergingFractions(new BigInteger[] { -1 })
-        );
-        Assert.Throws<ArgumentException>(() =>
-            _convergingFractionsService!.EnumerateConvergingFractions(new BigInteger[] { 1, 0, 3, -37 })
-        );
-        Assert.Throws<ArgumentException>(() =>
-            _convergingFractionsService!.EnumerateConvergingFractions(new BigInteger[] { 7, 7, -9, 7, 7 })
+            _convergingFractionsService!.EnumerateConvergingFractions(continuedFraction)
         );
     }
 }
