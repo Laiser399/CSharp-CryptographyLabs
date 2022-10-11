@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Module.RSA.Entities;
+using Module.RSA.Services;
 using Module.RSA.Services.Abstract;
 using NUnit.Framework;
 
@@ -13,8 +14,7 @@ public class ConvergingFractionsServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _convergingFractionsService = null;
-        throw new NotImplementedException();
+        _convergingFractionsService = new ConvergingFractionsService();
     }
 
     [Test]
@@ -63,7 +63,7 @@ public class ConvergingFractionsServiceTests
     {
         var continuedFraction = continuedFractionStr.Select(BigInteger.Parse);
         Assert.Throws<ArgumentException>(() =>
-            _convergingFractionsService!.EnumerateConvergingFractions(continuedFraction)
+            _ = _convergingFractionsService!.EnumerateConvergingFractions(continuedFraction).ToList()
         );
     }
 }
