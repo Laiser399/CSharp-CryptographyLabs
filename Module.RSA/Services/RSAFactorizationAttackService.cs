@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Module.RSA.Entities;
 using Module.RSA.Exceptions;
 using Module.RSA.Extensions;
 using Module.RSA.Services.Abstract;
@@ -94,13 +93,5 @@ public class RSAFactorizationAttackService : IRSAAttackService
         }
 
         return privateExponent.NormalizedMod(phiModulus);
-    }
-
-    [Obsolete]
-    public async Task<FactorizationResult> FactorizeModulusAsync(
-        BigInteger modulus,
-        CancellationToken? cancellationToken)
-    {
-        throw new NotSupportedException();
     }
 }

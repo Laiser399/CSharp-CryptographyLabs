@@ -1,9 +1,12 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace CryptographyLabs.GUI.AbstractViewModels;
 
 public interface IRSAFactorizationAttackResultsVM
 {
-    BigInteger FirstFactor { get; set; }
-    BigInteger SecondFactor { get; set; }
+    BigInteger PrivateExponent { get; set; }
+
+    [Obsolete] BigInteger FirstFactor { get; set; }
+    [Obsolete] BigInteger SecondFactor { get; set; }
 }

@@ -52,24 +52,25 @@ public class RSAFactorizationAttackVM : IRSAFactorizationAttackVM
         }
 
         IsInProgress = true;
-        Results.FirstFactor = 0;
-        Results.SecondFactor = 0;
+        Results.PrivateExponent = 0;
 
         _tokenSource = new CancellationTokenSource();
         try
         {
-            var factorizationResult =
-                await _rsaAttackService.FactorizeModulusAsync(Parameters.Modulus!.Value, _tokenSource.Token);
+            var privateExponent = await _rsaAttackService.AttackAsync(
+                Parameters.PublicExponent!.Value,
+                Parameters.Modulus!.Value,
+                _tokenSource.Token
+            );
 
-            Results.FirstFactor = factorizationResult.LowerFactor;
-            Results.SecondFactor = factorizationResult.HigherFactor;
+            Results.PrivateExponent = privateExponent;
         }
         catch (OperationCanceledException)
         {
         }
-        catch (FactorizationException e)
+        catch (CryptographyAttackException e)
         {
-            MessageBox.Show($"Factorization error:\n\n{e}");
+            MessageBox.Show($"Attack error:\n\n{e}");
         }
         finally
         {
