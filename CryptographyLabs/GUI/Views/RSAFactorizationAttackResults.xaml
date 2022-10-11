@@ -11,26 +11,16 @@
 
     <GroupBox Header="Results">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="First factor" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Private exponent" />
             <TextBox
-                Grid.Row="0" Grid.Column="1"
+                Grid.Column="1"
                 IsReadOnly="True"
-                Text="{Binding FirstFactor, Mode=OneWay}" />
-
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Second factor" />
-            <TextBox
-                Grid.Row="1" Grid.Column="1"
-                IsReadOnly="True"
-                Text="{Binding SecondFactor, Mode=OneWay}" />
+                Text="{Binding PrivateExponent, Mode=OneWay}" />
         </Grid>
     </GroupBox>
 </Grid>
