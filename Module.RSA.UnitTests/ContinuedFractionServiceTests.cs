@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Module.RSA.Services;
 using Module.RSA.Services.Abstract;
 using NUnit.Framework;
 
@@ -12,8 +13,7 @@ public class ContinuedFractionServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _continuedFractionService = null;
-        throw new NotImplementedException();
+        _continuedFractionService = new ContinuedFractionService();
     }
 
     [Test]
