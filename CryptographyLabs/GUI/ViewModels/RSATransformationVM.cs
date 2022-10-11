@@ -108,8 +108,8 @@ public class RSATransformationVM : IRSATransformationVM
         try
         {
             return Parameters.IsEncryption
-                ? await _rsaTransformService.EncryptAsync(data, key, x => Progress = x)
-                : await _rsaTransformService.DecryptAsync(data, key, x => Progress = x);
+                ? await _rsaTransformService.EncryptAsync(data, key, progressCallback: x => Progress = x)
+                : await _rsaTransformService.DecryptAsync(data, key, progressCallback: x => Progress = x);
         }
         catch (CryptoTransformException e)
         {

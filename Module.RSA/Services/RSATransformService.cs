@@ -14,7 +14,11 @@ public class RSATransformService : IRSATransformService
         _bigIntegerCalculationService = bigIntegerCalculationService;
     }
 
-    public Task<byte[]> EncryptAsync(byte[] data, IRSAKey key, Action<double>? progressCallback)
+    public Task<byte[]> EncryptAsync(
+        byte[] data,
+        IRSAKey key,
+        CancellationToken? cancellationToken,
+        Action<double>? progressCallback)
     {
         if (data.Length == 0)
         {
@@ -24,10 +28,14 @@ public class RSATransformService : IRSATransformService
         var nByteCount = key.Modulus.GetByteCount(true);
         var inputBlockSize = nByteCount - 1;
 
-        return TransformAsync(data, key, inputBlockSize, nByteCount, progressCallback);
+        return TransformAsync(data, key, inputBlockSize, nByteCount, cancellationToken, progressCallback);
     }
 
-    public Task<byte[]> DecryptAsync(byte[] data, IRSAKey key, Action<double>? progressCallback)
+    public Task<byte[]> DecryptAsync(
+        byte[] data,
+        IRSAKey key,
+        CancellationToken? cancellationToken,
+        Action<double>? progressCallback)
     {
         if (data.Length == 0)
         {
@@ -37,7 +45,7 @@ public class RSATransformService : IRSATransformService
         var nByteCount = key.Modulus.GetByteCount(true);
         var outputBlockSize = nByteCount - 1;
 
-        return TransformAsync(data, key, nByteCount, outputBlockSize, progressCallback);
+        return TransformAsync(data, key, nByteCount, outputBlockSize, cancellationToken, progressCallback);
     }
 
     private async Task<byte[]> TransformAsync(
@@ -45,6 +53,7 @@ public class RSATransformService : IRSATransformService
         IRSAKey key,
         int inputBlockSize,
         int outputBlockSize,
+        CancellationToken? cancellationToken,
         Action<double>? progressCallback)
     {
         var blockCount = (int)Math.Ceiling((double)data.Length / inputBlockSize);
@@ -54,6 +63,8 @@ public class RSATransformService : IRSATransformService
         var result = new List<byte>();
         for (var i = 0; i < blockCount; i++)
         {
+            cancellationToken?.ThrowIfCancellationRequested();
+
             progressCallback?.Invoke((double)i / blockCount);
 
             var bytesCountToCopy = i < blockCount - 1
@@ -63,7 +74,7 @@ public class RSATransformService : IRSATransformService
             Array.Copy(data, i * inputBlockSize, block, 0, bytesCountToCopy);
             Array.Fill(block, (byte)0, bytesCountToCopy, inputBlockSize - bytesCountToCopy);
 
-            var transformedBlock = await TransformBlockAsync(block, key);
+            var transformedBlock = await TransformBlockAsync(block, key, cancellationToken);
 
             if (transformedBlock.Length > outputBlockSize)
             {
@@ -82,14 +93,17 @@ public class RSATransformService : IRSATransformService
         return result.ToArray();
     }
 
-    private Task<byte[]> TransformBlockAsync(byte[] block, IRSAKey key)
+    private Task<byte[]> TransformBlockAsync(byte[] block, IRSAKey key, CancellationToken? cancellationToken)
     {
-        return Task.Run(() =>
-        {
-            var value = new BigInteger(block, true);
+        return Task.Run(
+            () =>
+            {
+                var value = new BigInteger(block, true);
 
-            var transformedValue = _bigIntegerCalculationService.BinPowMod(value, key.Exponent, key.Modulus);
-            return transformedValue.ToByteArray(true);
-        });
+                var transformedValue = _bigIntegerCalculationService.BinPowMod(value, key.Exponent, key.Modulus);
+                return transformedValue.ToByteArray(true);
+            },
+            cancellationToken ?? CancellationToken.None
+        );
     }
 }
