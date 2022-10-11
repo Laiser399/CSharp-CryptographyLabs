@@ -7,6 +7,10 @@ public class RSAFactorizationAttackParametersVMValidator : AbstractValidator<IRS
 {
     public RSAFactorizationAttackParametersVMValidator()
     {
+        RuleFor(x => x.PublicExponent)
+            .NotNull()
+            .GreaterThan(2)
+            .OverridePropertyName(nameof(IRSAFactorizationAttackParametersVM.PublicExponentStr));
         RuleFor(x => x.Modulus)
             .NotNull()
             .GreaterThan(2)

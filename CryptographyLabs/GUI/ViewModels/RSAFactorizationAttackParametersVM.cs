@@ -20,6 +20,20 @@ public class RSAFactorizationAttackParametersVM : IRSAFactorizationAttackParamet
 
     public bool HasErrors => _validationTemplate.HasErrors;
 
+    #region PublicExponent
+
+    public BigInteger? PublicExponent { get; private set; }
+    public string PublicExponentStr { get; set; }
+
+    public void OnPublicExponentStrChanged()
+    {
+        PublicExponent = BigInteger.TryParse(PublicExponentStr, out var publicExponent)
+            ? publicExponent
+            : null;
+    }
+
+    #endregion
+
     #region Modulus
 
     public BigInteger? Modulus { get; private set; }
@@ -41,6 +55,7 @@ public class RSAFactorizationAttackParametersVM : IRSAFactorizationAttackParamet
     {
         _validationTemplate = validationTemplateFactory(this);
 
+        PublicExponentStr = "3";
         ModulusStr = "15";
     }
 

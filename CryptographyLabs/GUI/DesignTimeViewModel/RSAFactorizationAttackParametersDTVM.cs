@@ -12,6 +12,9 @@ public class RSAFactorizationAttackParametersDTVM : IRSAFactorizationAttackParam
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
     public bool HasErrors => false;
 
+    public BigInteger? PublicExponent { get; } = BigInteger.Parse("65537");
+    public string PublicExponentStr { get; set; } = "65537";
+
     public BigInteger? Modulus { get; } = BigInteger.Parse("83465293845762345");
     public string ModulusStr { get; set; } = "83465293845762345";
 
