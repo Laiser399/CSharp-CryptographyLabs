@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,6 +17,9 @@ namespace CryptographyLabs.GUI.ViewModels;
 [AddINotifyPropertyChangedInterface]
 public class RSAAttackVM : IRSAAttackVM
 {
+    public IReadOnlyCollection<IRSAAttackTypeVM> AttackTypes { get; }
+    public IRSAAttackTypeVM SelectedAttackType { get; set; }
+
     public IRSAAttackParametersVM Parameters { get; }
     public IRSAAttackResultsVM Results { get; }
 
@@ -38,6 +43,13 @@ public class RSAAttackVM : IRSAAttackVM
         Parameters = parameters;
         Results = results;
         _rsaAttackServices = rsaAttackServices;
+
+        AttackTypes = new[]
+        {
+            new RSAAttackTypeVM(RSAAttackType.Factorization, "Factorization attack"),
+            new RSAAttackTypeVM(RSAAttackType.Wiener, "Wiener attack")
+        };
+        SelectedAttackType = AttackTypes.First();
     }
 
     private async Task Attack_Internal()
@@ -59,7 +71,7 @@ public class RSAAttackVM : IRSAAttackVM
         _tokenSource = new CancellationTokenSource();
         try
         {
-            var attackService = _rsaAttackServices[RSAAttackType.Factorization];
+            var attackService = _rsaAttackServices[SelectedAttackType.Type];
             var privateExponent = await attackService.AttackAsync(
                 Parameters.PublicExponent!.Value,
                 Parameters.Modulus!.Value,

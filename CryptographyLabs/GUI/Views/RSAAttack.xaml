@@ -21,7 +21,29 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Attack type" />
+                <ComboBox
+                    Grid.Column="1"
+                    MaxWidth="200" HorizontalAlignment="Left"
+                    ItemsSource="{Binding AttackTypes, Mode=OneWay}"
+                    SelectedItem="{Binding SelectedAttackType}">
+
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+
             <views:RSAAttackParameters
+                Margin="0 12 0 0"
                 DataContext="{Binding Parameters}"
                 IsEnabled="{
                     Binding DataContext.IsInProgress, 
