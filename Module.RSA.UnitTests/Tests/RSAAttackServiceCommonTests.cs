@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Autofac;
+﻿using Autofac;
 using Module.RSA.Exceptions;
 using Module.RSA.Services;
 using Module.RSA.Services.Abstract;
@@ -10,13 +9,13 @@ namespace Module.RSA.UnitTests.Tests;
 
 [TestFixture(typeof(FactorizationAttackService))]
 [TestFixture(typeof(WienerAttackService))]
-public class RSAAttackServiceTests<T> where T : IRSAAttackService
+public class RSAAttackServiceCommonTests<T> where T : IRSAAttackService
 {
     private readonly IContainer _container;
 
     private IRSAAttackService? _rsaAttackService;
 
-    public RSAAttackServiceTests()
+    public RSAAttackServiceCommonTests()
     {
         _container = BuildContainer();
     }
@@ -25,23 +24,6 @@ public class RSAAttackServiceTests<T> where T : IRSAAttackService
     public void OneTimeSetUp()
     {
         _rsaAttackService = _container.Resolve<T>();
-    }
-
-    [Test]
-    [TestCase("2118100319", "65537", "34450673")]
-    [TestCase("111309534155653", "65537", "107803968648065")]
-    public async Task Attack_TestAsync(
-        string modulusStr,
-        string publicExponentStr,
-        string expectedPrivateExponentStr)
-    {
-        var modulus = BigInteger.Parse(modulusStr);
-        var publicExponent = BigInteger.Parse(publicExponentStr);
-        var expectedPrivateExponent = BigInteger.Parse(expectedPrivateExponentStr);
-
-        var actualPrivateExponent = await _rsaAttackService!.AttackAsync(publicExponent, modulus);
-
-        Assert.AreEqual(expectedPrivateExponent, actualPrivateExponent);
     }
 
     [Test]
