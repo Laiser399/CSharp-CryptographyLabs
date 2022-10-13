@@ -3,7 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Autofac.Features.Indexed;
 using CryptographyLabs.GUI.AbstractViewModels;
+using Module.RSA.Enums;
 using Module.RSA.Exceptions;
 using Module.RSA.Services.Abstract;
 using PropertyChanged;
@@ -24,18 +26,18 @@ public class RSAFactorizationAttackVM : IRSAFactorizationAttackVM
     private ICommand? _attack;
     private ICommand? _cancel;
 
-    private readonly IRSAAttackService _rsaAttackService;
+    private readonly IIndex<RSAAttackType, IRSAAttackService> _rsaAttackServices;
 
     private CancellationTokenSource? _tokenSource;
 
     public RSAFactorizationAttackVM(
         IRSAFactorizationAttackParametersVM parameters,
         IRSAFactorizationAttackResultsVM results,
-        IRSAAttackService rsaAttackService)
+        IIndex<RSAAttackType, IRSAAttackService> rsaAttackServices)
     {
         Parameters = parameters;
         Results = results;
-        _rsaAttackService = rsaAttackService;
+        _rsaAttackServices = rsaAttackServices;
     }
 
     private async Task Attack_Internal()
@@ -57,7 +59,8 @@ public class RSAFactorizationAttackVM : IRSAFactorizationAttackVM
         _tokenSource = new CancellationTokenSource();
         try
         {
-            var privateExponent = await _rsaAttackService.AttackAsync(
+            var attackService = _rsaAttackServices[RSAAttackType.Factorization];
+            var privateExponent = await attackService.AttackAsync(
                 Parameters.PublicExponent!.Value,
                 Parameters.Modulus!.Value,
                 _tokenSource.Token
