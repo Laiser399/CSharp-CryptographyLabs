@@ -10,14 +10,10 @@ public class RSAKeyPairGenerator : IRSAKeyPairGenerator
 {
     private static readonly BigInteger StartEncryptionExponent = 65537;
 
-    private readonly IRSAKeyPairGeneratorParameters _parameters;
     private readonly IBigIntegerCalculationService _bigIntegerCalculationService;
 
-    public RSAKeyPairGenerator(
-        IRSAKeyPairGeneratorParameters parameters,
-        IBigIntegerCalculationService bigIntegerCalculationService)
+    public RSAKeyPairGenerator(IBigIntegerCalculationService bigIntegerCalculationService)
     {
-        _parameters = parameters;
         _bigIntegerCalculationService = bigIntegerCalculationService;
     }
 
@@ -38,8 +34,7 @@ public class RSAKeyPairGenerator : IRSAKeyPairGenerator
 
             d = d.NormalizedMod(phiN);
 
-            if (_parameters.ForceWienerAttackVulnerability && d < wienerAttackVulnerabilityThreshold
-                || !_parameters.ForceWienerAttackVulnerability && d > wienerAttackVulnerabilityThreshold)
+            if (d > wienerAttackVulnerabilityThreshold)
             {
                 break;
             }

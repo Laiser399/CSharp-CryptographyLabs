@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Module.RSA.Entities;
+using Module.RSA.Entities.Abstract;
 using Module.RSA.Services;
 using Module.RSA.Services.Abstract;
 
@@ -25,7 +27,12 @@ public class RSAModule : Autofac.Module
         {
             builder
                 .RegisterType<RSAKeyPairGenerator>()
-                .As<IRSAKeyPairGenerator>()
+                .Keyed<IRSAKeyPairGenerator>(RSAKeyPairGenerationType.Default)
+                .SingleInstance();
+            builder
+                .RegisterType<RSAWienerAttackVulnerableKeyPairGenerator>()
+                .Keyed<IRSAKeyPairGenerator>(RSAKeyPairGenerationType.WithWienerAttackVulnerability)
+                .WithParameter(new TypedParameter(typeof(IRandomProvider), new RandomProvider(new Random())))
                 .SingleInstance();
         }
 

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
+using Autofac.Features.Indexed;
 using CryptographyLabs.GUI.AbstractViewModels;
-using Module.RSA.Entities;
-using Module.RSA.Entities.Abstract;
+using Module.RSA;
 using Module.RSA.Services.Abstract;
 
 namespace CryptographyLabs.GUI.ViewModels;
@@ -16,16 +15,16 @@ public class RSAKeyGenerationVM : IRSAKeyGenerationVM
     public ICommand Generate => _generate ??= new RelayCommand(_ => Generate_Internal());
     private ICommand? _generate;
 
-    private readonly Func<IRSAKeyPairGeneratorParameters, IRSAKeyPairGenerator> _rsaKeyPairGeneratorFactory;
+    private readonly IIndex<RSAKeyPairGenerationType, IRSAKeyPairGenerator> _rsaKeyPairGenerators;
 
     public RSAKeyGenerationVM(
         IRSAKeyGenerationParametersVM parameters,
         IRSAKeyGenerationResultsVM results,
-        Func<IRSAKeyPairGeneratorParameters, IRSAKeyPairGenerator> rsaKeyPairGeneratorFactory)
+        IIndex<RSAKeyPairGenerationType, IRSAKeyPairGenerator> rsaKeyPairGenerators)
     {
         Parameters = parameters;
         Results = results;
-        _rsaKeyPairGeneratorFactory = rsaKeyPairGeneratorFactory;
+        _rsaKeyPairGenerators = rsaKeyPairGenerators;
     }
 
     private void Generate_Internal()
@@ -40,10 +39,11 @@ public class RSAKeyGenerationVM : IRSAKeyGenerationVM
         Results.PrivateExponent = 0;
         Results.Modulus = 0;
 
-        var generator = _rsaKeyPairGeneratorFactory(
-            new RSAKeyPairGeneratorParameters(Parameters.ForceWienerAttackVulnerability)
-        );
-        var keyPair = generator.Generate(Parameters.P!.Value, Parameters.Q!.Value);
+        var keyPairGenerator = Parameters.ForceWienerAttackVulnerability
+            ? _rsaKeyPairGenerators[RSAKeyPairGenerationType.WithWienerAttackVulnerability]
+            : _rsaKeyPairGenerators[RSAKeyPairGenerationType.Default];
+
+        var keyPair = keyPairGenerator.Generate(Parameters.P!.Value, Parameters.Q!.Value);
 
         Results.PublicExponent = keyPair.Public.Exponent;
         Results.PrivateExponent = keyPair.Private.Exponent;
