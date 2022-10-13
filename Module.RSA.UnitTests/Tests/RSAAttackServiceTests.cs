@@ -3,9 +3,10 @@ using Autofac;
 using Module.RSA.Exceptions;
 using Module.RSA.Services;
 using Module.RSA.Services.Abstract;
+using Module.RSA.UnitTests.Modules;
 using NUnit.Framework;
 
-namespace Module.RSA.UnitTests;
+namespace Module.RSA.UnitTests.Tests;
 
 [TestFixture(typeof(RSAFactorizationAttackService))]
 [TestFixture(typeof(RSAWienerAttackService))]
@@ -83,16 +84,8 @@ public class RSAAttackServiceTests<T> where T : IRSAAttackService
     {
         var builder = new ContainerBuilder();
 
-        builder
-            .RegisterType<RSAFactorizationAttackService>()
-            .AsSelf();
-        builder
-            .RegisterType<RSAWienerAttackService>()
-            .AsSelf();
-        builder
-            .RegisterType<BigIntegerCalculationService>()
-            .As<IBigIntegerCalculationService>()
-            .SingleInstance();
+        builder.RegisterModule<RSAFactorizationAttackModule>();
+        builder.RegisterModule<RSAWienerAttackModule>();
 
         return builder.Build();
     }

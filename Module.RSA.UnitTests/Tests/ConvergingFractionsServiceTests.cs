@@ -4,7 +4,7 @@ using Module.RSA.Services;
 using Module.RSA.Services.Abstract;
 using NUnit.Framework;
 
-namespace Module.RSA.UnitTests;
+namespace Module.RSA.UnitTests.Tests;
 
 [TestFixture]
 public class ConvergingFractionsServiceTests
