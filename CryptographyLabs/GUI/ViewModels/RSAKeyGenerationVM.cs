@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
+using Module.RSA.Entities;
+using Module.RSA.Entities.Abstract;
 using Module.RSA.Services.Abstract;
 
 namespace CryptographyLabs.GUI.ViewModels;
@@ -13,16 +16,16 @@ public class RSAKeyGenerationVM : IRSAKeyGenerationVM
     public ICommand Generate => _generate ??= new RelayCommand(_ => Generate_Internal());
     private ICommand? _generate;
 
-    private readonly IRSAKeyPairGenerator _rsaKeyPairGenerator;
+    private readonly Func<IRSAKeyPairGeneratorParameters, IRSAKeyPairGenerator> _rsaKeyPairGeneratorFactory;
 
     public RSAKeyGenerationVM(
         IRSAKeyGenerationParametersVM parameters,
         IRSAKeyGenerationResultsVM results,
-        IRSAKeyPairGenerator rsaKeyPairGenerator)
+        Func<IRSAKeyPairGeneratorParameters, IRSAKeyPairGenerator> rsaKeyPairGeneratorFactory)
     {
         Parameters = parameters;
         Results = results;
-        _rsaKeyPairGenerator = rsaKeyPairGenerator;
+        _rsaKeyPairGeneratorFactory = rsaKeyPairGeneratorFactory;
     }
 
     private void Generate_Internal()
@@ -37,7 +40,10 @@ public class RSAKeyGenerationVM : IRSAKeyGenerationVM
         Results.PrivateExponent = 0;
         Results.Modulus = 0;
 
-        var keyPair = _rsaKeyPairGenerator.Generate(Parameters.P!.Value, Parameters.Q!.Value);
+        var generator = _rsaKeyPairGeneratorFactory(
+            new RSAKeyPairGeneratorParameters(Parameters.ForceWienerAttackVulnerability)
+        );
+        var keyPair = generator.Generate(Parameters.P!.Value, Parameters.Q!.Value);
 
         Results.PublicExponent = keyPair.Public.Exponent;
         Results.PrivateExponent = keyPair.Private.Exponent;
