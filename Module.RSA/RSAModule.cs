@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Module.RSA.Entities;
 using Module.RSA.Entities.Abstract;
+using Module.RSA.Enums;
 using Module.RSA.Services;
 using Module.RSA.Services.Abstract;
 
@@ -11,7 +12,7 @@ public class RSAModule : Autofac.Module
     public bool RegisterRsaCore { get; set; }
     public bool RegisterRsaKeyGenerator { get; set; }
     public bool RegisterPrimesGenerator { get; set; }
-    public bool RegisterRsaAttackServices { get; set; }
+    public bool RegisterAttackServices { get; set; }
 
     protected override void Load(ContainerBuilder builder)
     {
@@ -54,15 +55,28 @@ public class RSAModule : Autofac.Module
                 .SingleInstance();
         }
 
-        if (RegisterRsaAttackServices)
+        if (RegisterAttackServices)
         {
             builder
                 .RegisterType<FactorizationAttackService>()
-                .As<IRSAAttackService>()
+                .Keyed<IRSAAttackService>(RSAAttackType.Factorization)
+                .SingleInstance();
+            builder
+                .RegisterType<WienerAttackService>()
+                .Keyed<IRSAAttackService>(RSAAttackType.Wiener)
+                .WithParameter(new TypedParameter(typeof(IRandomProvider), new RandomProvider(new Random())))
+                .SingleInstance();
+            builder
+                .RegisterType<ContinuedFractionService>()
+                .As<IContinuedFractionService>()
+                .SingleInstance();
+            builder
+                .RegisterType<ConvergingFractionsService>()
+                .As<IConvergingFractionsService>()
                 .SingleInstance();
         }
 
-        if (RegisterRsaCore || RegisterRsaKeyGenerator || RegisterPrimesGenerator || RegisterRsaAttackServices)
+        if (RegisterRsaCore || RegisterRsaKeyGenerator || RegisterPrimesGenerator || RegisterAttackServices)
         {
             builder
                 .RegisterType<BigIntegerCalculationService>()

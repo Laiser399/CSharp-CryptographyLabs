@@ -75,7 +75,7 @@ public static class Bootstrapper
             RegisterPrimesGenerator = true,
             RegisterRsaKeyGenerator = true,
             RegisterRsaCore = true,
-            RegisterRsaAttackServices = true
+            RegisterAttackServices = true
         });
 
         return builder.Build();
