@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Autofac;
+using Module.RSA.Exceptions;
 using Module.RSA.Services.Abstract;
 using Module.RSA.UnitTests.Modules;
 using NUnit.Framework;
@@ -61,6 +62,21 @@ public class WienerAttackServiceTests
         var actualPrivateExponent = await _rsaAttackService!.AttackAsync(publicExponent, modulus);
 
         Assert.AreEqual(expectedPrivateExponent, actualPrivateExponent);
+    }
+
+    [Test]
+    [TestCase("2118100319", "65537")]
+    [TestCase("111309534155653", "65537")]
+    public void Attack_WithoutVulnerabilityTest(
+        string modulusStr,
+        string publicExponentStr)
+    {
+        var modulus = BigInteger.Parse(modulusStr);
+        var publicExponent = BigInteger.Parse(publicExponentStr);
+
+        Assert.ThrowsAsync<CryptographyAttackException>(
+            () => _rsaAttackService!.AttackAsync(publicExponent, modulus)
+        );
     }
 
     private static IContainer BuildContainer()
