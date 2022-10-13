@@ -12,5 +12,7 @@ public interface IRSAKeyGenerationParametersVM : INotifyPropertyChanged, INotify
     BigInteger? Q { get; }
     string QStr { get; set; }
 
+    bool ForceWienerAttackVulnerability { get; set; }
+
     ICommand SetFromPrimesGenerationResults { get; }
 }

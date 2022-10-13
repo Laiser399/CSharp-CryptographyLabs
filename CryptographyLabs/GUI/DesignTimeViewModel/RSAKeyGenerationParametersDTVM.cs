@@ -19,6 +19,8 @@ public class RSAKeyGenerationParametersDTVM : IRSAKeyGenerationParametersVM
     public BigInteger? Q { get; } = BigInteger.Parse("9807");
     public string QStr { get; set; } = "9807";
 
+    public bool ForceWienerAttackVulnerability { get; set; } = true;
+
     public ICommand SetFromPrimesGenerationResults { get; } = new RelayCommand(_ => { });
 
     public IEnumerable GetErrors(string? propertyName)

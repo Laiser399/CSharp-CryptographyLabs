@@ -63,6 +63,8 @@ public class RSAKeyGenerationParametersVM : IRSAKeyGenerationParametersVM
 
     #endregion
 
+    public bool ForceWienerAttackVulnerability { get; set; }
+
     public ICommand SetFromPrimesGenerationResults => _setFromPrimesGenerationResults ??=
         new RelayCommand(_ => SetFromPrimesGenerationResults_Internal());
 

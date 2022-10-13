@@ -12,33 +12,46 @@
     <GroupBox Header="Parameters">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="p" />
-            <TextBox
-                Grid.Row="0" Grid.Column="1"
-                Text="{Binding PStr, UpdateSourceTrigger=PropertyChanged}" />
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="q" />
-            <TextBox
-                Grid.Row="1" Grid.Column="1"
-                Text="{Binding QStr, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="p" />
+                <TextBox
+                    Grid.Row="0" Grid.Column="1"
+                    Text="{Binding PStr, UpdateSourceTrigger=PropertyChanged}" />
 
-            <Button
-                Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Width="110px"
-                Command="{Binding SetFromPrimesGenerationResults}">
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="q" />
+                <TextBox
+                    Grid.Row="1" Grid.Column="1"
+                    Text="{Binding QStr, UpdateSourceTrigger=PropertyChanged}" />
 
-                <Button.Content>
-                    <TextBlock Text="Set from primes generation results" TextWrapping="Wrap" TextAlignment="Center" />
-                </Button.Content>
-            </Button>
+                <Button
+                    Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Width="110px"
+                    Command="{Binding SetFromPrimesGenerationResults}">
+
+                    <Button.Content>
+                        <TextBlock Text="Set from primes generation results" TextWrapping="Wrap" TextAlignment="Center" />
+                    </Button.Content>
+                </Button>
+            </Grid>
+
+            <CheckBox
+                Grid.Row="1"
+                Margin="0 12 0 0" Foreground="MediumVioletRed"
+                Content="Force Wiener attack vulnerability"
+                IsChecked="{Binding ForceWienerAttackVulnerability}" />
         </Grid>
     </GroupBox>
 </Grid>
