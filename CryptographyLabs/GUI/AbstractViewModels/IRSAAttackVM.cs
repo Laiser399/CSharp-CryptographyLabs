@@ -2,10 +2,10 @@
 
 namespace CryptographyLabs.GUI.AbstractViewModels;
 
-public interface IRSAFactorizationAttackVM
+public interface IRSAAttackVM
 {
-    IRSAFactorizationAttackParametersVM Parameters { get; }
-    IRSAFactorizationAttackResultsVM Results { get; }
+    IRSAAttackParametersVM Parameters { get; }
+    IRSAAttackResultsVM Results { get; }
 
     bool IsInProgress { get; }
 

@@ -2,9 +2,9 @@
 
 namespace CryptographyLabs.GUI.Views;
 
-public partial class RSAFactorizationAttackResults : Grid
+public partial class RSAAttackParameters : Grid
 {
-    public RSAFactorizationAttackResults()
+    public RSAAttackParameters()
     {
         InitializeComponent();
     }

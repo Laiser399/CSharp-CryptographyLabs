@@ -13,10 +13,10 @@ using PropertyChanged;
 namespace CryptographyLabs.GUI.ViewModels;
 
 [AddINotifyPropertyChangedInterface]
-public class RSAFactorizationAttackVM : IRSAFactorizationAttackVM
+public class RSAAttackVM : IRSAAttackVM
 {
-    public IRSAFactorizationAttackParametersVM Parameters { get; }
-    public IRSAFactorizationAttackResultsVM Results { get; }
+    public IRSAAttackParametersVM Parameters { get; }
+    public IRSAAttackResultsVM Results { get; }
 
     public bool IsInProgress { get; private set; }
 
@@ -30,9 +30,9 @@ public class RSAFactorizationAttackVM : IRSAFactorizationAttackVM
 
     private CancellationTokenSource? _tokenSource;
 
-    public RSAFactorizationAttackVM(
-        IRSAFactorizationAttackParametersVM parameters,
-        IRSAFactorizationAttackResultsVM results,
+    public RSAAttackVM(
+        IRSAAttackParametersVM parameters,
+        IRSAAttackResultsVM results,
         IIndex<RSAAttackType, IRSAAttackService> rsaAttackServices)
     {
         Parameters = parameters;

@@ -44,14 +44,14 @@ public static class AppContainer
             .RegisterType<RSATransformationParametersVM>()
             .As<IRSATransformationParametersVM>();
         builder
-            .RegisterType<RSAFactorizationAttackVM>()
-            .As<IRSAFactorizationAttackVM>();
+            .RegisterType<RSAAttackVM>()
+            .As<IRSAAttackVM>();
         builder
-            .RegisterType<RSAFactorizationAttackParametersVM>()
-            .As<IRSAFactorizationAttackParametersVM>();
+            .RegisterType<RSAAttackParametersVM>()
+            .As<IRSAAttackParametersVM>();
         builder
-            .RegisterType<RSAFactorizationAttackResultsVM>()
-            .As<IRSAFactorizationAttackResultsVM>();
+            .RegisterType<RSAAttackResultsVM>()
+            .As<IRSAAttackResultsVM>();
 
         builder
             .RegisterGeneric(typeof(ValidationTemplate<>))
@@ -67,8 +67,8 @@ public static class AppContainer
             .RegisterType<RSATransformationParametersVMValidator>()
             .As<IValidator<IRSATransformationParametersVM>>();
         builder
-            .RegisterType<RSAFactorizationAttackParametersVMValidator>()
-            .As<IValidator<IRSAFactorizationAttackParametersVM>>();
+            .RegisterType<RSAAttackParametersVMValidator>()
+            .As<IValidator<IRSAAttackParametersVM>>();
 
         builder.RegisterModule(new RSAModule
         {

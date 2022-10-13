@@ -2,7 +2,7 @@
 
 namespace CryptographyLabs.GUI.AbstractViewModels;
 
-public interface IRSAFactorizationAttackResultsVM
+public interface IRSAAttackResultsVM
 {
     BigInteger PrivateExponent { get; set; }
 }

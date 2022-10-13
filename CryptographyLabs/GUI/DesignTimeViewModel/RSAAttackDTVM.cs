@@ -3,10 +3,10 @@ using CryptographyLabs.GUI.AbstractViewModels;
 
 namespace CryptographyLabs.GUI.DesignTimeViewModel;
 
-public class RSAFactorizationAttackDTVM : IRSAFactorizationAttackVM
+public class RSAAttackDTVM : IRSAAttackVM
 {
-    public IRSAFactorizationAttackParametersVM Parameters { get; } = new RSAFactorizationAttackParametersDTVM();
-    public IRSAFactorizationAttackResultsVM Results { get; } = new RSAFactorizationAttackResultsDTVM();
+    public IRSAAttackParametersVM Parameters { get; } = new RSAAttackParametersDTVM();
+    public IRSAAttackResultsVM Results { get; } = new RSAAttackResultsDTVM();
 
     public bool IsInProgress => false;
 

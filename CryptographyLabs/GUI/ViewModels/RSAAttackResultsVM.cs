@@ -5,7 +5,7 @@ using PropertyChanged;
 namespace CryptographyLabs.GUI.ViewModels;
 
 [AddINotifyPropertyChangedInterface]
-public class RSAFactorizationAttackResultsVM : IRSAFactorizationAttackResultsVM
+public class RSAAttackResultsVM : IRSAAttackResultsVM
 {
     public BigInteger PrivateExponent { get; set; }
 }

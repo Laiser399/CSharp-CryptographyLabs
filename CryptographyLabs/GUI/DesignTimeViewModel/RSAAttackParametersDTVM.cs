@@ -6,7 +6,7 @@ using CryptographyLabs.GUI.AbstractViewModels;
 
 namespace CryptographyLabs.GUI.DesignTimeViewModel;
 
-public class RSAFactorizationAttackParametersDTVM : IRSAFactorizationAttackParametersVM
+public class RSAAttackParametersDTVM : IRSAAttackParametersVM
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;

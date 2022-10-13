@@ -8,7 +8,7 @@ using PropertyChanged;
 namespace CryptographyLabs.GUI.ViewModels;
 
 [AddINotifyPropertyChangedInterface]
-public class RSAFactorizationAttackParametersVM : IRSAFactorizationAttackParametersVM
+public class RSAAttackParametersVM : IRSAAttackParametersVM
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -50,8 +50,8 @@ public class RSAFactorizationAttackParametersVM : IRSAFactorizationAttackParamet
 
     private readonly INotifyDataErrorInfo _validationTemplate;
 
-    public RSAFactorizationAttackParametersVM(
-        ValidationTemplateFactory<IRSAFactorizationAttackParametersVM> validationTemplateFactory)
+    public RSAAttackParametersVM(
+        ValidationTemplateFactory<IRSAAttackParametersVM> validationTemplateFactory)
     {
         _validationTemplate = validationTemplateFactory(this);
 

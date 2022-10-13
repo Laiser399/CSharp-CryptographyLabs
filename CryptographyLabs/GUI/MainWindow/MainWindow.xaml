@@ -249,8 +249,8 @@
                 <TabItem Header="Transformation">
                     <views:RSATransformation DataContext="{Binding RSATransformation}" />
                 </TabItem>
-                <TabItem Header="Factorization attack">
-                    <views:RSAFactorizationAttack DataContext="{Binding RSAFactorizationAttack}" />
+                <TabItem Header="Attack">
+                    <views:RSAAttack DataContext="{Binding RSAAttack}" />
                 </TabItem>
             </TabControl>
         </TabItem>
