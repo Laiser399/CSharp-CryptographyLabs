@@ -55,7 +55,7 @@ public class RSAWienerAttackVulnerableKeyPairGenerator : IRSAKeyPairGenerator
     private BigInteger GetStartPrivateExponent(BigInteger wienerAttackVulnerabilityThreshold)
     {
         var d = _randomBigIntegerGenerator.Generate(
-            65537,
+            3,
             wienerAttackVulnerabilityThreshold,
             _randomProvider.Random
         );
