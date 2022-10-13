@@ -13,7 +13,7 @@ namespace CryptographyLabs
         {
             InitializeComponent();
 
-            var lifetimeScope = Bootstrapper.BuildLifetimeScope().BeginLifetimeScope(nameof(MainWindowVM));
+            var lifetimeScope = AppContainer.Build().BeginLifetimeScope(nameof(MainWindowVM));
             DataContext = lifetimeScope.Resolve<MainWindowVM>();
         }
     }

@@ -8,9 +8,9 @@ using Module.RSA;
 
 namespace CryptographyLabs;
 
-public static class Bootstrapper
+public static class AppContainer
 {
-    public static ILifetimeScope BuildLifetimeScope()
+    public static IContainer Build()
     {
         var builder = new ContainerBuilder();
 
