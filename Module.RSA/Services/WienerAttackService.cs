@@ -3,7 +3,7 @@ using Module.RSA.Services.Abstract;
 
 namespace Module.RSA.Services;
 
-public class RSAWienerAttackService : IRSAAttackService
+public class WienerAttackService : IRSAAttackService
 {
     public Task<BigInteger> AttackAsync(
         BigInteger publicExponent,

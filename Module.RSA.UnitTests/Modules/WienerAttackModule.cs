@@ -4,12 +4,12 @@ using Module.RSA.Services.Abstract;
 
 namespace Module.RSA.UnitTests.Modules;
 
-public class RSAWienerAttackModule : Autofac.Module
+public class WienerAttackModule : Autofac.Module
 {
     protected override void Load(ContainerBuilder builder)
     {
         builder
-            .RegisterType<RSAWienerAttackService>()
+            .RegisterType<WienerAttackService>()
             .As<IRSAAttackService>()
             .AsSelf();
     }

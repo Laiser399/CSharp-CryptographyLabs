@@ -4,12 +4,12 @@ using Module.RSA.Services.Abstract;
 
 namespace Module.RSA.UnitTests.Modules;
 
-public class RSAFactorizationAttackModule : Autofac.Module
+public class FactorizationAttackModule : Autofac.Module
 {
     protected override void Load(ContainerBuilder builder)
     {
         builder
-            .RegisterType<RSAFactorizationAttackService>()
+            .RegisterType<FactorizationAttackService>()
             .As<IRSAAttackService>()
             .AsSelf()
             .SingleInstance();

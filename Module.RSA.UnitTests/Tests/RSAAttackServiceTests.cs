@@ -8,8 +8,8 @@ using NUnit.Framework;
 
 namespace Module.RSA.UnitTests.Tests;
 
-[TestFixture(typeof(RSAFactorizationAttackService))]
-[TestFixture(typeof(RSAWienerAttackService))]
+[TestFixture(typeof(FactorizationAttackService))]
+[TestFixture(typeof(WienerAttackService))]
 public class RSAAttackServiceTests<T> where T : IRSAAttackService
 {
     private readonly IContainer _container;
@@ -84,8 +84,8 @@ public class RSAAttackServiceTests<T> where T : IRSAAttackService
     {
         var builder = new ContainerBuilder();
 
-        builder.RegisterModule<RSAFactorizationAttackModule>();
-        builder.RegisterModule<RSAWienerAttackModule>();
+        builder.RegisterModule<FactorizationAttackModule>();
+        builder.RegisterModule<WienerAttackModule>();
 
         return builder.Build();
     }

@@ -5,11 +5,11 @@ using Module.RSA.Services.Abstract;
 
 namespace Module.RSA.Services;
 
-public class RSAFactorizationAttackService : IRSAAttackService
+public class FactorizationAttackService : IRSAAttackService
 {
     private readonly IBigIntegerCalculationService _bigIntegerCalculationService;
 
-    public RSAFactorizationAttackService(IBigIntegerCalculationService bigIntegerCalculationService)
+    public FactorizationAttackService(IBigIntegerCalculationService bigIntegerCalculationService)
     {
         _bigIntegerCalculationService = bigIntegerCalculationService;
     }
