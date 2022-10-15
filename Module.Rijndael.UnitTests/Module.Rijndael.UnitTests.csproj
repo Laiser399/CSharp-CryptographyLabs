@@ -6,5 +6,8 @@
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Module.Rijndael\Module.Rijndael.csproj" />
+  </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
