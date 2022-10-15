@@ -49,6 +49,7 @@ namespace CryptographyLabs
             return Multiply_(a, Inverse_(b));
         }
 
+        // todo delete later
         public static byte Inverse(byte a, bool withReplaceVector = _defaultWithReplace)
         {
             if (withReplaceVector)
@@ -79,6 +80,7 @@ namespace CryptographyLabs
             return res;
         }
 
+        // todo delete later
         public static byte Multiply(byte a, byte b, bool withReplaceMtx = _defaultWithReplace)
         {
             if (withReplaceMtx)
