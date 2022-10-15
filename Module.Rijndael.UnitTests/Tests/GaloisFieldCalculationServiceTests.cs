@@ -1,4 +1,6 @@
-﻿using Module.Rijndael.Services.Abstract;
+﻿using Module.Rijndael.Services;
+using Module.Rijndael.Services.Abstract;
+using Module.Rijndael.UnitTests.Entities;
 using NUnit.Framework;
 
 namespace Module.Rijndael.UnitTests.Tests;
@@ -11,8 +13,7 @@ public class GaloisFieldCalculationServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _galoisFieldCalculationService = null;
-        throw new NotImplementedException();
+        _galoisFieldCalculationService = new GaloisFieldCalculationService(new GaloisFieldConfiguration(0b100011011));
     }
 
     [Test]
@@ -39,25 +40,18 @@ public class GaloisFieldCalculationServiceTests
     }
 
     [Test]
-    [TestCase(0, 0)]
-    [TestCase(1, 1)]
-    public void Inverse_Test(byte a, byte expected)
+    public void Inverse_FullTest()
     {
-        var actual = _galoisFieldCalculationService!.Inverse(a);
-        Assert.AreEqual(expected, actual);
-    }
+        var actual = _galoisFieldCalculationService!.Inverse(0);
+        Assert.AreEqual(0, actual);
 
-    [Test]
-    [TestCase(0b1001)]
-    [TestCase(0b1001101)]
-    [TestCase(0b11111000)]
-    [TestCase(0b101010)]
-    [TestCase(0b1100011)]
-    public void Inverse_Test(byte a)
-    {
-        var inversed = _galoisFieldCalculationService!.Inverse(a);
+        for (var i = 1; i < 256; i++)
+        {
+            var a = (byte)i;
+            var inversed = _galoisFieldCalculationService!.Inverse(a);
 
-        Assert.AreEqual(1, _galoisFieldCalculationService!.Multiply(a, inversed));
-        Assert.AreEqual(1, _galoisFieldCalculationService!.Multiply(inversed, a));
+            Assert.AreEqual(1, _galoisFieldCalculationService!.Multiply(a, inversed));
+            Assert.AreEqual(1, _galoisFieldCalculationService!.Multiply(inversed, a));
+        }
     }
 }
