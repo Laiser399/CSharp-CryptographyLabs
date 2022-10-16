@@ -2,11 +2,11 @@
 
 namespace Module.Rijndael.UnitTests.Entities;
 
-public class GaloisFieldConfiguration : IGaloisFieldConfiguration
+public class GaloisFieldConfigurationForTests : IGaloisFieldConfiguration
 {
     public ushort IrreduciblePolynomial { get; }
 
-    public GaloisFieldConfiguration(ushort irreduciblePolynomial)
+    public GaloisFieldConfigurationForTests(ushort irreduciblePolynomial)
     {
         IrreduciblePolynomial = irreduciblePolynomial;
     }

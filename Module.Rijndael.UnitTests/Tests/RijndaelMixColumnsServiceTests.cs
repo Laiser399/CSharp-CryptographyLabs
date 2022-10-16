@@ -15,7 +15,7 @@ public class RijndaelMixColumnsServiceTests
     {
         _rijndaelMixColumnsService = new RijndaelMixColumnsService(
             new GaloisFieldCalculationService(
-                new GaloisFieldConfiguration(0b100011011)
+                new GaloisFieldConfigurationForTests(0b100011011)
             )
         );
     }

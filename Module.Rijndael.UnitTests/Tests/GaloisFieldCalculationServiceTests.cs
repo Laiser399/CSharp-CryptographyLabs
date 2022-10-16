@@ -13,7 +13,7 @@ public class GaloisFieldCalculationServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _galoisFieldCalculationService = new GaloisFieldCalculationService(new GaloisFieldConfiguration(0b100011011));
+        _galoisFieldCalculationService = new GaloisFieldCalculationService(new GaloisFieldConfigurationForTests(0b100011011));
     }
 
     [Test]

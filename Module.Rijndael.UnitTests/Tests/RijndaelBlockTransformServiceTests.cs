@@ -1,4 +1,11 @@
-﻿using Module.Rijndael.Services.Abstract;
+﻿using Autofac;
+using Module.Rijndael.Entities.Abstract;
+using Module.Rijndael.Enums;
+using Module.Rijndael.Factories;
+using Module.Rijndael.Factories.Abstract;
+using Module.Rijndael.Services;
+using Module.Rijndael.Services.Abstract;
+using Module.Rijndael.UnitTests.Entities;
 using NUnit.Framework;
 
 namespace Module.Rijndael.UnitTests.Tests;
@@ -6,42 +13,155 @@ namespace Module.Rijndael.UnitTests.Tests;
 [TestFixture]
 public class RijndaelBlockTransformServiceTests
 {
-    private IRijndaelBlockTransformService? _rijndaelBlockTransformService;
+    private static readonly IReadOnlyCollection<RijndaelSize> BlockSizes = new[]
+    {
+        RijndaelSize.S128,
+        RijndaelSize.S192,
+        RijndaelSize.S256
+    };
+
+    private IRijndaelKeyFactory? _rijndaelKeyFactory;
+    private IRijndaelParametersFactory? _rijndaelParametersFactory;
+    private Func<IRijndaelParameters, IRijndaelBlockTransformService>? _rijndaelBlockTransformServiceFactory;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _rijndaelBlockTransformService = null;
-        throw new NotImplementedException();
+        var container = BuildContainer();
+        _rijndaelKeyFactory = container.Resolve<IRijndaelKeyFactory>();
+        _rijndaelParametersFactory = container.Resolve<IRijndaelParametersFactory>();
+        _rijndaelBlockTransformServiceFactory =
+            container.Resolve<Func<IRijndaelParameters, IRijndaelBlockTransformService>>();
     }
 
     [Test]
-    public void Transform_Test()
+    [TestCase(
+        new byte[]
+        {
+            220, 98, 68, 222,
+            197, 55, 127, 233,
+            53, 242, 68, 32,
+            91, 119, 175, 95
+        }
+    )]
+    [TestCase(
+        new byte[]
+        {
+            93, 230, 245, 204, 216, 129,
+            66, 132, 92, 63, 19, 244,
+            227, 157, 177, 22, 49, 56,
+            50, 142, 121, 181, 247, 18
+        }
+    )]
+    [TestCase(
+        new byte[]
+        {
+            130, 237, 235, 12, 213, 170, 49, 57,
+            87, 227, 107, 115, 51, 119, 87, 130,
+            246, 189, 57, 255, 113, 65, 74, 72,
+            244, 66, 191, 162, 9, 233, 234, 1
+        }
+    )]
+    public void Transform_Test(byte[] keyBytes)
     {
         var random = new Random(123);
 
-        var text = new byte[16];
-        var encrypted = new byte[16];
-        var decrypted = new byte[16];
-        for (var i = 0; i < 1000; i++)
+        foreach (var blockSize in BlockSizes)
         {
-            random.NextBytes(text);
-            _rijndaelBlockTransformService!.Encrypt(text, encrypted);
-            _rijndaelBlockTransformService!.Decrypt(text, decrypted);
+            var key = _rijndaelKeyFactory!.Create(keyBytes);
+            var parameters = _rijndaelParametersFactory!.Create(key, blockSize);
+            var transformService = _rijndaelBlockTransformServiceFactory!(parameters);
 
-            CollectionAssert.AreNotEqual(text, encrypted);
-            CollectionAssert.AreEqual(text, decrypted);
+            var text = new byte[blockSize.ByteCount];
+            var encrypted = new byte[blockSize.ByteCount];
+            var decrypted = new byte[blockSize.ByteCount];
+
+            for (var i = 0; i < 1000; i++)
+            {
+                random.NextBytes(text);
+                transformService.Encrypt(text, encrypted);
+                transformService.Decrypt(encrypted, decrypted);
+
+                CollectionAssert.AreNotEqual(text, encrypted);
+                CollectionAssert.AreEqual(text, decrypted);
+            }
         }
     }
 
     [Test]
     public void Transform_InvalidArgumentTest()
     {
+        var keyBytes = new byte[]
+        {
+            220, 98, 68, 222,
+            197, 55, 127, 233,
+            53, 242, 68, 32,
+            91, 119, 175, 95
+        };
+        var blockSize = RijndaelSize.S128;
+
+        var key = _rijndaelKeyFactory!.Create(keyBytes);
+        var parameters = _rijndaelParametersFactory!.Create(key, blockSize);
+        var transformService = _rijndaelBlockTransformServiceFactory!(parameters);
+
         Assert.Throws<ArgumentException>(
-            () => _rijndaelBlockTransformService!.Encrypt(new byte[15], new byte[16])
+            () => transformService.Encrypt(new byte[15], new byte[16])
         );
         Assert.Throws<ArgumentException>(
-            () => _rijndaelBlockTransformService!.Encrypt(new byte[16], new byte[15])
+            () => transformService.Encrypt(new byte[16], new byte[15])
         );
+        Assert.Throws<ArgumentException>(
+            () => transformService.Decrypt(new byte[15], new byte[16])
+        );
+        Assert.Throws<ArgumentException>(
+            () => transformService.Decrypt(new byte[16], new byte[15])
+        );
+    }
+
+    private static IContainer BuildContainer()
+    {
+        var builder = new ContainerBuilder();
+
+        builder
+            .RegisterType<RijndaelKeyFactory>()
+            .As<IRijndaelKeyFactory>()
+            .SingleInstance();
+        builder
+            .RegisterType<RijndaelParametersFactory>()
+            .As<IRijndaelParametersFactory>()
+            .SingleInstance();
+        builder
+            .RegisterType<RijndaelExtendedKeyGenerator>()
+            .As<IRijndaelExtendedKeyGenerator>()
+            .SingleInstance();
+        builder
+            .RegisterType<RijndaelRoundCountCalculator>()
+            .As<IRijndaelRoundCountCalculator>()
+            .SingleInstance();
+
+        builder
+            .RegisterType<RijndaelBlockTransformService>()
+            .As<IRijndaelBlockTransformService>();
+        builder
+            .RegisterType<RijndaelSubstitutionService>()
+            .As<IRijndaelSubstitutionService>()
+            .SingleInstance();
+        builder
+            .RegisterType<RijndaelShiftRowsService>()
+            .As<IRijndaelShiftRowsService>()
+            .SingleInstance();
+        builder
+            .RegisterType<RijndaelMixColumnsService>()
+            .As<IRijndaelMixColumnsService>()
+            .SingleInstance();
+        builder
+            .RegisterType<GaloisFieldCalculationService>()
+            .As<IGaloisFieldCalculationService>()
+            .SingleInstance();
+        builder
+            .RegisterInstance(new GaloisFieldConfigurationForTests(0b1_0001_1011))
+            .As<IGaloisFieldConfiguration>();
+
+        return builder.Build();
     }
 }
