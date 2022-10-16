@@ -50,10 +50,14 @@ public class RijndaelBlockTransformService : IRijndaelBlockTransformService
     #endregion
 
     private readonly IRijndaelParameters _rijndaelParameters;
+    private readonly IRijndaelShiftRowsService _rijndaelShiftRowsService;
 
-    public RijndaelBlockTransformService(IRijndaelParameters rijndaelParameters)
+    public RijndaelBlockTransformService(
+        IRijndaelParameters rijndaelParameters,
+        IRijndaelShiftRowsService rijndaelShiftRowsService)
     {
         _rijndaelParameters = rijndaelParameters;
+        _rijndaelShiftRowsService = rijndaelShiftRowsService;
     }
 
     public void Encrypt(Span<byte> input, Span<byte> output)
@@ -67,7 +71,7 @@ public class RijndaelBlockTransformService : IRijndaelBlockTransformService
         for (var i = 0; i < _rijndaelParameters.RoundCount; i++)
         {
             SubstituteBytes(output);
-            ShiftRows(output);
+            _rijndaelShiftRowsService.ShiftRows(output);
 
             if (i < _rijndaelParameters.RoundCount - 1)
             {
@@ -93,7 +97,7 @@ public class RijndaelBlockTransformService : IRijndaelBlockTransformService
                 InverseMixColumns(output);
             }
 
-            InverseShiftRows(output);
+            _rijndaelShiftRowsService.InverseShiftRows(output);
             SubstituteBytesInversed(output);
         }
 
@@ -143,16 +147,6 @@ public class RijndaelBlockTransformService : IRijndaelBlockTransformService
         {
             state[i] = InversedSubstituteBox[state[i]];
         }
-    }
-
-    private void ShiftRows(Span<byte> state)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void InverseShiftRows(Span<byte> state)
-    {
-        throw new NotImplementedException();
     }
 
     private void MixColumns(Span<byte> state)
