@@ -79,7 +79,7 @@ public class RijndaelBlockTransformService : IRijndaelBlockTransformService
         }
     }
 
-    private static void AddKey(Span<byte> state, Span<byte> key)
+    private static void AddKey(Span<byte> state, ReadOnlySpan<byte> key)
     {
         unsafe
         {

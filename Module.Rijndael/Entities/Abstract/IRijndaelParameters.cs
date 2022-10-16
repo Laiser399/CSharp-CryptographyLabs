@@ -6,7 +6,7 @@ public interface IRijndaelParameters
     int RoundCount { get; }
 
 
-    Span<byte> InitialKey { get; }
+    ReadOnlySpan<byte> InitialKey { get; }
 
-    Span<byte> GetRoundKey(int round);
+    ReadOnlySpan<byte> GetRoundKey(int round);
 }
