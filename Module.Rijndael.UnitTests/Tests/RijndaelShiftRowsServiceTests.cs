@@ -1,4 +1,5 @@
-﻿using Module.Rijndael.Services.Abstract;
+﻿using Module.Rijndael.Services;
+using Module.Rijndael.Services.Abstract;
 using NUnit.Framework;
 
 namespace Module.Rijndael.UnitTests.Tests;
@@ -11,8 +12,7 @@ public class RijndaelShiftRowsServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _rijndaelShiftRowsService = null;
-        throw new NotImplementedException();
+        _rijndaelShiftRowsService = new RijndaelShiftRowsService();
     }
 
     [Test]
