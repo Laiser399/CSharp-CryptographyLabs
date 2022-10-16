@@ -1,4 +1,6 @@
-﻿using Module.Rijndael.Services.Abstract;
+﻿using Module.Rijndael.Services;
+using Module.Rijndael.Services.Abstract;
+using Module.Rijndael.UnitTests.Entities;
 using NUnit.Framework;
 
 namespace Module.Rijndael.UnitTests.Tests;
@@ -11,8 +13,11 @@ public class RijndaelMixColumnsServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _rijndaelMixColumnsService = null;
-        throw new NotImplementedException();
+        _rijndaelMixColumnsService = new RijndaelMixColumnsService(
+            new GaloisFieldCalculationService(
+                new GaloisFieldConfiguration(0b100011011)
+            )
+        );
     }
 
     [Test]
