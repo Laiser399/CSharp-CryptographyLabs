@@ -137,10 +137,13 @@ public class RijndaelShiftRowsServiceTests
         25, 26, 27, 28, 29, 30, 31, 32,
         33
     })]
-    public void ShiftRows_InvalidArgumentTest(byte[] state)
+    public void Common_InvalidArgumentTest(byte[] state)
     {
         Assert.Throws<ArgumentException>(
             () => _rijndaelShiftRowsService!.ShiftRows(state)
+        );
+        Assert.Throws<ArgumentException>(
+            () => _rijndaelShiftRowsService!.InverseShiftRows(state)
         );
     }
 }
