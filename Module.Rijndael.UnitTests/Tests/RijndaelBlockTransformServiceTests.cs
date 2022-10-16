@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Module.Core.Services.Abstract;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Enums;
 using Module.Rijndael.Factories;
@@ -22,7 +23,8 @@ public class RijndaelBlockTransformServiceTests
 
     private IRijndaelKeyFactory? _rijndaelKeyFactory;
     private IRijndaelParametersFactory? _rijndaelParametersFactory;
-    private Func<IRijndaelParameters, IRijndaelBlockTransformService>? _rijndaelBlockTransformServiceFactory;
+    private Func<IRijndaelParameters, IBlockCryptoTransform>? _blockEncryptTransformFactory;
+    private Func<IRijndaelParameters, IBlockCryptoTransform>? _blockDecryptTransformFactory;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
@@ -30,8 +32,10 @@ public class RijndaelBlockTransformServiceTests
         var container = BuildContainer();
         _rijndaelKeyFactory = container.Resolve<IRijndaelKeyFactory>();
         _rijndaelParametersFactory = container.Resolve<IRijndaelParametersFactory>();
-        _rijndaelBlockTransformServiceFactory =
-            container.Resolve<Func<IRijndaelParameters, IRijndaelBlockTransformService>>();
+        _blockEncryptTransformFactory =
+            container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>("encrypt");
+        _blockDecryptTransformFactory =
+            container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>("decrypt");
     }
 
     [Test]
@@ -70,7 +74,8 @@ public class RijndaelBlockTransformServiceTests
         {
             var key = _rijndaelKeyFactory!.Create(keyBytes);
             var parameters = _rijndaelParametersFactory!.Create(key, blockSize);
-            var transformService = _rijndaelBlockTransformServiceFactory!(parameters);
+            var blockEncryptTransform = _blockEncryptTransformFactory!(parameters);
+            var blockDecryptTransform = _blockDecryptTransformFactory!(parameters);
 
             var text = new byte[blockSize.ByteCount];
             var encrypted = new byte[blockSize.ByteCount];
@@ -79,8 +84,8 @@ public class RijndaelBlockTransformServiceTests
             for (var i = 0; i < 1000; i++)
             {
                 random.NextBytes(text);
-                transformService.Encrypt(text, encrypted);
-                transformService.Decrypt(encrypted, decrypted);
+                blockEncryptTransform.Transform(text, encrypted);
+                blockDecryptTransform.Transform(encrypted, decrypted);
 
                 CollectionAssert.AreNotEqual(text, encrypted);
                 CollectionAssert.AreEqual(text, decrypted);
@@ -102,19 +107,20 @@ public class RijndaelBlockTransformServiceTests
 
         var key = _rijndaelKeyFactory!.Create(keyBytes);
         var parameters = _rijndaelParametersFactory!.Create(key, blockSize);
-        var transformService = _rijndaelBlockTransformServiceFactory!(parameters);
+        var blockEncryptTransform = _blockEncryptTransformFactory!(parameters);
+        var blockDecryptTransform = _blockDecryptTransformFactory!(parameters);
 
         Assert.Throws<ArgumentException>(
-            () => transformService.Encrypt(new byte[15], new byte[16])
+            () => blockEncryptTransform.Transform(new byte[15], new byte[16])
         );
         Assert.Throws<ArgumentException>(
-            () => transformService.Encrypt(new byte[16], new byte[15])
+            () => blockEncryptTransform.Transform(new byte[16], new byte[15])
         );
         Assert.Throws<ArgumentException>(
-            () => transformService.Decrypt(new byte[15], new byte[16])
+            () => blockDecryptTransform.Transform(new byte[15], new byte[16])
         );
         Assert.Throws<ArgumentException>(
-            () => transformService.Decrypt(new byte[16], new byte[15])
+            () => blockDecryptTransform.Transform(new byte[16], new byte[15])
         );
     }
 
@@ -140,8 +146,15 @@ public class RijndaelBlockTransformServiceTests
             .SingleInstance();
 
         builder
-            .RegisterType<RijndaelBlockTransformService>()
-            .As<IRijndaelBlockTransformService>();
+            .RegisterType<RijndaelBlockEncryptTransform>()
+            .Keyed<IBlockCryptoTransform>("encrypt");
+        builder
+            .RegisterType<RijndaelBlockDecryptTransform>()
+            .Keyed<IBlockCryptoTransform>("decrypt");
+        builder
+            .RegisterType<RijndaelAddKeyService>()
+            .As<IRijndaelAddKeyService>()
+            .SingleInstance();
         builder
             .RegisterType<RijndaelSubstitutionService>()
             .As<IRijndaelSubstitutionService>()
