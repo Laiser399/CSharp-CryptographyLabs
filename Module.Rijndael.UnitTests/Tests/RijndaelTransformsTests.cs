@@ -89,6 +89,7 @@ public class RijndaelTransformsTests
             from mode in modes
             from blockCount in blockCounts
             from handingByteCount in handingByteCounts
+            where blockCount != 0 || handingByteCount >= 0
             select new object[] { mode, blockCount, handingByteCount };
 
         return testCases.ToList();
