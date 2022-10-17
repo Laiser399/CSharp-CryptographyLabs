@@ -2,11 +2,9 @@
 using Module.Core.Services.Abstract;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Enums;
-using Module.Rijndael.Factories;
 using Module.Rijndael.Factories.Abstract;
-using Module.Rijndael.Services;
-using Module.Rijndael.Services.Abstract;
-using Module.Rijndael.UnitTests.Entities;
+using Module.Rijndael.UnitTests.Enums;
+using Module.Rijndael.UnitTests.Modules;
 using NUnit.Framework;
 
 namespace Module.Rijndael.UnitTests.Tests;
@@ -33,9 +31,9 @@ public class RijndaelBlockTransformServiceTests
         _rijndaelKeyFactory = container.Resolve<IRijndaelKeyFactory>();
         _rijndaelParametersFactory = container.Resolve<IRijndaelParametersFactory>();
         _blockEncryptTransformFactory =
-            container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>("encrypt");
+            container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>(TransformDirection.Encrypt);
         _blockDecryptTransformFactory =
-            container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>("decrypt");
+            container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>(TransformDirection.Encrypt);
     }
 
     [Test]
@@ -128,52 +126,7 @@ public class RijndaelBlockTransformServiceTests
     {
         var builder = new ContainerBuilder();
 
-        builder
-            .RegisterType<RijndaelKeyFactory>()
-            .As<IRijndaelKeyFactory>()
-            .SingleInstance();
-        builder
-            .RegisterType<RijndaelParametersFactory>()
-            .As<IRijndaelParametersFactory>()
-            .SingleInstance();
-        builder
-            .RegisterType<RijndaelExtendedKeyGenerator>()
-            .As<IRijndaelExtendedKeyGenerator>()
-            .SingleInstance();
-        builder
-            .RegisterType<RijndaelRoundCountCalculator>()
-            .As<IRijndaelRoundCountCalculator>()
-            .SingleInstance();
-
-        builder
-            .RegisterType<RijndaelBlockEncryptTransform>()
-            .Keyed<IBlockCryptoTransform>("encrypt");
-        builder
-            .RegisterType<RijndaelBlockDecryptTransform>()
-            .Keyed<IBlockCryptoTransform>("decrypt");
-        builder
-            .RegisterType<RijndaelAddKeyService>()
-            .As<IRijndaelAddKeyService>()
-            .SingleInstance();
-        builder
-            .RegisterType<RijndaelSubstitutionService>()
-            .As<IRijndaelSubstitutionService>()
-            .SingleInstance();
-        builder
-            .RegisterType<RijndaelShiftRowsService>()
-            .As<IRijndaelShiftRowsService>()
-            .SingleInstance();
-        builder
-            .RegisterType<RijndaelMixColumnsService>()
-            .As<IRijndaelMixColumnsService>()
-            .SingleInstance();
-        builder
-            .RegisterType<GaloisFieldCalculationService>()
-            .As<IGaloisFieldCalculationService>()
-            .SingleInstance();
-        builder
-            .RegisterInstance(new GaloisFieldConfigurationForTests(0b1_0001_1011))
-            .As<IGaloisFieldConfiguration>();
+        builder.RegisterModule<RijndaelModuleForTests>();
 
         return builder.Build();
     }
