@@ -41,9 +41,11 @@ public class RijndaelModuleForTests : Autofac.Module
 
         builder
             .RegisterType<RijndaelBlockEncryptTransform>()
+            .AsSelf()
             .Keyed<IBlockCryptoTransform>(TransformDirection.Encrypt);
         builder
             .RegisterType<RijndaelBlockDecryptTransform>()
+            .AsSelf()
             .Keyed<IBlockCryptoTransform>(TransformDirection.Decrypt);
         builder
             .RegisterType<RijndaelSubstitutionService>()

@@ -4,6 +4,7 @@ using Module.Core.Cryptography;
 using Module.Core.Cryptography.Abstract;
 using Module.Core.Enums;
 using Module.Core.Services.Abstract;
+using Module.Rijndael.Cryptography;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Enums;
 using Module.Rijndael.Factories.Abstract;
@@ -89,9 +90,15 @@ public class RijndaelCryptoTransformFactory : IRijndaelCryptoTransformFactory
         var rijndaelKey = _rijndaelKeyFactory.Create(key);
         var rijndaelParameters = _rijndaelParametersFactory.Create(rijndaelKey, blockSize);
 
-        return _lifetimeScope.ResolveKeyed<IBlockCryptoTransform>(
-            direction,
-            new TypedParameter(typeof(IRijndaelParameters), rijndaelParameters)
-        );
+        return direction switch
+        {
+            TransformDirection.Encrypt => _lifetimeScope.Resolve<RijndaelBlockEncryptTransform>(
+                new TypedParameter(typeof(IRijndaelParameters), rijndaelParameters)
+            ),
+            TransformDirection.Decrypt => _lifetimeScope.Resolve<RijndaelBlockDecryptTransform>(
+                new TypedParameter(typeof(IRijndaelParameters), rijndaelParameters)
+            ),
+            _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unsupported transform direction.")
+        };
     }
 }
