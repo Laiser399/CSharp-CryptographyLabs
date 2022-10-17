@@ -111,10 +111,9 @@ public class CbcDecryptTransform : ICryptoTransform
             return Array.Empty<byte>();
         }
 
-        var input = new Span<byte>(inputBuffer, inputOffset, InputBlockSize);
         var output = new byte[InputBlockSize];
 
-        _blockCryptoTransform.Transform(input, output);
+        _blockCryptoTransform.Transform(_prevInputBlock, output);
 
         _xorService.Xor(output, _xorVector, output);
 
