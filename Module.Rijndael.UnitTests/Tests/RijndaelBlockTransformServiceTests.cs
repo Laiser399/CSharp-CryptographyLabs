@@ -33,7 +33,7 @@ public class RijndaelBlockTransformServiceTests
         _blockEncryptTransformFactory =
             container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>(TransformDirection.Encrypt);
         _blockDecryptTransformFactory =
-            container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>(TransformDirection.Encrypt);
+            container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>(TransformDirection.Decrypt);
     }
 
     [Test]
