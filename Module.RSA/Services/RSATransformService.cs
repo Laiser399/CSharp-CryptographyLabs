@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
+using Module.Core.Exceptions;
 using Module.RSA.Entities.Abstract;
-using Module.RSA.Exceptions;
 using Module.RSA.Services.Abstract;
 
 namespace Module.RSA.Services;

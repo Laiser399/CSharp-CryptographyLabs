@@ -1,4 +1,4 @@
-﻿namespace Module.RSA.Exceptions;
+﻿namespace Module.Core.Exceptions;
 
 public class CryptoTransformException : Exception
 {
