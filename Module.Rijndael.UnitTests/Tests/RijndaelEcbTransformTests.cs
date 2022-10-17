@@ -1,9 +1,6 @@
 ﻿using System.Security.Cryptography;
 using Autofac;
 using Module.Core.Enums;
-using Module.Core.Services;
-using Module.Core.Services.Abstract;
-using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Enums;
 using Module.Rijndael.Factories.Abstract;
 using Module.Rijndael.UnitTests.Modules;
@@ -24,20 +21,13 @@ public class RijndaelEcbTransformTests
 
     private static readonly RijndaelSize BlockSize = RijndaelSize.S192;
 
-    private readonly IContainer _container;
-    private readonly IRijndaelParameters _rijndaelParameters;
+    private readonly IRijndaelCryptoTransformFactory _rijndaelCryptoTransformFactory;
     private readonly Random _random = new();
 
     public RijndaelEcbTransformTests()
     {
-        _container = BuildContainer();
-
-        var key = _container
-            .Resolve<IRijndaelKeyFactory>()
-            .Create(KeyBytes);
-        _rijndaelParameters = _container
-            .Resolve<IRijndaelParametersFactory>()
-            .Create(key, BlockSize);
+        var container = BuildContainer();
+        _rijndaelCryptoTransformFactory = container.Resolve<IRijndaelCryptoTransformFactory>();
     }
 
     [Test]
@@ -51,31 +41,16 @@ public class RijndaelEcbTransformTests
     [TestCase(999, -1)]
     public void Transform_Test(int blockCount, int handingByteCount)
     {
-        var encryptTransform = CreateEncryptTransform();
-        var decryptTransform = CreateDecryptTransform();
+        var encryptTransform = _rijndaelCryptoTransformFactory
+            .CreateECB(TransformDirection.Encrypt, KeyBytes, BlockSize);
+        var decryptTransform = _rijndaelCryptoTransformFactory
+            .CreateECB(TransformDirection.Decrypt, KeyBytes, BlockSize);
+
         TestTransform(
             encryptTransform.InputBlockSize * blockCount + handingByteCount,
             encryptTransform,
             decryptTransform
         );
-    }
-
-    private ICryptoTransform CreateEncryptTransform()
-    {
-        var blockCryptoTransform = _container.ResolveKeyed<IBlockCryptoTransform>(
-            TransformDirection.Encrypt,
-            new TypedParameter(typeof(IRijndaelParameters), _rijndaelParameters)
-        );
-        return new EcbEncryptTransform(blockCryptoTransform);
-    }
-
-    private ICryptoTransform CreateDecryptTransform()
-    {
-        var blockCryptoTransform = _container.ResolveKeyed<IBlockCryptoTransform>(
-            TransformDirection.Decrypt,
-            new TypedParameter(typeof(IRijndaelParameters), _rijndaelParameters)
-        );
-        return new EcbDecryptTransform(blockCryptoTransform);
     }
 
     private void TestTransform(int byteCount, ICryptoTransform encryptTransform, ICryptoTransform decryptTransform)

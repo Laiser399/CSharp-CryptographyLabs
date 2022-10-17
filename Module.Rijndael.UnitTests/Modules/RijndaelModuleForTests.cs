@@ -15,6 +15,10 @@ public class RijndaelModuleForTests : Autofac.Module
     protected override void Load(ContainerBuilder builder)
     {
         builder
+            .RegisterType<RijndaelCryptoTransformFactory>()
+            .As<IRijndaelCryptoTransformFactory>()
+            .SingleInstance();
+        builder
             .RegisterType<RijndaelKeyFactory>()
             .As<IRijndaelKeyFactory>()
             .SingleInstance();
