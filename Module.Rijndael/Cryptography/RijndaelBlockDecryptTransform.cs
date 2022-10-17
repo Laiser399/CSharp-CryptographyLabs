@@ -3,9 +3,9 @@ using Module.Core.Services.Abstract;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Services.Abstract;
 
-namespace Module.Rijndael.Services;
+namespace Module.Rijndael.Cryptography;
 
-public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
+public class RijndaelBlockDecryptTransform : IBlockCryptoTransform
 {
     public int InputBlockSize => _rijndaelParameters.BlockSize;
     public int OutputBlockSize => _rijndaelParameters.BlockSize;
@@ -16,7 +16,7 @@ public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
     private readonly IRijndaelShiftRowsService _rijndaelShiftRowsService;
     private readonly IRijndaelMixColumnsService _rijndaelMixColumnsService;
 
-    public RijndaelBlockEncryptTransform(
+    public RijndaelBlockDecryptTransform(
         IRijndaelParameters rijndaelParameters,
         IXorService xorService,
         IRijndaelSubstitutionService rijndaelSubstitutionService,
@@ -36,20 +36,20 @@ public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
 
         input.CopyTo(output);
 
-        AddKey(output, _rijndaelParameters.InitialKey);
-
-        for (var i = 0; i < _rijndaelParameters.RoundCount; i++)
+        for (var i = _rijndaelParameters.RoundCount - 1; i >= 0; i--)
         {
-            _rijndaelSubstitutionService.SubstituteBytes(output);
-            _rijndaelShiftRowsService.ShiftRows(output);
+            AddKey(output, _rijndaelParameters.GetRoundKey(i));
 
             if (i < _rijndaelParameters.RoundCount - 1)
             {
-                _rijndaelMixColumnsService.MixColumns(output);
+                _rijndaelMixColumnsService.ReverseColumnsMixing(output);
             }
 
-            AddKey(output, _rijndaelParameters.GetRoundKey(i));
+            _rijndaelShiftRowsService.InverseShiftRows(output);
+            _rijndaelSubstitutionService.SubstituteBytesInversed(output);
         }
+
+        AddKey(output, _rijndaelParameters.InitialKey);
     }
 
     private void ValidateArguments(Span<byte> input, Span<byte> output)

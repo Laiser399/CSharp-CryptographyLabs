@@ -2,6 +2,7 @@
 using Module.Core;
 using Module.Core.Cryptography.Abstract;
 using Module.Core.Enums;
+using Module.Rijndael.Cryptography;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Factories;
 using Module.Rijndael.Factories.Abstract;
