@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Module.Core.Enums;
+using Module.Core.Services;
 using Module.Core.Services.Abstract;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Factories;
@@ -42,8 +43,8 @@ public class RijndaelModuleForTests : Autofac.Module
             .RegisterType<RijndaelBlockDecryptTransform>()
             .Keyed<IBlockCryptoTransform>(TransformDirection.Decrypt);
         builder
-            .RegisterType<RijndaelAddKeyService>()
-            .As<IRijndaelAddKeyService>()
+            .RegisterType<XorService>()
+            .As<IXorService>()
             .SingleInstance();
         builder
             .RegisterType<RijndaelSubstitutionService>()

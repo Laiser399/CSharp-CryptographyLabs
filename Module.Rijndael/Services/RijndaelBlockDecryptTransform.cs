@@ -10,20 +10,20 @@ public class RijndaelBlockDecryptTransform : IBlockCryptoTransform
     public int OutputBlockSize => _rijndaelParameters.BlockSize;
 
     private readonly IRijndaelParameters _rijndaelParameters;
-    private readonly IRijndaelAddKeyService _rijndaelAddKeyService;
+    private readonly IXorService _xorService;
     private readonly IRijndaelSubstitutionService _rijndaelSubstitutionService;
     private readonly IRijndaelShiftRowsService _rijndaelShiftRowsService;
     private readonly IRijndaelMixColumnsService _rijndaelMixColumnsService;
 
     public RijndaelBlockDecryptTransform(
         IRijndaelParameters rijndaelParameters,
-        IRijndaelAddKeyService rijndaelAddKeyService,
+        IXorService xorService,
         IRijndaelSubstitutionService rijndaelSubstitutionService,
         IRijndaelShiftRowsService rijndaelShiftRowsService,
         IRijndaelMixColumnsService rijndaelMixColumnsService)
     {
         _rijndaelParameters = rijndaelParameters;
-        _rijndaelAddKeyService = rijndaelAddKeyService;
+        _xorService = xorService;
         _rijndaelSubstitutionService = rijndaelSubstitutionService;
         _rijndaelShiftRowsService = rijndaelShiftRowsService;
         _rijndaelMixColumnsService = rijndaelMixColumnsService;
@@ -37,7 +37,7 @@ public class RijndaelBlockDecryptTransform : IBlockCryptoTransform
 
         for (var i = _rijndaelParameters.RoundCount - 1; i >= 0; i--)
         {
-            _rijndaelAddKeyService.AddKey(output, _rijndaelParameters.GetRoundKey(i));
+            AddKey(output, _rijndaelParameters.GetRoundKey(i));
 
             if (i < _rijndaelParameters.RoundCount - 1)
             {
@@ -48,7 +48,7 @@ public class RijndaelBlockDecryptTransform : IBlockCryptoTransform
             _rijndaelSubstitutionService.SubstituteBytesInversed(output);
         }
 
-        _rijndaelAddKeyService.AddKey(output, _rijndaelParameters.InitialKey);
+        AddKey(output, _rijndaelParameters.InitialKey);
     }
 
     private void ValidateArguments(Span<byte> input, Span<byte> output)
@@ -62,5 +62,10 @@ public class RijndaelBlockDecryptTransform : IBlockCryptoTransform
         {
             throw new ArgumentException("Invalid length of output span size.", nameof(output));
         }
+    }
+
+    private void AddKey(Span<byte> state, ReadOnlySpan<byte> key)
+    {
+        _xorService.Xor(state, key, state);
     }
 }

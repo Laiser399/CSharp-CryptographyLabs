@@ -10,20 +10,20 @@ public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
     public int OutputBlockSize => _rijndaelParameters.BlockSize;
 
     private readonly IRijndaelParameters _rijndaelParameters;
-    private readonly IRijndaelAddKeyService _rijndaelAddKeyService;
+    private readonly IXorService _xorService;
     private readonly IRijndaelSubstitutionService _rijndaelSubstitutionService;
     private readonly IRijndaelShiftRowsService _rijndaelShiftRowsService;
     private readonly IRijndaelMixColumnsService _rijndaelMixColumnsService;
 
     public RijndaelBlockEncryptTransform(
         IRijndaelParameters rijndaelParameters,
-        IRijndaelAddKeyService rijndaelAddKeyService,
+        IXorService xorService,
         IRijndaelSubstitutionService rijndaelSubstitutionService,
         IRijndaelShiftRowsService rijndaelShiftRowsService,
         IRijndaelMixColumnsService rijndaelMixColumnsService)
     {
         _rijndaelParameters = rijndaelParameters;
-        _rijndaelAddKeyService = rijndaelAddKeyService;
+        _xorService = xorService;
         _rijndaelSubstitutionService = rijndaelSubstitutionService;
         _rijndaelShiftRowsService = rijndaelShiftRowsService;
         _rijndaelMixColumnsService = rijndaelMixColumnsService;
@@ -35,7 +35,7 @@ public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
 
         input.CopyTo(output);
 
-        _rijndaelAddKeyService.AddKey(output, _rijndaelParameters.InitialKey);
+        AddKey(output, _rijndaelParameters.InitialKey);
 
         for (var i = 0; i < _rijndaelParameters.RoundCount; i++)
         {
@@ -47,7 +47,7 @@ public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
                 _rijndaelMixColumnsService.MixColumns(output);
             }
 
-            _rijndaelAddKeyService.AddKey(output, _rijndaelParameters.GetRoundKey(i));
+            AddKey(output, _rijndaelParameters.GetRoundKey(i));
         }
     }
 
@@ -62,5 +62,10 @@ public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
         {
             throw new ArgumentException("Invalid length of output span size.", nameof(output));
         }
+    }
+
+    private void AddKey(Span<byte> state, ReadOnlySpan<byte> key)
+    {
+        _xorService.Xor(state, key, state);
     }
 }
