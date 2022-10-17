@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.Rijndael.UnitTests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.Core", "Module.Core\Module.Core.csproj", "{5091BDBF-3FCE-4B18-8C8A-D294C219C52E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.Core.UnitTests", "Module.Core.UnitTests\Module.Core.UnitTests.csproj", "{8F046FA3-F984-4510-8972-B0735D935D80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{5091BDBF-3FCE-4B18-8C8A-D294C219C52E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5091BDBF-3FCE-4B18-8C8A-D294C219C52E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5091BDBF-3FCE-4B18-8C8A-D294C219C52E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F046FA3-F984-4510-8972-B0735D935D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F046FA3-F984-4510-8972-B0735D935D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F046FA3-F984-4510-8972-B0735D935D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F046FA3-F984-4510-8972-B0735D935D80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
