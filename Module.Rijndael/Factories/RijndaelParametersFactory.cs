@@ -23,7 +23,6 @@ public class RijndaelParametersFactory : IRijndaelParametersFactory
         var extendedKey = _rijndaelExtendedKeyGenerator.Generate(key, blockSize);
 
         return new RijndaelParameters(
-            key,
             extendedKey,
             blockSize.ByteCount,
             _rijndaelRoundCountCalculator.GetRoundCount(blockSize, key.Size)
@@ -35,14 +34,12 @@ public class RijndaelParametersFactory : IRijndaelParametersFactory
         public int BlockSize { get; }
         public int RoundCount { get; }
 
-        public ReadOnlySpan<byte> InitialKey => _key.Key;
+        public ReadOnlySpan<byte> InitialKey => new(_extendedKey, 0, BlockSize);
 
-        private readonly IRijndaelKey _key;
         private readonly byte[] _extendedKey;
 
-        public RijndaelParameters(IRijndaelKey key, byte[] extendedKey, int blockSize, int roundCount)
+        public RijndaelParameters(byte[] extendedKey, int blockSize, int roundCount)
         {
-            _key = key;
             _extendedKey = extendedKey;
             BlockSize = blockSize;
             RoundCount = roundCount;
@@ -50,7 +47,7 @@ public class RijndaelParametersFactory : IRijndaelParametersFactory
 
         public ReadOnlySpan<byte> GetRoundKey(int round)
         {
-            return new ReadOnlySpan<byte>(_extendedKey, BlockSize * round, BlockSize);
+            return new ReadOnlySpan<byte>(_extendedKey, (round + 1) * BlockSize, BlockSize);
         }
     }
 }

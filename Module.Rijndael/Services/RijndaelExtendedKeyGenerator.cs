@@ -33,8 +33,8 @@ public class RijndaelExtendedKeyGenerator : IRijndaelExtendedKeyGenerator
     {
         var roundCount = _rijndaelRoundCountCalculator.GetRoundCount(blockSize, key.Size);
 
-        var extendedKeyByteCount = roundCount * blockSize.ByteCount;
-        var extendedKeyWordCount = roundCount * blockSize.WordCount;
+        var extendedKeyByteCount = (roundCount + 1) * blockSize.ByteCount;
+        var extendedKeyWordCount = (roundCount + 1) * blockSize.WordCount;
         var extendedKey = new byte[extendedKeyByteCount];
 
         fixed (byte* extendedKeyPtr = extendedKey, keyPtr = key.Key)
@@ -44,31 +44,27 @@ public class RijndaelExtendedKeyGenerator : IRijndaelExtendedKeyGenerator
 
             for (var i = 0; i < extendedKeyWordCount; i++)
             {
-                var prevWordPtr = i == 0
-                    ? keyUIntPtr + key.Size.WordCount - 1
-                    : extendedKeyUIntPtr + i - 1;
-
-                var prevBlockWord = i < key.Size.WordCount
-                    ? keyUIntPtr[i]
-                    : extendedKeyUIntPtr[i - key.Size.WordCount];
-
-                if (i % key.Size.WordCount == 0)
+                if (i < key.Size.WordCount)
                 {
-                    extendedKeyUIntPtr[i] = RotateWord(*prevWordPtr);
+                    extendedKeyUIntPtr[i] = keyUIntPtr[i];
+                }
+                else if (i % key.Size.WordCount == 0)
+                {
+                    extendedKeyUIntPtr[i] = RotateWord(extendedKeyUIntPtr[i - 1]);
                     _rijndaelSubstitutionService.SubstituteBytes(new Span<byte>(extendedKeyPtr + i * 4, 4));
 
-                    extendedKeyUIntPtr[i] ^= prevBlockWord;
-                    extendedKeyUIntPtr[i] ^= RoundConstants[i / key.Size.WordCount];
+                    extendedKeyUIntPtr[i] ^= extendedKeyUIntPtr[i - key.Size.WordCount];
+                    extendedKeyUIntPtr[i] ^= RoundConstants[i / key.Size.WordCount - 1];
                 }
                 else if (key.Size == RijndaelSize.S256 && i % key.Size.WordCount == 4)
                 {
-                    extendedKeyUIntPtr[i] = *prevWordPtr;
+                    extendedKeyUIntPtr[i] = extendedKeyUIntPtr[i - 1];
                     _rijndaelSubstitutionService.SubstituteBytes(new Span<byte>(extendedKeyPtr + i * 4, 4));
-                    extendedKeyUIntPtr[i] ^= prevBlockWord;
+                    extendedKeyUIntPtr[i] ^= extendedKeyUIntPtr[i - key.Size.WordCount];
                 }
                 else
                 {
-                    extendedKeyUIntPtr[i] = *prevWordPtr ^ prevBlockWord;
+                    extendedKeyUIntPtr[i] = extendedKeyUIntPtr[i - 1] ^ extendedKeyUIntPtr[i - key.Size.WordCount];
                 }
             }
         }
