@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Module.Rijndael.UnitTests.Tests;
 
 [TestFixture]
-public class RijndaelEcbTransformTests
+public class RijndaelTransformsTests
 {
     private static readonly byte[] KeyBytes =
     {
@@ -32,7 +32,7 @@ public class RijndaelEcbTransformTests
     private readonly IRijndaelCryptoTransformFactory _rijndaelCryptoTransformFactory;
     private readonly Random _random = new();
 
-    public RijndaelEcbTransformTests()
+    public RijndaelTransformsTests()
     {
         var container = BuildContainer();
         _rijndaelCryptoTransformFactory = container.Resolve<IRijndaelCryptoTransformFactory>();
