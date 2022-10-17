@@ -1,4 +1,4 @@
-﻿namespace Module.Core.Services.Abstract;
+﻿namespace Module.Core.Cryptography.Abstract;
 
 public interface IBlockCryptoTransform
 {

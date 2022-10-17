@@ -1,4 +1,5 @@
-﻿using Module.Core.Services.Abstract;
+﻿using Module.Core.Cryptography.Abstract;
+using Module.Core.Services.Abstract;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Services.Abstract;
 

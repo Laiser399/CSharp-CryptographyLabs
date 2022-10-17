@@ -1,6 +1,6 @@
 ﻿using Autofac;
+using Module.Core.Cryptography.Abstract;
 using Module.Core.Enums;
-using Module.Core.Services.Abstract;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Enums;
 using Module.Rijndael.Factories.Abstract;

@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
-using Module.Core.Services.Abstract;
+using Module.Core.Cryptography.Abstract;
 
-namespace Module.Core.Services;
+namespace Module.Core.Cryptography;
 
 public class EcbEncryptTransform : ICryptoTransform
 {

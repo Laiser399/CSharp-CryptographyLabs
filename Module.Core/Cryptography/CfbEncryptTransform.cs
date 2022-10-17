@@ -1,7 +1,8 @@
 ﻿using System.Security.Cryptography;
+using Module.Core.Cryptography.Abstract;
 using Module.Core.Services.Abstract;
 
-namespace Module.Core.Services;
+namespace Module.Core.Cryptography;
 
 public class CfbEncryptTransform : ICryptoTransform
 {

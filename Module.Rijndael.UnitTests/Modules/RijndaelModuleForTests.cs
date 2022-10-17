@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Module.Core.Cryptography.Abstract;
 using Module.Core.Enums;
 using Module.Core.Services;
 using Module.Core.Services.Abstract;

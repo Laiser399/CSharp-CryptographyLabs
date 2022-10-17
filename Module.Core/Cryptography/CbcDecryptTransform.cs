@@ -1,10 +1,11 @@
 ﻿using System.Security.Cryptography;
+using Module.Core.Cryptography.Abstract;
 using Module.Core.Exceptions;
 using Module.Core.Services.Abstract;
 
-namespace Module.Core.Services;
+namespace Module.Core.Cryptography;
 
-public class EcbDecryptTransform : ICryptoTransform
+public class CbcDecryptTransform : ICryptoTransform
 {
     public bool CanReuseTransform => false;
     public bool CanTransformMultipleBlocks => true;
@@ -12,12 +13,35 @@ public class EcbDecryptTransform : ICryptoTransform
     public int OutputBlockSize => _blockCryptoTransform.OutputBlockSize;
 
     private readonly IBlockCryptoTransform _blockCryptoTransform;
+    private readonly IXorService _xorService;
+    private readonly byte[] _xorVector;
 
     private byte[]? _prevInputBlock;
 
-    public EcbDecryptTransform(IBlockCryptoTransform blockCryptoTransform)
+    /// <exception cref="ArgumentException">Invalid transform block sizes or initial vector size.</exception>
+    public CbcDecryptTransform(IBlockCryptoTransform blockCryptoTransform, byte[] initialVector, IXorService xorService)
     {
+        if (blockCryptoTransform.InputBlockSize != blockCryptoTransform.OutputBlockSize)
+        {
+            throw new ArgumentException(
+                "Transform with different input and output block sizes is not supported",
+                nameof(blockCryptoTransform)
+            );
+        }
+
+        if (blockCryptoTransform.InputBlockSize != initialVector.Length)
+        {
+            throw new ArgumentException(
+                "Initial vector size is not equal transform block size.",
+                nameof(initialVector)
+            );
+        }
+
         _blockCryptoTransform = blockCryptoTransform;
+        _xorService = xorService;
+
+        _xorVector = new byte[InputBlockSize];
+        Array.Copy(initialVector, _xorVector, InputBlockSize);
     }
 
     public int TransformBlock(
@@ -45,24 +69,24 @@ public class EcbDecryptTransform : ICryptoTransform
         {
             _blockCryptoTransform.Transform(
                 _prevInputBlock,
-                new Span<byte>(outputBuffer, outputOffset, OutputBlockSize)
+                new Span<byte>(outputBuffer, outputOffset, InputBlockSize)
             );
         }
 
         for (var i = 0; i < blockCount - 1; i++)
         {
-            _blockCryptoTransform.Transform(
-                new Span<byte>(
-                    inputBuffer,
-                    inputOffset + i * InputBlockSize,
-                    InputBlockSize
-                ),
-                new Span<byte>(
-                    outputBuffer,
-                    outputOffset + (i + outputBlockOffset) * OutputBlockSize,
-                    OutputBlockSize
-                )
+            var input = new Span<byte>(inputBuffer, inputOffset + i * InputBlockSize, InputBlockSize);
+            var output = new Span<byte>(
+                outputBuffer,
+                outputOffset + (i + outputBlockOffset) * InputBlockSize,
+                InputBlockSize
             );
+
+            _blockCryptoTransform.Transform(input, output);
+
+            _xorService.Xor(output, _xorVector, output);
+
+            input.CopyTo(_xorVector);
         }
 
         Array.Copy(
@@ -73,7 +97,7 @@ public class EcbDecryptTransform : ICryptoTransform
             InputBlockSize
         );
 
-        return (blockCount - 1 + outputBlockOffset) * OutputBlockSize;
+        return (blockCount - 1 + outputBlockOffset) * InputBlockSize;
     }
 
     public byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount)
@@ -88,15 +112,20 @@ public class EcbDecryptTransform : ICryptoTransform
             return Array.Empty<byte>();
         }
 
-        var output = new byte[OutputBlockSize];
+        var output = new byte[InputBlockSize];
+
         _blockCryptoTransform.Transform(_prevInputBlock, output);
+
+        _xorService.Xor(output, _xorVector, output);
+
         var finalBlockSize = output[^1];
-        if (finalBlockSize >= output.Length)
+        if (finalBlockSize >= InputBlockSize)
         {
             throw new CryptoTransformException("Invalid final block state.");
         }
 
         Array.Resize(ref output, finalBlockSize);
+
         return output;
     }
 

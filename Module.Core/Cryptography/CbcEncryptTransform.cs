@@ -1,21 +1,22 @@
 ﻿using System.Security.Cryptography;
+using Module.Core.Cryptography.Abstract;
 using Module.Core.Services.Abstract;
 
-namespace Module.Core.Services;
+namespace Module.Core.Cryptography;
 
-public class OfbEncryptTransform : ICryptoTransform
+public class CbcEncryptTransform : ICryptoTransform
 {
     public bool CanReuseTransform => false;
-    public bool CanTransformMultipleBlocks => false;
+    public bool CanTransformMultipleBlocks => true;
     public int InputBlockSize => _blockCryptoTransform.InputBlockSize;
     public int OutputBlockSize => _blockCryptoTransform.OutputBlockSize;
 
     private readonly IBlockCryptoTransform _blockCryptoTransform;
     private readonly IXorService _xorService;
+    private readonly byte[] _xorVector;
 
-    private readonly byte[] _encryptionVector;
-
-    public OfbEncryptTransform(IBlockCryptoTransform blockCryptoTransform, byte[] initialVector, IXorService xorService)
+    /// <exception cref="ArgumentException">Invalid transform block sizes or initial vector size.</exception>
+    public CbcEncryptTransform(IBlockCryptoTransform blockCryptoTransform, byte[] initialVector, IXorService xorService)
     {
         if (blockCryptoTransform.InputBlockSize != blockCryptoTransform.OutputBlockSize)
         {
@@ -36,8 +37,8 @@ public class OfbEncryptTransform : ICryptoTransform
         _blockCryptoTransform = blockCryptoTransform;
         _xorService = xorService;
 
-        _encryptionVector = new byte[InputBlockSize];
-        initialVector.CopyTo(_encryptionVector, 0);
+        _xorVector = new byte[InputBlockSize];
+        Array.Copy(initialVector, _xorVector, InputBlockSize);
     }
 
     public int TransformBlock(
@@ -47,33 +48,38 @@ public class OfbEncryptTransform : ICryptoTransform
         byte[] outputBuffer,
         int outputOffset)
     {
-        if (inputCount != InputBlockSize)
+        var blockCount = inputCount / InputBlockSize;
+        if (blockCount == 0)
         {
             return 0;
         }
 
-        var input = new Span<byte>(inputBuffer, inputOffset, InputBlockSize);
-        var output = new Span<byte>(outputBuffer, outputOffset, InputBlockSize);
+        var buffer = new byte[InputBlockSize];
 
-        _blockCryptoTransform.Transform(_encryptionVector, output);
+        for (var i = 0; i < blockCount; i++)
+        {
+            var input = new Span<byte>(inputBuffer, inputOffset + i * InputBlockSize, InputBlockSize);
+            _xorService.Xor(input, _xorVector, buffer);
 
-        output.CopyTo(_encryptionVector);
+            var output = new Span<byte>(outputBuffer, outputOffset + i * InputBlockSize, InputBlockSize);
+            _blockCryptoTransform.Transform(buffer, output);
 
-        _xorService.Xor(output, input, output);
+            output.CopyTo(_xorVector);
+        }
 
-        return InputBlockSize;
+        return blockCount * InputBlockSize;
     }
 
     public byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount)
     {
+        inputBuffer[inputOffset + InputBlockSize - 1] = (byte)inputCount;
+
         var input = new Span<byte>(inputBuffer, inputOffset, InputBlockSize);
         var output = new byte[InputBlockSize];
 
-        input[^1] = (byte)inputCount;
+        _xorService.Xor(input, _xorVector, input);
 
-        _blockCryptoTransform.Transform(_encryptionVector, output);
-
-        _xorService.Xor(output, input, output);
+        _blockCryptoTransform.Transform(input, output);
 
         return output;
     }

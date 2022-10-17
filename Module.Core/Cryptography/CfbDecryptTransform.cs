@@ -1,10 +1,11 @@
 ﻿using System.Security.Cryptography;
+using Module.Core.Cryptography.Abstract;
 using Module.Core.Exceptions;
 using Module.Core.Services.Abstract;
 
-namespace Module.Core.Services;
+namespace Module.Core.Cryptography;
 
-public class OfbDecryptTransform : ICryptoTransform
+public class CfbDecryptTransform : ICryptoTransform
 {
     public bool CanReuseTransform => false;
     public bool CanTransformMultipleBlocks => false;
@@ -17,7 +18,7 @@ public class OfbDecryptTransform : ICryptoTransform
 
     private byte[]? _prevInputBlock;
 
-    public OfbDecryptTransform(IBlockCryptoTransform blockCryptoTransform, byte[] initialVector, IXorService xorService)
+    public CfbDecryptTransform(IBlockCryptoTransform blockCryptoTransform, byte[] initialVector, IXorService xorService)
     {
         if (blockCryptoTransform.InputBlockSize != blockCryptoTransform.OutputBlockSize)
         {
@@ -67,9 +68,9 @@ public class OfbDecryptTransform : ICryptoTransform
 
         _blockCryptoTransform.Transform(_encryptionVector, output);
 
-        output.CopyTo(_encryptionVector);
-
         _xorService.Xor(output, _prevInputBlock, output);
+
+        _prevInputBlock.CopyTo(_encryptionVector, 0);
 
         input.CopyTo(_prevInputBlock);
 
