@@ -1,9 +1,9 @@
 ﻿using Autofac;
+using Module.Core.Enums;
 using Module.Core.Services.Abstract;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Enums;
 using Module.Rijndael.Factories.Abstract;
-using Module.Rijndael.UnitTests.Enums;
 using Module.Rijndael.UnitTests.Modules;
 using NUnit.Framework;
 

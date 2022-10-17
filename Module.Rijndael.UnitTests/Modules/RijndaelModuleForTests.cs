@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Module.Core.Enums;
 using Module.Core.Services.Abstract;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Factories;
@@ -6,7 +7,6 @@ using Module.Rijndael.Factories.Abstract;
 using Module.Rijndael.Services;
 using Module.Rijndael.Services.Abstract;
 using Module.Rijndael.UnitTests.Entities;
-using Module.Rijndael.UnitTests.Enums;
 
 namespace Module.Rijndael.UnitTests.Modules;
 

@@ -1,4 +1,4 @@
-﻿namespace Module.Rijndael.UnitTests.Enums;
+﻿namespace Module.Core.Enums;
 
 public enum TransformDirection
 {
