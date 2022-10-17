@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
+using Module.Core.Exceptions;
 using Module.RSA.Entities;
-using Module.RSA.Exceptions;
 using Module.RSA.Services.Abstract;
 using PropertyChanged;
 
