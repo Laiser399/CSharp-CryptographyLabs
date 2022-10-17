@@ -11,7 +11,7 @@ public interface IRijndaelCryptoTransformFactory
 
     /// <exception cref="ArgumentException"></exception>
     ICryptoTransform Create(
-        BlockCouplingMode mode,
+        BlockCipherMode mode,
         TransformDirection direction,
         byte[] initialVector,
         byte[] key,

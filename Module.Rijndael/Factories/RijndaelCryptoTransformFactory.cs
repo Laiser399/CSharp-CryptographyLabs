@@ -38,7 +38,7 @@ public class RijndaelCryptoTransformFactory : IRijndaelCryptoTransformFactory
     }
 
     public ICryptoTransform Create(
-        BlockCouplingMode mode,
+        BlockCipherMode mode,
         TransformDirection direction,
         byte[] initialVector,
         byte[] key,
@@ -46,23 +46,23 @@ public class RijndaelCryptoTransformFactory : IRijndaelCryptoTransformFactory
     {
         return (mode, direction) switch
         {
-            (BlockCouplingMode.CBC, _) => new CbcEncryptTransform(
+            (BlockCipherMode.CBC, _) => new CbcEncryptTransform(
                 GetBlockCryptoTransform(direction, key, blockSize),
                 initialVector
             ),
-            (BlockCouplingMode.CFB, TransformDirection.Encrypt) => new CfbEncryptTransform(
+            (BlockCipherMode.CFB, TransformDirection.Encrypt) => new CfbEncryptTransform(
                 GetBlockCryptoTransform(TransformDirection.Encrypt, key, blockSize),
                 initialVector
             ),
-            (BlockCouplingMode.CFB, TransformDirection.Decrypt) => new CfbDecryptTransform(
+            (BlockCipherMode.CFB, TransformDirection.Decrypt) => new CfbDecryptTransform(
                 GetBlockCryptoTransform(TransformDirection.Encrypt, key, blockSize),
                 initialVector
             ),
-            (BlockCouplingMode.OFB, TransformDirection.Encrypt) => new OfbEncryptTransform(
+            (BlockCipherMode.OFB, TransformDirection.Encrypt) => new OfbEncryptTransform(
                 GetBlockCryptoTransform(TransformDirection.Encrypt, key, blockSize),
                 initialVector
             ),
-            (BlockCouplingMode.OFB, TransformDirection.Decrypt) => new OfbDecryptTransform(
+            (BlockCipherMode.OFB, TransformDirection.Decrypt) => new OfbDecryptTransform(
                 GetBlockCryptoTransform(TransformDirection.Encrypt, key, blockSize),
                 initialVector
             ),

@@ -1,6 +1,6 @@
 ﻿namespace Module.Core.Enums;
 
-public enum BlockCouplingMode
+public enum BlockCipherMode
 {
     CBC,
     CFB,

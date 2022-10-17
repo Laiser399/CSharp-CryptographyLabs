@@ -40,7 +40,7 @@ public class RijndaelEcbTransformTests
 
     [Test]
     [TestCaseSource(nameof(GetTestCases))]
-    public void Transform_Test(BlockCouplingMode? mode, int blockCount, int handingByteCount)
+    public void Transform_Test(BlockCipherMode? mode, int blockCount, int handingByteCount)
     {
         var encryptTransform = GetCryptoTransform(mode, TransformDirection.Encrypt);
         var decryptTransform = GetCryptoTransform(mode, TransformDirection.Decrypt);
@@ -52,7 +52,7 @@ public class RijndaelEcbTransformTests
         );
     }
 
-    private ICryptoTransform GetCryptoTransform(BlockCouplingMode? mode, TransformDirection direction)
+    private ICryptoTransform GetCryptoTransform(BlockCipherMode? mode, TransformDirection direction)
     {
         return mode switch
         {
@@ -71,10 +71,10 @@ public class RijndaelEcbTransformTests
     {
         var modes = new[]
         {
-            (BlockCouplingMode?)null,
-            BlockCouplingMode.CBC,
-            BlockCouplingMode.CFB,
-            BlockCouplingMode.OFB
+            (BlockCipherMode?)null,
+            BlockCipherMode.CBC,
+            BlockCipherMode.CFB,
+            BlockCipherMode.OFB
         };
         var blockCounts = new[]
         {
