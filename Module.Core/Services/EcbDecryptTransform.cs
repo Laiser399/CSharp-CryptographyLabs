@@ -80,7 +80,7 @@ public class EcbDecryptTransform : ICryptoTransform
     {
         if (inputCount != 0)
         {
-            throw new CryptoTransformException("Final block is not full on decryption.");
+            throw new CryptoTransformException("Invalid final block state.");
         }
 
         if (_prevInputBlock is null)
