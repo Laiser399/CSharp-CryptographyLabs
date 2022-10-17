@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Module.Core.Services.Abstract;
 
 namespace Module.Core.Services;
 
@@ -8,6 +9,10 @@ public class CfbEncryptTransform : ICryptoTransform
     public bool CanTransformMultipleBlocks { get; }
     public int InputBlockSize { get; }
     public int OutputBlockSize { get; }
+
+    public CfbEncryptTransform(IBlockCryptoTransform blockCryptoTransform, byte[] initialVector)
+    {
+    }
 
     public int TransformBlock(
         byte[] inputBuffer,
