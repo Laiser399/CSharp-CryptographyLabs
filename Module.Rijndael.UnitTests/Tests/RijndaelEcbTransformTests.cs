@@ -21,6 +21,14 @@ public class RijndaelEcbTransformTests
 
     private static readonly RijndaelSize BlockSize = RijndaelSize.S192;
 
+    private static readonly byte[] InitialVector =
+    {
+        249, 215, 150, 208, 191, 44,
+        178, 243, 120, 245, 137, 203,
+        164, 21, 225, 170, 222, 19,
+        75, 28, 217, 208, 125, 192
+    };
+
     private readonly IRijndaelCryptoTransformFactory _rijndaelCryptoTransformFactory;
     private readonly Random _random = new();
 
@@ -31,26 +39,59 @@ public class RijndaelEcbTransformTests
     }
 
     [Test]
-    [TestCase(0, 0)]
-    [TestCase(0, 1)]
-    [TestCase(10, 0)]
-    [TestCase(999, 0)]
-    [TestCase(999, 1)]
-    [TestCase(999, 2)]
-    [TestCase(999, 7)]
-    [TestCase(999, -1)]
-    public void Transform_Test(int blockCount, int handingByteCount)
+    [TestCaseSource(nameof(GetTestCases))]
+    public void Transform_Test(BlockCouplingMode? mode, int blockCount, int handingByteCount)
     {
-        var encryptTransform = _rijndaelCryptoTransformFactory
-            .CreateECB(TransformDirection.Encrypt, KeyBytes, BlockSize);
-        var decryptTransform = _rijndaelCryptoTransformFactory
-            .CreateECB(TransformDirection.Decrypt, KeyBytes, BlockSize);
+        var encryptTransform = GetCryptoTransform(mode, TransformDirection.Encrypt);
+        var decryptTransform = GetCryptoTransform(mode, TransformDirection.Decrypt);
 
         TestTransform(
             encryptTransform.InputBlockSize * blockCount + handingByteCount,
             encryptTransform,
             decryptTransform
         );
+    }
+
+    private ICryptoTransform GetCryptoTransform(BlockCouplingMode? mode, TransformDirection direction)
+    {
+        return mode switch
+        {
+            null => _rijndaelCryptoTransformFactory.CreateECB(direction, KeyBytes, BlockSize),
+            _ => _rijndaelCryptoTransformFactory.Create(
+                mode.Value,
+                direction,
+                InitialVector,
+                KeyBytes,
+                BlockSize
+            )
+        };
+    }
+
+    private static IReadOnlyCollection<object[]> GetTestCases()
+    {
+        var modes = new[]
+        {
+            (BlockCouplingMode?)null,
+            BlockCouplingMode.CBC,
+            BlockCouplingMode.CFB,
+            BlockCouplingMode.OFB
+        };
+        var blockCounts = new[]
+        {
+            0, 10, 999
+        };
+        var handingByteCounts = new[]
+        {
+            0, 1, 2, -1, 7
+        };
+
+        var testCases =
+            from mode in modes
+            from blockCount in blockCounts
+            from handingByteCount in handingByteCounts
+            select new object[] { mode, blockCount, handingByteCount };
+
+        return testCases.ToList();
     }
 
     private void TestTransform(int byteCount, ICryptoTransform encryptTransform, ICryptoTransform decryptTransform)
