@@ -6,15 +6,13 @@ namespace Module.Rijndael.Factories;
 
 public class GaloisFieldConfigurationFactory : IGaloisFieldConfigurationFactory
 {
-    public IGaloisFieldConfiguration Default { get; }
+    public static readonly IGaloisFieldConfiguration DefaultConfiguration = new GaloisFieldConfiguration(0b100011011);
 
     private readonly IGaloisFieldService _galoisFieldService;
 
     public GaloisFieldConfigurationFactory(IGaloisFieldService galoisFieldService)
     {
         _galoisFieldService = galoisFieldService;
-
-        Default = new GaloisFieldConfiguration(0b100011011);
     }
 
     public IGaloisFieldConfiguration Create(ushort irreduciblePolynomial)

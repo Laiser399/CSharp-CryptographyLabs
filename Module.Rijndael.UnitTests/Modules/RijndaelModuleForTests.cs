@@ -63,16 +63,7 @@ public class RijndaelModuleForTests : Autofac.Module
             .As<IGaloisFieldCalculationService>()
             .SingleInstance();
         builder
-            .RegisterType<GaloisFieldConfigurationFactory>()
-            .As<IGaloisFieldConfigurationFactory>()
-            .SingleInstance();
-        builder
-            .RegisterType<GaloisFieldService>()
-            .As<IGaloisFieldService>()
-            .SingleInstance();
-        builder
-            .Register(x => x.Resolve<IGaloisFieldConfigurationFactory>().Default)
-            .As<IGaloisFieldConfiguration>()
-            .SingleInstance();
+            .RegisterInstance(GaloisFieldConfigurationFactory.DefaultConfiguration)
+            .As<IGaloisFieldConfiguration>();
     }
 }
