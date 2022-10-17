@@ -8,7 +8,6 @@ using Module.Rijndael.Factories;
 using Module.Rijndael.Factories.Abstract;
 using Module.Rijndael.Services;
 using Module.Rijndael.Services.Abstract;
-using Module.Rijndael.UnitTests.Entities;
 
 namespace Module.Rijndael.UnitTests.Modules;
 
@@ -64,7 +63,16 @@ public class RijndaelModuleForTests : Autofac.Module
             .As<IGaloisFieldCalculationService>()
             .SingleInstance();
         builder
-            .RegisterInstance(new GaloisFieldConfigurationForTests(0b1_0001_1011))
-            .As<IGaloisFieldConfiguration>();
+            .RegisterType<GaloisFieldConfigurationFactory>()
+            .As<IGaloisFieldConfigurationFactory>()
+            .SingleInstance();
+        builder
+            .RegisterType<GaloisFieldService>()
+            .As<IGaloisFieldService>()
+            .SingleInstance();
+        builder
+            .Register(x => x.Resolve<IGaloisFieldConfigurationFactory>().Default)
+            .As<IGaloisFieldConfiguration>()
+            .SingleInstance();
     }
 }
