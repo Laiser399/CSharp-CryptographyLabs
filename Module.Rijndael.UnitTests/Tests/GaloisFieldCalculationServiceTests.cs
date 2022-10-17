@@ -1,6 +1,6 @@
-﻿using Module.Rijndael.Services;
+﻿using Module.Rijndael.Factories;
+using Module.Rijndael.Services;
 using Module.Rijndael.Services.Abstract;
-using Module.Rijndael.UnitTests.Entities;
 using NUnit.Framework;
 
 namespace Module.Rijndael.UnitTests.Tests;
@@ -13,7 +13,9 @@ public class GaloisFieldCalculationServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _galoisFieldCalculationService = new GaloisFieldCalculationService(new GaloisFieldConfigurationForTests(0b100011011));
+        _galoisFieldCalculationService = new GaloisFieldCalculationService(
+            GaloisFieldConfigurationFactory.DefaultConfiguration
+        );
     }
 
     [Test]

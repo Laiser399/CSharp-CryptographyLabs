@@ -1,6 +1,6 @@
-﻿using Module.Rijndael.Services;
+﻿using Module.Rijndael.Factories;
+using Module.Rijndael.Services;
 using Module.Rijndael.Services.Abstract;
-using Module.Rijndael.UnitTests.Entities;
 using NUnit.Framework;
 
 namespace Module.Rijndael.UnitTests.Tests;
@@ -15,7 +15,7 @@ public class RijndaelMixColumnsServiceTests
     {
         _rijndaelMixColumnsService = new RijndaelMixColumnsService(
             new GaloisFieldCalculationService(
-                new GaloisFieldConfigurationForTests(0b100011011)
+                GaloisFieldConfigurationFactory.DefaultConfiguration
             )
         );
     }
