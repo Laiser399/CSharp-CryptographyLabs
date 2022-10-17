@@ -11,6 +11,7 @@ namespace CryptographyLabs.Crypto
     public static partial class Rijndael_
     {
         /// <exception cref="ArgumentException">Wrong key length or IV length</exception>
+        [Obsolete("Use IRijndaelCryptoTransformFactory instead")]
         public static ICryptoTransform Get(byte[] key, Size stateSize, byte[] IV, Mode mode, CryptoDirection direction)
         {
             switch (mode)
@@ -28,6 +29,7 @@ namespace CryptographyLabs.Crypto
         }
 
         /// <exception cref="ArgumentException">Wrong key length</exception>
+        [Obsolete("Use IRijndaelCryptoTransformFactory instead")]
         public static ICryptoTransform Get(byte[] key, Size stateSize, CryptoDirection direction)
         {
             if (!IsValidKeyLength(key))

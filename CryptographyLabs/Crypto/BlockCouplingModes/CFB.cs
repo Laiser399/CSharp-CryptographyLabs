@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.Crypto.BlockCouplingModes
 {
+    [Obsolete("Use code from Module.Core instead")]
     public static class CFB
     {
         /// <exception cref="ArgumentException">Wrong length of IV</exception>
@@ -18,6 +19,7 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
                 return new CFBDecryptTransform(transform, IV);
         }
 
+        [Obsolete("Use code from Module.Core instead")]
         private class CFBEncryptTransform : BaseEncryptTransform
         {
             private byte[] _initVector;
@@ -45,6 +47,7 @@ namespace CryptographyLabs.Crypto.BlockCouplingModes
             #endregion
         }
 
+        [Obsolete("Use code from Module.Core instead")]
         private class CFBDecryptTransform : BaseDecryptTransform
         {
             private byte[] _initVector;

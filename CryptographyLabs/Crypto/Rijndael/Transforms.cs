@@ -10,6 +10,7 @@ namespace CryptographyLabs.Crypto
 {
     public static partial class Rijndael_
     {
+        [Obsolete("Use code from Module.Rijndael instead")]
         public class RijndaelEncryptTransform : BlockEncryptTransform
         {
             private int _roundsCount;
@@ -83,6 +84,7 @@ namespace CryptographyLabs.Crypto
 
         }
 
+        [Obsolete("Use code from Module.Rijndael instead")]
         public class RijndaelDecryptTransform : BlockDecryptTransform
         {
             private int _roundsCount;
