@@ -58,11 +58,13 @@ public class RijndaelCryptoTransformFactory : IRijndaelCryptoTransformFactory
             ),
             (BlockCipherMode.CFB, TransformDirection.Encrypt) => new CfbEncryptTransform(
                 GetBlockCryptoTransform(TransformDirection.Encrypt, key, blockSize),
-                initialVector
+                initialVector,
+                _lifetimeScope.Resolve<IXorService>()
             ),
             (BlockCipherMode.CFB, TransformDirection.Decrypt) => new CfbDecryptTransform(
                 GetBlockCryptoTransform(TransformDirection.Encrypt, key, blockSize),
-                initialVector
+                initialVector,
+                _lifetimeScope.Resolve<IXorService>()
             ),
             (BlockCipherMode.OFB, TransformDirection.Encrypt) => new OfbEncryptTransform(
                 GetBlockCryptoTransform(TransformDirection.Encrypt, key, blockSize),
