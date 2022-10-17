@@ -46,8 +46,12 @@ public class RijndaelCryptoTransformFactory : IRijndaelCryptoTransformFactory
     {
         return (mode, direction) switch
         {
-            (BlockCipherMode.CBC, _) => new CbcEncryptTransform(
-                GetBlockCryptoTransform(direction, key, blockSize),
+            (BlockCipherMode.CBC, TransformDirection.Encrypt) => new CbcEncryptTransform(
+                GetBlockCryptoTransform(TransformDirection.Encrypt, key, blockSize),
+                initialVector
+            ),
+            (BlockCipherMode.CBC, TransformDirection.Decrypt) => new CbcDecryptTransform(
+                GetBlockCryptoTransform(TransformDirection.Decrypt, key, blockSize),
                 initialVector
             ),
             (BlockCipherMode.CFB, TransformDirection.Encrypt) => new CfbEncryptTransform(
