@@ -68,11 +68,13 @@ public class RijndaelCryptoTransformFactory : IRijndaelCryptoTransformFactory
             ),
             (BlockCipherMode.OFB, TransformDirection.Encrypt) => new OfbEncryptTransform(
                 GetBlockCryptoTransform(TransformDirection.Encrypt, key, blockSize),
-                initialVector
+                initialVector,
+                _lifetimeScope.Resolve<IXorService>()
             ),
             (BlockCipherMode.OFB, TransformDirection.Decrypt) => new OfbDecryptTransform(
                 GetBlockCryptoTransform(TransformDirection.Encrypt, key, blockSize),
-                initialVector
+                initialVector,
+                _lifetimeScope.Resolve<IXorService>()
             ),
             _ => throw new ArgumentOutOfRangeException("", "Unsupported mode or transform direction.")
         };
