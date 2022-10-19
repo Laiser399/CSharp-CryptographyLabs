@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class VernamEncryptVM : BaseTransformVM
+    class VernamEncryptVM : TransformVM
     {
 
         string _keyFilePath;

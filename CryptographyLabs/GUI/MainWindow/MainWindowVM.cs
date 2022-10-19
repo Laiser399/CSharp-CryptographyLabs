@@ -85,9 +85,9 @@ namespace CryptographyLabs.GUI
         public FrogVM FrogVM => _frogVM;
 
         // 
-        private ObservableCollection<BaseTransformVM> _progressViewModels;
-        public ObservableCollection<BaseTransformVM> ProgressViewModels =>
-            _progressViewModels ?? (_progressViewModels = new ObservableCollection<BaseTransformVM>());
+        private ObservableCollection<TransformVM> _progressViewModels;
+        public ObservableCollection<TransformVM> ProgressViewModels =>
+            _progressViewModels ?? (_progressViewModels = new ObservableCollection<TransformVM>());
 
         #endregion
 

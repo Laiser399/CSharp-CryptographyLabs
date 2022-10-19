@@ -1,17 +1,14 @@
-﻿using CryptographyLabs.Crypto;
-using CryptographyLabs.Crypto.BlockCouplingModes;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CryptographyLabs.Crypto;
+using CryptographyLabs.Crypto.BlockCouplingModes;
 
 namespace CryptographyLabs.GUI
 {
-    public abstract class BaseTransformVM : BaseViewModel
+    public class TransformVM : BaseViewModel
     {
         protected CancellationTokenSource _cts = new CancellationTokenSource();
 
@@ -21,6 +18,7 @@ namespace CryptographyLabs.GUI
         public long StartTime => _startTime;
 
         private string _sourceFilePath = "";
+
         public string SourceFilePath
         {
             get => _sourceFilePath;
@@ -32,6 +30,7 @@ namespace CryptographyLabs.GUI
         }
 
         private string _destFilePath;
+
         public string DestFilePath
         {
             get => _destFilePath;
@@ -43,6 +42,7 @@ namespace CryptographyLabs.GUI
         }
 
         private string _statusString = "aga";
+
         public string StatusString
         {
             get => _statusString;
@@ -54,6 +54,7 @@ namespace CryptographyLabs.GUI
         }
 
         private double _cryptoProgress = 0;
+
         public double CryptoProgress
         {
             get => _cryptoProgress;
@@ -70,6 +71,7 @@ namespace CryptographyLabs.GUI
         }
 
         private bool _isDone = false;
+
         public bool IsDone
         {
             get => _isDone;
@@ -81,6 +83,7 @@ namespace CryptographyLabs.GUI
         }
 
         private string _cryptoName = "";
+
         public string CryptoName
         {
             get => _cryptoName;
@@ -92,6 +95,7 @@ namespace CryptographyLabs.GUI
         }
 
         private RelayCommand _cancelCmd;
+
         public RelayCommand CancelCmd
             => _cancelCmd ?? (_cancelCmd = new RelayCommand(_ => Cancel()));
 
@@ -100,7 +104,7 @@ namespace CryptographyLabs.GUI
         private bool _isDeleteAfter;
         private CryptoDirection? _direction;
 
-        public BaseTransformVM(bool isDeleteAfter, CryptoDirection? direction)
+        public TransformVM(bool isDeleteAfter, CryptoDirection? direction)
         {
             _isDeleteAfter = isDeleteAfter;
             _direction = direction;
@@ -238,8 +242,9 @@ namespace CryptographyLabs.GUI
                 if (File.Exists(DestFilePath))
                     File.Delete(DestFilePath);
             }
-            catch { }
+            catch
+            {
+            }
         }
-
     }
 }

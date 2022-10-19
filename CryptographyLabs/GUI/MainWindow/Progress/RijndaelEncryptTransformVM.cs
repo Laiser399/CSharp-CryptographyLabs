@@ -8,7 +8,7 @@ using CryptographyLabs.Crypto;
 
 namespace CryptographyLabs.GUI
 {
-    class RijndaelEncryptTransformVM : BaseTransformVM
+    class RijndaelEncryptTransformVM : TransformVM
     {
         public RijndaelEncryptTransformVM(string filePath, string encryptFilePath, byte[] key, 
             Rijndael_.Size blockSize, bool isDeleteAfter, bool multithread = false) 

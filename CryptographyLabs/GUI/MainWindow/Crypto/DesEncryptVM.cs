@@ -65,7 +65,7 @@ namespace CryptographyLabs.GUI
             string filePath = FilenameToEncrypt;
             string encryptPath = filePath + ".des399";
 
-            BaseTransformVM vm;
+            TransformVM vm;
             if (DesVM.Mode == DES_.Mode.ECB)
             {
                 vm = new DESEncryptTransformVM(filePath, encryptPath, key56, DesVM.IsDeleteFileAfter, 

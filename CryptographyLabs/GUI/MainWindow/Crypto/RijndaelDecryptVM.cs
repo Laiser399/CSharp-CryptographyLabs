@@ -50,7 +50,7 @@ namespace CryptographyLabs.GUI
                 return;
             }
 
-            BaseTransformVM vm;
+            TransformVM vm;
             if (Mode == Rijndael_.Mode.ECB)
             {
                 vm = new RijndaelDecryptTransformVM(FilePath, decryptPath, keyBytes, BlockSize, IsDeleteAfter,

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class RC4CryptVM : BaseTransformVM
+    class RC4CryptVM : TransformVM
     {
         public RC4CryptVM(string sourceFilePath, string destFilePath, byte[] keyBytes, bool isDeleteAfter)
             : base(isDeleteAfter, null)

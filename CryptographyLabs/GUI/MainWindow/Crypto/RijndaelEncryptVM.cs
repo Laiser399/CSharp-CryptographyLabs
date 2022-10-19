@@ -42,7 +42,7 @@ namespace CryptographyLabs.GUI
             }
 
             string encryptPath = FilePath + ".rjn399";
-            BaseTransformVM vm;
+            TransformVM vm;
             if (Mode == Rijndael_.Mode.ECB)
             {
                 vm = new RijndaelEncryptTransformVM(FilePath, encryptPath, keyBytes, BlockSize, IsDeleteAfter,

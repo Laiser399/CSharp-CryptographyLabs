@@ -72,7 +72,7 @@ namespace CryptographyLabs.GUI
                 return;
             }
 
-            BaseTransformVM vm;
+            TransformVM vm;
             if (DesVM.Mode == DES_.Mode.ECB)
             {
                 vm = new DESDecryptTransformVM(filePath, decryptPath, key56, DesVM.IsDeleteFileAfter, 

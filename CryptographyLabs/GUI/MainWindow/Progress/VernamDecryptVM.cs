@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class VernamDecryptVM : BaseTransformVM
+    class VernamDecryptVM : TransformVM
     {
         public VernamDecryptVM(string filePath, string destFilePath, string keyFilePath, bool isDeleteAfter)
             : base(isDeleteAfter, CryptoDirection.Decrypt)

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class DESEncryptTransformVM : BaseTransformVM
+    class DESEncryptTransformVM : TransformVM
     {
         public DESEncryptTransformVM(string filePath, string encryptFilePath, ulong key56, byte[] IV, 
             DES_.Mode mode, bool isDeleteAfter) : base(isDeleteAfter, CryptoDirection.Encrypt)

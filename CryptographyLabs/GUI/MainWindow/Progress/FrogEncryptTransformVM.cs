@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CryptographyLabs.GUI
 {
-    public class FrogEncryptTransformVM : BaseTransformVM
+    public class FrogEncryptTransformVM : TransformVM
     {
         public FrogEncryptTransformVM(string filePath, string encryptFilePath, byte[] key, 
             bool isDeleteAfter, bool multithread = false) : base(isDeleteAfter, CryptoDirection.Encrypt)

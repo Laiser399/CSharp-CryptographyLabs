@@ -72,7 +72,7 @@ namespace CryptographyLabs.GUI
                 return;
             }
 
-            BaseTransformVM vm;
+            TransformVM vm;
             if (_owner.Mode == FROGProvider.Mode.ECB)
             {
                 vm = new FrogDecryptTransformVM(FilePath, decryptPath, keyBytes,

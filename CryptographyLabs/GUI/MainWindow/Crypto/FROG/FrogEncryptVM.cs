@@ -64,7 +64,7 @@ namespace CryptographyLabs.GUI
             }
 
             string encryptFilePath = FilePath + ".frg399";
-            BaseTransformVM vm;
+            TransformVM vm;
             if (_owner.Mode == FROGProvider.Mode.ECB)
             {
                 vm = new FrogEncryptTransformVM(FilePath, encryptFilePath, keyBytes,

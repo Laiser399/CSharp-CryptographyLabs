@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.GUI
 {
-    class DESDecryptTransformVM : BaseTransformVM
+    class DESDecryptTransformVM : TransformVM
     {
         public DESDecryptTransformVM(string filePath, string decryptFilePath, ulong key56, byte[] IV, DES_.Mode mode,
             bool isDeleteAfter) : base(isDeleteAfter, CryptoDirection.Decrypt)

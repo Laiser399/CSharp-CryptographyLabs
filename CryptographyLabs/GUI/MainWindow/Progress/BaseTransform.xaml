@@ -6,7 +6,7 @@
         <BooleanToVisibilityConverter/>
     </gui:ValueConverterGroup>
     
-    <DataTemplate DataType="{x:Type gui:BaseTransformVM}">
+    <DataTemplate DataType="{x:Type gui:TransformVM}">
         <StackPanel Margin="6 0 6 12">
             <Grid>
                 <Grid.ColumnDefinitions>
