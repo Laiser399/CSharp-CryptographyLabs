@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace CryptographyLabs.Crypto.BlockCouplingModes
 {
+    [Obsolete("Use EcbEncryptParallelTransform and EcbDecryptParallelTransform instead")]
     public static class ECB
     {
         /// <exception cref="ArgumentException">data is empty.</exception>
