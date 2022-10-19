@@ -108,20 +108,14 @@ namespace CryptographyLabs.GUI
         {
             var transformVM = CreateTransformVM(targetFilePath);
 
-            if (Multithread)
-            {
-                transformVM.StartMultiThread(Rijndael_.GetNice(keyBytes, BlockSize, CryptoDirection.Decrypt));
-            }
-            else
-            {
-                var cryptoTransform = _rijndaelCryptoTransformFactory.CreateECB(
-                    TransformDirection.Decrypt,
-                    keyBytes,
-                    LegacyCodeHelper.Fix(BlockSize)
-                );
+            var cryptoTransform = _rijndaelCryptoTransformFactory.CreateECB(
+                TransformDirection.Decrypt,
+                keyBytes,
+                LegacyCodeHelper.Fix(BlockSize),
+                Multithread
+            );
 
-                transformVM.Start(cryptoTransform);
-            }
+            transformVM.Start(cryptoTransform);
 
             _owner.ProgressViewModels.Add(transformVM);
         }
