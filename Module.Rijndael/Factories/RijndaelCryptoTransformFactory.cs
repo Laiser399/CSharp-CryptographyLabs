@@ -27,14 +27,20 @@ public class RijndaelCryptoTransformFactory : IRijndaelCryptoTransformFactory
         _rijndaelParametersFactory = rijndaelParametersFactory;
     }
 
-    public ICryptoTransform CreateECB(TransformDirection direction, byte[] key, RijndaelSize blockSize)
+    public ICryptoTransform CreateECB(
+        TransformDirection direction,
+        byte[] key,
+        RijndaelSize blockSize,
+        bool withParallelism)
     {
         var blockCryptoTransform = GetBlockCryptoTransform(direction, key, blockSize);
 
-        return direction switch
+        return (direction, withParallelism) switch
         {
-            TransformDirection.Encrypt => new EcbEncryptTransform(blockCryptoTransform),
-            TransformDirection.Decrypt => new EcbDecryptTransform(blockCryptoTransform),
+            (TransformDirection.Encrypt, true) => new EcbEncryptParallelTransform(blockCryptoTransform),
+            (TransformDirection.Encrypt, false) => new EcbEncryptTransform(blockCryptoTransform),
+            (TransformDirection.Decrypt, true) => new EcbDecryptParallelTransform(blockCryptoTransform),
+            (TransformDirection.Decrypt, false) => new EcbDecryptTransform(blockCryptoTransform),
             _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unsupported transform direction.")
         };
     }

@@ -7,7 +7,11 @@ namespace Module.Rijndael.Factories.Abstract;
 public interface IRijndaelCryptoTransformFactory
 {
     /// <exception cref="ArgumentException"></exception>
-    ICryptoTransform CreateECB(TransformDirection direction, byte[] key, RijndaelSize blockSize);
+    ICryptoTransform CreateECB(
+        TransformDirection direction,
+        byte[] key,
+        RijndaelSize blockSize,
+        bool withParallelism = false);
 
     /// <exception cref="ArgumentException"></exception>
     ICryptoTransform Create(
