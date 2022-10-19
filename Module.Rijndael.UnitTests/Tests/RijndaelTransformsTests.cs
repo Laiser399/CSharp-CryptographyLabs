@@ -11,6 +11,23 @@ namespace Module.Rijndael.UnitTests.Tests;
 [TestFixture]
 public class RijndaelTransformsTests
 {
+    private static readonly IReadOnlyCollection<BlockCipherMode> ModeCases = new[]
+    {
+        BlockCipherMode.CBC,
+        BlockCipherMode.CFB,
+        BlockCipherMode.OFB
+    };
+
+    private static readonly IReadOnlyCollection<int> BlockCountCases = new[]
+    {
+        0, 10, 999
+    };
+
+    private static readonly IReadOnlyCollection<int> HangingByteCountCases = new[]
+    {
+        0, 1, 2, -1, 7
+    };
+
     private static readonly byte[] KeyBytes =
     {
         93, 230, 245, 204, 216, 129,
@@ -30,7 +47,7 @@ public class RijndaelTransformsTests
     };
 
     private readonly IRijndaelCryptoTransformFactory _rijndaelCryptoTransformFactory;
-    private readonly Random _random = new();
+    private Random _random = new(0);
 
     public RijndaelTransformsTests()
     {
@@ -38,59 +55,81 @@ public class RijndaelTransformsTests
         _rijndaelCryptoTransformFactory = container.Resolve<IRijndaelCryptoTransformFactory>();
     }
 
-    [Test]
-    [TestCaseSource(nameof(GetTestCases))]
-    public void Transform_Test(BlockCipherMode? mode, int blockCount, int handingByteCount)
+    [SetUp]
+    public void SetUp()
     {
-        var encryptTransform = GetCryptoTransform(mode, TransformDirection.Encrypt);
-        var decryptTransform = GetCryptoTransform(mode, TransformDirection.Decrypt);
+        _random = new Random(123);
+    }
+
+    [Test]
+    [TestCaseSource(nameof(GetEcbTestCases))]
+    public void Transform_EcbTest(int blockCount, int hangingByteCount, bool withParallelism)
+    {
+        var encryptTransform = GetEcbCryptoTransform(TransformDirection.Encrypt, withParallelism);
+        var decryptTransform = GetEcbCryptoTransform(TransformDirection.Decrypt, withParallelism);
 
         TestTransform(
-            encryptTransform.InputBlockSize * blockCount + handingByteCount,
+            encryptTransform.InputBlockSize * blockCount + hangingByteCount,
             encryptTransform,
             decryptTransform
         );
     }
 
-    private ICryptoTransform GetCryptoTransform(BlockCipherMode? mode, TransformDirection direction)
+    [Test]
+    [TestCaseSource(nameof(GetTestCases))]
+    public void Transform_Test(BlockCipherMode mode, int blockCount, int hangingByteCount)
     {
-        return mode switch
-        {
-            null => _rijndaelCryptoTransformFactory.CreateECB(direction, KeyBytes, BlockSize),
-            _ => _rijndaelCryptoTransformFactory.Create(
-                mode.Value,
-                direction,
-                InitialVector,
-                KeyBytes,
-                BlockSize
-            )
-        };
+        var encryptTransform = GetCryptoTransform(mode, TransformDirection.Encrypt);
+        var decryptTransform = GetCryptoTransform(mode, TransformDirection.Decrypt);
+
+        TestTransform(
+            encryptTransform.InputBlockSize * blockCount + hangingByteCount,
+            encryptTransform,
+            decryptTransform
+        );
+    }
+
+    private ICryptoTransform GetEcbCryptoTransform(TransformDirection direction, bool withParallelism)
+    {
+        return _rijndaelCryptoTransformFactory.CreateECB(
+            direction,
+            KeyBytes,
+            BlockSize,
+            withParallelism
+        );
+    }
+
+    private ICryptoTransform GetCryptoTransform(BlockCipherMode mode, TransformDirection direction)
+    {
+        return _rijndaelCryptoTransformFactory.Create(
+            mode,
+            direction,
+            InitialVector,
+            KeyBytes,
+            BlockSize
+        );
+    }
+
+    private static IReadOnlyCollection<object[]> GetEcbTestCases()
+    {
+        var testCases =
+            from blockCount in BlockCountCases
+            from hangingByteCount in HangingByteCountCases
+            from withParallelism in new[] { true, false }
+            where blockCount != 0 || hangingByteCount >= 0
+            select new object[] { blockCount, hangingByteCount, withParallelism };
+
+        return testCases.ToList();
     }
 
     private static IReadOnlyCollection<object[]> GetTestCases()
     {
-        var modes = new[]
-        {
-            (BlockCipherMode?)null,
-            BlockCipherMode.CBC,
-            BlockCipherMode.CFB,
-            BlockCipherMode.OFB
-        };
-        var blockCounts = new[]
-        {
-            0, 10, 999
-        };
-        var handingByteCounts = new[]
-        {
-            0, 1, 2, -1, 7
-        };
-
         var testCases =
-            from mode in modes
-            from blockCount in blockCounts
-            from handingByteCount in handingByteCounts
-            where blockCount != 0 || handingByteCount >= 0
-            select new object[] { mode, blockCount, handingByteCount };
+            from mode in ModeCases
+            from blockCount in BlockCountCases
+            from hangingByteCount in HangingByteCountCases
+            where blockCount != 0 || hangingByteCount >= 0
+            select new object[] { mode, blockCount, hangingByteCount };
 
         return testCases.ToList();
     }
