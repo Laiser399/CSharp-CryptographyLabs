@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
 using CryptographyLabs.Crypto;
-using System.Windows;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace CryptographyLabs.GUI
@@ -30,42 +25,95 @@ namespace CryptographyLabs.GUI
 
         protected override void Go()
         {
-            if (!StringEx.TryParse(Key, out byte[] keyBytes))
+            if (!TryGetKeyBytes(out var keyBytes))
             {
-                MessageBox.Show("Wrong key format.");
-                return;
-            }
-            if (keyBytes.Length != Rijndael_.GetBytesCount(KeySize))
-            {
-                MessageBox.Show("Wrong bytes count in key.");
                 return;
             }
 
-            string encryptPath = FilePath + ".rjn399";
-            TransformVM vm;
+            var targetFilePath = FilePath + ".rjn399";
+
             if (Mode == Rijndael_.Mode.ECB)
             {
-                vm = new RijndaelEncryptTransformVM(FilePath, encryptPath, keyBytes, BlockSize, IsDeleteAfter,
-                    Multithread);
+                StartEcbTransform(targetFilePath, keyBytes);
             }
             else
             {
-                if (!StringEx.TryParse(IV, out byte[] iv))
+                if (!TryGetInitialVector(out var initialVector))
                 {
-                    MessageBox.Show("Wrong IV format.");
-                    return;
-                }
-                if (iv.Length != Rijndael_.GetBytesCount(BlockSize))
-                {
-                    MessageBox.Show($"Wrong IV bytes count. Must be {Rijndael_.GetBytesCount(BlockSize)}.");
                     return;
                 }
 
-                vm = new RijndaelEncryptTransformVM(FilePath, encryptPath, keyBytes, 
-                    BlockSize, iv, Mode, IsDeleteAfter);
+                StartTransform(targetFilePath, keyBytes, initialVector);
+            }
+        }
+
+        private bool TryGetKeyBytes(out byte[] keyBytes)
+        {
+            if (!StringEx.TryParse(Key, out keyBytes))
+            {
+                MessageBox.Show("Wrong key format.");
+                return false;
             }
 
-            _owner.ProgressViewModels.Add(vm);
+            if (keyBytes.Length != Rijndael_.GetBytesCount(KeySize))
+            {
+                MessageBox.Show("Wrong bytes count in key.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool TryGetInitialVector(out byte[] initialVector)
+        {
+            if (!StringEx.TryParse(IV, out initialVector))
+            {
+                MessageBox.Show("Wrong IV format.");
+                return false;
+            }
+
+            if (initialVector.Length != Rijndael_.GetBytesCount(BlockSize))
+            {
+                MessageBox.Show($"Wrong IV bytes count. Must be {Rijndael_.GetBytesCount(BlockSize)}.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void StartEcbTransform(string targetFilePath, byte[] keyBytes)
+        {
+            var transformVM = CreateTransformVM(targetFilePath);
+
+            if (Multithread)
+            {
+                transformVM.StartMultiThread(Rijndael_.GetNice(keyBytes, BlockSize, CryptoDirection.Encrypt));
+            }
+            else
+            {
+                transformVM.Start(Rijndael_.Get(keyBytes, BlockSize, CryptoDirection.Encrypt));
+            }
+
+            _owner.ProgressViewModels.Add(transformVM);
+        }
+
+        private void StartTransform(string targetFilePath, byte[] keyBytes, byte[] initialVector)
+        {
+            var transformVM = CreateTransformVM(targetFilePath);
+
+            transformVM.Start(Rijndael_.Get(keyBytes, BlockSize, initialVector, Mode, CryptoDirection.Encrypt));
+
+            _owner.ProgressViewModels.Add(transformVM);
+        }
+
+        private TransformVM CreateTransformVM(string targetFilePath)
+        {
+            return new TransformVM(IsDeleteAfter, CryptoDirection.Encrypt)
+            {
+                CryptoName = "Rijndael",
+                SourceFilePath = FilePath,
+                DestFilePath = targetFilePath
+            };
         }
     }
 }
