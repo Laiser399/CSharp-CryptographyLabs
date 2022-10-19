@@ -82,7 +82,7 @@ public class RijndaelShiftRowsService : IRijndaelShiftRowsService
 
     private static unsafe void ShiftRowsWith6Columns(Span<byte> state)
     {
-        for (var i = 1; i < 4; i++)
+        for (var i = 1; i < 3; i++)
         {
             var row = state.Slice(i * 6, 6);
             fixed (byte* rowPtr = row)
@@ -95,11 +95,18 @@ public class RijndaelShiftRowsService : IRijndaelShiftRowsService
                 *rowULongPtr |= shiftedRow;
             }
         }
+
+        var lastRow = state.Slice(3 * 6, 6);
+
+        // Сдвиг последней строки вынесен отдельно, т.к. в случае многопоточности заход на чужую территорию приводит к приколам.
+        // А на чужую территорию мы заходим, т.к. в последней строке 6 байт, а длина ulong - 8 байт.
+        (lastRow[0], lastRow[1], lastRow[2], lastRow[3], lastRow[4], lastRow[5]) =
+            (lastRow[3], lastRow[4], lastRow[5], lastRow[0], lastRow[1], lastRow[2]);
     }
 
     private static unsafe void InverseShiftRowsWith6Columns(Span<byte> state)
     {
-        for (var i = 1; i < 4; i++)
+        for (var i = 1; i < 3; i++)
         {
             var row = state.Slice(i * 6, 6);
             fixed (byte* rowPtr = row)
@@ -112,6 +119,12 @@ public class RijndaelShiftRowsService : IRijndaelShiftRowsService
                 *rowULongPtr |= shiftedRow;
             }
         }
+
+        var lastRow = state.Slice(3 * 6, 6);
+
+        // см. выше
+        (lastRow[0], lastRow[1], lastRow[2], lastRow[3], lastRow[4], lastRow[5]) =
+            (lastRow[3], lastRow[4], lastRow[5], lastRow[0], lastRow[1], lastRow[2]);
     }
 
     private static unsafe void ShiftRowsWith8Columns(Span<byte> state)
