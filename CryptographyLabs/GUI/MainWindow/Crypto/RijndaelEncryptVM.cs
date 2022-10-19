@@ -1,16 +1,23 @@
 ﻿using System.Windows;
 using CryptographyLabs.Crypto;
+using CryptographyLabs.Helpers;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Module.Core.Enums;
+using Module.Rijndael.Factories.Abstract;
 
 namespace CryptographyLabs.GUI
 {
     class RijndaelEncryptVM : RijndaelVM
     {
-        private MainWindowVM _owner;
+        private readonly MainWindowVM _owner;
+        private readonly IRijndaelCryptoTransformFactory _rijndaelCryptoTransformFactory;
 
-        public RijndaelEncryptVM(MainWindowVM owner)
+        public RijndaelEncryptVM(
+            MainWindowVM owner,
+            IRijndaelCryptoTransformFactory rijndaelCryptoTransformFactory)
         {
             _owner = owner;
+            _rijndaelCryptoTransformFactory = rijndaelCryptoTransformFactory;
         }
 
         protected override void ChangeFilePath()
@@ -91,7 +98,13 @@ namespace CryptographyLabs.GUI
             }
             else
             {
-                transformVM.Start(Rijndael_.Get(keyBytes, BlockSize, CryptoDirection.Encrypt));
+                var cryptoTransform = _rijndaelCryptoTransformFactory.CreateECB(
+                    TransformDirection.Encrypt,
+                    keyBytes,
+                    LegacyCodeHelper.Fix(BlockSize)
+                );
+
+                transformVM.Start(cryptoTransform);
             }
 
             _owner.ProgressViewModels.Add(transformVM);
@@ -101,7 +114,15 @@ namespace CryptographyLabs.GUI
         {
             var transformVM = CreateTransformVM(targetFilePath);
 
-            transformVM.Start(Rijndael_.Get(keyBytes, BlockSize, initialVector, Mode, CryptoDirection.Encrypt));
+            var cryptoTransform = _rijndaelCryptoTransformFactory.Create(
+                LegacyCodeHelper.Fix(Mode),
+                TransformDirection.Encrypt,
+                initialVector,
+                keyBytes,
+                LegacyCodeHelper.Fix(BlockSize)
+            );
+
+            transformVM.Start(cryptoTransform);
 
             _owner.ProgressViewModels.Add(transformVM);
         }

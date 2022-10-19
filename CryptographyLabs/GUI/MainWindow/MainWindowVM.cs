@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CryptographyLabs.GUI.AbstractViewModels;
+using Module.Rijndael.Factories.Abstract;
 
 namespace CryptographyLabs.GUI
 {
@@ -95,15 +96,16 @@ namespace CryptographyLabs.GUI
             IPrimesGenerationVM primesGenerationVM,
             IRSAKeyGenerationVM rsaKeyGenerationVM,
             IRSATransformationVM rsaTransformation,
-            IRSAAttackVM rsaAttackVM)
+            IRSAAttackVM rsaAttackVM,
+            IRijndaelCryptoTransformFactory rijndaelCryptoTransformFactory)
         {
             PrimesGeneration = primesGenerationVM;
             RSAKeyGeneration = rsaKeyGenerationVM;
             RSATransformation = rsaTransformation;
             RSAAttack = rsaAttackVM;
 
-            _rijndaelEncryptVM = new RijndaelEncryptVM(this);
-            _rijndaelDecryptVM = new RijndaelDecryptVM(this);
+            _rijndaelEncryptVM = new RijndaelEncryptVM(this, rijndaelCryptoTransformFactory);
+            _rijndaelDecryptVM = new RijndaelDecryptVM(this, rijndaelCryptoTransformFactory);
 
             var desVM = new DesVM();
             _desEncryptVM = new DesEncryptVM(desVM, this);
