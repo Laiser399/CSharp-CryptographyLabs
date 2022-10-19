@@ -47,7 +47,7 @@ namespace CryptographyLabs.GUI
             _direction = direction;
         }
 
-        protected async void Start(ICryptoTransform transform)
+        public async void Start(ICryptoTransform transform)
         {
             StatusString = GetTransformStatusString(_direction);
 
@@ -101,7 +101,7 @@ namespace CryptographyLabs.GUI
                 throw canceledException;
         }
 
-        protected async void StartMultiThread(INiceCryptoTransform transform)
+        public async void StartMultiThread(INiceCryptoTransform transform)
         {
             try
             {
