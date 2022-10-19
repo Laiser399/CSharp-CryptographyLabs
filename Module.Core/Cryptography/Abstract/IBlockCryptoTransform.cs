@@ -6,5 +6,5 @@ public interface IBlockCryptoTransform
     int OutputBlockSize { get; }
 
     /// <exception cref="ArgumentException">Invalid size of input or output.</exception>
-    void Transform(Span<byte> input, Span<byte> output);
+    void Transform(ReadOnlySpan<byte> input, Span<byte> output);
 }

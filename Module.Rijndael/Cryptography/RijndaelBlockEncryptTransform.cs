@@ -30,7 +30,7 @@ public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
         _rijndaelMixColumnsService = rijndaelMixColumnsService;
     }
 
-    public void Transform(Span<byte> input, Span<byte> output)
+    public void Transform(ReadOnlySpan<byte> input, Span<byte> output)
     {
         ValidateArguments(input, output);
 
@@ -52,7 +52,7 @@ public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
         }
     }
 
-    private void ValidateArguments(Span<byte> input, Span<byte> output)
+    private void ValidateArguments(ReadOnlySpan<byte> input, Span<byte> output)
     {
         if (input.Length != _rijndaelParameters.BlockSize)
         {
