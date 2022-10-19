@@ -4,6 +4,8 @@ using CryptographyLabs.GUI.AbstractViewModels;
 using CryptographyLabs.GUI.Validators;
 using CryptographyLabs.GUI.ViewModels;
 using FluentValidation;
+using Module.Core;
+using Module.Rijndael;
 using Module.RSA;
 
 namespace CryptographyLabs;
@@ -77,6 +79,13 @@ public static class AppContainer
             RegisterRsaCore = true,
             RegisterAttackServices = true
         });
+
+        builder.RegisterModule(new RijndaelModule
+        {
+            UseDefaultGaloisFieldConfiguration = true
+        });
+
+        builder.RegisterModule<CoreModule>();
 
         return builder.Build();
     }
