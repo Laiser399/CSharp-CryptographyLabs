@@ -16,7 +16,7 @@ namespace CryptographyLabs.GUI
 
             FROGProvider provider = new FROGProvider(key);
             if (multithread)
-                StartMultithread(provider.CreateNice(CryptoDirection.Encrypt));
+                StartMultiThread(provider.CreateNice(CryptoDirection.Encrypt));
             else
                 Start(provider.Create(CryptoDirection.Encrypt));
         }

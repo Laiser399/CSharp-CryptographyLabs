@@ -32,7 +32,7 @@ namespace CryptographyLabs.GUI
 
             if (multithread)
             {
-                StartMultithread(DES_.GetNice(key56, CryptoDirection.Encrypt));
+                StartMultiThread(DES_.GetNice(key56, CryptoDirection.Encrypt));
             }
             else
             {

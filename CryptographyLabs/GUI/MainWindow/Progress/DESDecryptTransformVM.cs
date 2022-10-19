@@ -30,7 +30,7 @@ namespace CryptographyLabs.GUI
             DestFilePath = decryptFilePath;
 
             if (multithread)
-                StartMultithread(DES_.GetNice(key56, CryptoDirection.Decrypt));
+                StartMultiThread(DES_.GetNice(key56, CryptoDirection.Decrypt));
             else
                 Start(DES_.Get(key56, CryptoDirection.Decrypt));
         }

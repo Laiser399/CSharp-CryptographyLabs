@@ -3,106 +3,43 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CryptographyLabs.Crypto;
 using CryptographyLabs.Crypto.BlockCouplingModes;
+using PropertyChanged;
 
 namespace CryptographyLabs.GUI
 {
-    public class TransformVM : BaseViewModel
+    [AddINotifyPropertyChangedInterface]
+    public class TransformVM
     {
-        protected CancellationTokenSource _cts = new CancellationTokenSource();
-
         #region Bindings
 
-        private long _startTime = DateTime.Now.Ticks;
-        public long StartTime => _startTime;
+        public long StartTime { get; } = DateTime.Now.Ticks;
 
-        private string _sourceFilePath = "";
+        public string SourceFilePath { get; set; } = string.Empty;
 
-        public string SourceFilePath
-        {
-            get => _sourceFilePath;
-            set
-            {
-                _sourceFilePath = value;
-                NotifyPropChanged(nameof(SourceFilePath));
-            }
-        }
+        public string DestFilePath { get; set; } = string.Empty;
 
-        private string _destFilePath;
+        public string StatusString { get; set; } = "STATUS_STRING";
 
-        public string DestFilePath
-        {
-            get => _destFilePath;
-            set
-            {
-                _destFilePath = value;
-                NotifyPropChanged(nameof(DestFilePath));
-            }
-        }
+        public double CryptoProgress { get; set; }
 
-        private string _statusString = "aga";
+        public bool IsDone { get; set; }
 
-        public string StatusString
-        {
-            get => _statusString;
-            set
-            {
-                _statusString = value;
-                NotifyPropChanged(nameof(StatusString));
-            }
-        }
+        public string CryptoName { get; set; } = string.Empty;
 
-        private double _cryptoProgress = 0;
+        public ICommand CancelCmd
+            => _cancelCmd ??= new RelayCommand(_ => Cancel());
 
-        public double CryptoProgress
-        {
-            get => _cryptoProgress;
-            set
-            {
-                if (value > 100)
-                    _cryptoProgress = 100;
-                else if (value < 0)
-                    _cryptoProgress = 0;
-                else
-                    _cryptoProgress = value;
-                NotifyPropChanged(nameof(CryptoProgress));
-            }
-        }
-
-        private bool _isDone = false;
-
-        public bool IsDone
-        {
-            get => _isDone;
-            set
-            {
-                _isDone = value;
-                NotifyPropChanged(nameof(IsDone));
-            }
-        }
-
-        private string _cryptoName = "";
-
-        public string CryptoName
-        {
-            get => _cryptoName;
-            set
-            {
-                _cryptoName = value;
-                NotifyPropChanged(nameof(CryptoName));
-            }
-        }
-
-        private RelayCommand _cancelCmd;
-
-        public RelayCommand CancelCmd
-            => _cancelCmd ?? (_cancelCmd = new RelayCommand(_ => Cancel()));
+        private ICommand? _cancelCmd;
 
         #endregion
 
-        private bool _isDeleteAfter;
-        private CryptoDirection? _direction;
+        private readonly CancellationTokenSource _cancellationTokenSource = new();
+
+        private readonly bool _isDeleteAfter;
+        private readonly CryptoDirection? _direction;
 
         public TransformVM(bool isDeleteAfter, CryptoDirection? direction)
         {
@@ -112,12 +49,7 @@ namespace CryptographyLabs.GUI
 
         protected async void Start(ICryptoTransform transform)
         {
-            if (_direction is null)
-                StatusString = "Cryption...";
-            else if (_direction == CryptoDirection.Encrypt)
-                StatusString = "Encryption...";
-            else
-                StatusString = "Decryption...";
+            StatusString = GetTransformStatusString(_direction);
 
             try
             {
@@ -141,19 +73,22 @@ namespace CryptographyLabs.GUI
 
             try
             {
-                using (FileStream inStream = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
-                using (FileStream outStream = new FileStream(DestFilePath, FileMode.Create, FileAccess.Write))
-                using (CryptoStream outCrypto = new CryptoStream(outStream, transform, CryptoStreamMode.Write))
+                await using var input = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read);
+                await using var outputRaw = new FileStream(DestFilePath, FileMode.Create, FileAccess.Write);
+                await using var outputTransformed = new CryptoStream(outputRaw, transform, CryptoStreamMode.Write);
+
+                try
                 {
-                    try
-                    {
-                        await inStream.CopyToAsync(outCrypto, 80_000, _cts.Token,
-                            progress => CryptoProgress = progress);
-                    }
-                    catch (OperationCanceledException e)
-                    {
-                        canceledException = e;
-                    }
+                    await input.CopyToAsync(
+                        outputTransformed,
+                        80_000,
+                        _cancellationTokenSource.Token,
+                        progress => CryptoProgress = progress
+                    );
+                }
+                catch (OperationCanceledException e)
+                {
+                    canceledException = e;
                 }
             }
             catch (Exception e)
@@ -162,28 +97,31 @@ namespace CryptographyLabs.GUI
                     throw e;
             }
 
-            if (canceledException is object)
+            if (canceledException is not null)
                 throw canceledException;
         }
 
-        protected async void StartMultithread(INiceCryptoTransform transform)
+        protected async void StartMultiThread(INiceCryptoTransform transform)
         {
             try
             {
                 StatusString = "Reading file...";
-                byte[] text = await File.ReadAllBytesAsync(SourceFilePath, _cts.Token);
 
-                if (_direction is null)
-                    StatusString = "Cryption...";
-                else if (_direction == CryptoDirection.Encrypt)
-                    StatusString = "Encryption...";
-                else
-                    StatusString = "Decryption...";
-                byte[] transformed = await ECB.TransformAsync(text, transform, _cts.Token, 4,
-                    progress => CryptoProgress = progress);
+                var text = await File.ReadAllBytesAsync(SourceFilePath, _cancellationTokenSource.Token);
+
+                StatusString = GetTransformStatusString(_direction);
+
+                var transformed = await ECB.TransformAsync(
+                    text,
+                    transform,
+                    _cancellationTokenSource.Token,
+                    4,
+                    progress => CryptoProgress = progress
+                );
 
                 StatusString = "Saving to file...";
-                await File.WriteAllBytesAsync(DestFilePath, transformed, _cts.Token);
+
+                await File.WriteAllBytesAsync(DestFilePath, transformed, _cancellationTokenSource.Token);
 
                 await DeleteSourceIfNeeded();
 
@@ -192,13 +130,22 @@ namespace CryptographyLabs.GUI
             catch (OperationCanceledException)
             {
                 OnCanceled();
-                return;
             }
             catch (Exception e)
             {
                 OnError(e.Message);
-                return;
             }
+        }
+
+        private static string GetTransformStatusString(CryptoDirection? direction)
+        {
+            return direction switch
+            {
+                null => "Transform...",
+                CryptoDirection.Encrypt => "Encryption...",
+                CryptoDirection.Decrypt => "Decryption...",
+                _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unknown direction.")
+            };
         }
 
         private async Task DeleteSourceIfNeeded()
@@ -212,7 +159,7 @@ namespace CryptographyLabs.GUI
 
         private void Cancel()
         {
-            _cts.Cancel();
+            _cancellationTokenSource.Cancel();
         }
 
         private void OnCanceled()
@@ -240,7 +187,9 @@ namespace CryptographyLabs.GUI
             try
             {
                 if (File.Exists(DestFilePath))
+                {
                     File.Delete(DestFilePath);
+                }
             }
             catch
             {

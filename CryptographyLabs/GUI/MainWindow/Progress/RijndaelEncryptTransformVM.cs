@@ -19,7 +19,7 @@ namespace CryptographyLabs.GUI
             DestFilePath = encryptFilePath;
 
             if (multithread)
-                StartMultithread(Rijndael_.GetNice(key, blockSize, CryptoDirection.Encrypt));
+                StartMultiThread(Rijndael_.GetNice(key, blockSize, CryptoDirection.Encrypt));
             else
                 Start(Rijndael_.Get(key, blockSize, CryptoDirection.Encrypt));
         }
