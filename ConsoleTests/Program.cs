@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using CryptographyLabs;
 
 namespace ConsoleTests
@@ -83,63 +84,37 @@ namespace ConsoleTests
             return degree;
         }
 
-        private static ulong[] CalcPermMasks64(byte[] myTransposition)
+        private static ulong[] CalcPermutationMasks64(byte[] permutation)
         {
-            if (myTransposition.Length > 64)
-                throw new Exception("chet ne to");
-            else if (myTransposition.Length < 64)
+            if (permutation.Length != 64)
             {
-                // дополнение до 64 бит
-                byte[] addedTransp = new byte[64];
-                HashSet<byte> indices = new HashSet<byte>();
-                for (byte i = 0; i < 64; ++i)
-                    indices.Add(i);
-                foreach (byte usedIdex in myTransposition)
-                    indices.Remove(usedIdex);
-
-                for (int i = 0; i < 64 - myTransposition.Length; ++i)
-                {
-                    addedTransp[i] = indices.First();
-                    indices.Remove(addedTransp[i]);
-                }
-                for (int i = 0; i < myTransposition.Length; ++i)
-                    addedTransp[63 - i] = myTransposition[myTransposition.Length - 1 - i];
-                myTransposition = addedTransp;
+                throw new ArgumentException("Wrong length of transposition.");
             }
 
-            byte[] trueTranspose = new byte[64];
-            for (int i = 0; i < 64; ++i)
-                trueTranspose[myTransposition[63 - i]] = (byte)i;
-            var network = new PermutationNetwork(trueTranspose);
-
-            //tests
-            Random random = new Random(123);
-            byte[] buf = new byte[8];
-            for (int i = 0; i < 10000; ++i)
+            if (permutation.Distinct().Count() != 64)
             {
-                random.NextBytes(buf);
-                ulong value = BitConverter.ToUInt64(buf, 0);
-
-                ulong expected = Bitops.BitPermutation(value, myTransposition);
-                ulong actualNetwork = network.Permute(value);
-
-                ulong actual = value;
-                byte[] deltas64 = new byte[] { 1, 2, 4, 8, 16, 32, 16, 8, 4, 2, 1 };
-                for (int j = 0; j < deltas64.Length; ++j)
-                {
-                    ulong mask = network.Masks[j];
-                    if (mask != 0)
-                        actual = Bitops.SwapBitsMask(actual, deltas64[j], mask);
-                }
-
-                if (expected != actualNetwork || expected != actual)
-                    throw new Exception($"ne: {i}");
+                throw new ArgumentException("There is repeats in transposition.");
             }
 
-            ulong[] masks = new ulong[11];
-            for (int i = 0; i < 11; ++i)
-                masks[i] = network.Masks[i];
-            return masks;
+            if (permutation.Any(x => x >= 64))
+            {
+                throw new ArgumentException("Found value in transposition greater or equal 64.");
+            }
+
+            var inversedPermutation = new byte[64];
+            for (var i = 0; i < 64; ++i)
+            {
+                inversedPermutation[permutation[i]] = (byte)i;
+            }
+
+            var network = new PermutationNetwork(inversedPermutation);
+
+            if (network.Masks.Count != 11)
+            {
+                throw new Exception("Something went wrong - masks count is not equal 11.");
+            }
+
+            return network.Masks.ToArray();
         }
     }
 }
