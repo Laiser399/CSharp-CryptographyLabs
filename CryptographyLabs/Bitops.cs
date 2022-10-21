@@ -10,6 +10,7 @@ namespace CryptographyLabs
     {
         private static byte[] _deltas64 = new byte[] { 1, 2, 4, 8, 16, 32, 16, 8, 4, 2, 1 };
 
+        [Obsolete("Use IBitPermutationService")]
         public static ulong SwapBitsMasks64(ulong value, ulong[] masks)
         {
             if (_deltas64.Length != masks.Length)
@@ -24,16 +25,11 @@ namespace CryptographyLabs
             return value;
         }
 
+        [Obsolete("See BitPermutationService")]
         public static ulong SwapBitsMask(ulong x, int delta, ulong mask)
         {
             // page 177 (69)
             ulong y = (x ^ (x >> delta)) & mask;
-            return x ^ y ^ (y << delta);
-        }
-
-        public static uint SwapBitsMask(uint x, int delta, uint mask)
-        {
-            uint y = (x ^ (x >> delta)) & mask;
             return x ^ y ^ (y << delta);
         }
 
