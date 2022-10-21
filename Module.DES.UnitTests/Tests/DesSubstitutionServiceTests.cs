@@ -1,4 +1,5 @@
-﻿using Module.DES.Services.Abstract;
+﻿using Module.DES.Services;
+using Module.DES.Services.Abstract;
 using NUnit.Framework;
 
 namespace Module.DES.UnitTests.Tests;
@@ -11,8 +12,7 @@ public class DesSubstitutionServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _desSubstitutionService = null;
-        throw new NotImplementedException();
+        _desSubstitutionService = new DesSubstitutionService();
     }
 
     [Test]
