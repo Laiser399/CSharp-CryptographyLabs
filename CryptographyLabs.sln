@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.Core.UnitTests", "Mo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.DES", "Module.DES\Module.DES.csproj", "{088F90EA-019C-4A19-A567-5BD4C6862B05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.DES.UnitTests", "Module.DES.UnitTests\Module.DES.UnitTests.csproj", "{F5134FCA-D660-4F98-8440-80DCF781CCAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{088F90EA-019C-4A19-A567-5BD4C6862B05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{088F90EA-019C-4A19-A567-5BD4C6862B05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{088F90EA-019C-4A19-A567-5BD4C6862B05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5134FCA-D660-4F98-8440-80DCF781CCAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5134FCA-D660-4F98-8440-80DCF781CCAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5134FCA-D660-4F98-8440-80DCF781CCAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5134FCA-D660-4F98-8440-80DCF781CCAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
