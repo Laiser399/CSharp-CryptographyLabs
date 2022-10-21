@@ -20,7 +20,9 @@ public class DesInitialPermutationServiceTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _uInt64BitPermutationService = new DesInitialPermutationService();
+        _uInt64BitPermutationService = new DesInitialPermutationService(
+            new BitPermutationService()
+        );
     }
 
     [Test]
