@@ -6,9 +6,9 @@ public class BitPermutationService : IBitPermutationService
 {
     private static readonly byte[] Deltas64 = { 1, 2, 4, 8, 16, 32, 16, 8, 4, 2, 1 };
 
-    public ulong Permute(ulong value, ulong[] masks)
+    public ulong Permute(ulong value, IReadOnlyList<ulong> masks)
     {
-        if (masks.Length != 11)
+        if (masks.Count != 11)
         {
             throw new ArgumentException("Wrong masks count.");
         }
