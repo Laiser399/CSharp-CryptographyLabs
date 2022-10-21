@@ -59,7 +59,7 @@ public class PermutationServicesTests
         };
         yield return new object[]
         {
-            new DesFinalPermutationService(),
+            new DesFinalPermutationService(bitPermutationService),
             finalPermutationTable
         };
     }
