@@ -8,8 +8,23 @@ namespace Module.DES.UnitTests.Tests;
 public class PermutationServicesTests
 {
     [Test]
-    [TestCaseSource(nameof(GetTestCases))]
-    public void Permute_Test(
+    [TestCaseSource(nameof(GetTestCases32))]
+    public void Permute32_Test(
+        IUInt32BitPermutationService permutationService,
+        IReadOnlyList<byte> permutationTable)
+    {
+        for (var i = 0; i < permutationTable.Count; i++)
+        {
+            var value = 1u << i;
+            var expected = PermuteWithTable(value, permutationTable);
+            var actual = permutationService.Permute(value);
+            Assert.AreEqual(expected, actual);
+        }
+    }
+
+    [Test]
+    [TestCaseSource(nameof(GetTestCases64))]
+    public void Permute64_Test(
         IUInt64BitPermutationService permutationService,
         IReadOnlyList<byte> permutationTable)
     {
@@ -20,6 +35,17 @@ public class PermutationServicesTests
             var actual = permutationService.Permute(value);
             Assert.AreEqual(expected, actual);
         }
+    }
+
+    private static uint PermuteWithTable(uint value, IReadOnlyList<byte> permutationTable)
+    {
+        var result = 0u;
+        for (var i = 0; i < permutationTable.Count; i++)
+        {
+            result |= ((value >> permutationTable[i]) & 1) << i;
+        }
+
+        return result;
     }
 
     private static ulong PermuteWithTable(ulong value, IReadOnlyList<byte> permutationTable)
@@ -33,7 +59,23 @@ public class PermutationServicesTests
         return result;
     }
 
-    private static IEnumerable<object[]> GetTestCases()
+    private static IEnumerable<object[]> GetTestCases32()
+    {
+        var feistelFunctionPermutationTable = new byte[]
+        {
+            15, 6, 19, 20, 28, 11, 27, 16,
+            0, 14, 22, 25, 4, 17, 30, 9,
+            1, 7, 23, 13, 31, 26, 2, 8,
+            18, 12, 29, 5, 21, 10, 3, 24,
+        };
+        yield return new object[]
+        {
+            new FeistelFunctionPermutationService(),
+            feistelFunctionPermutationTable
+        };
+    }
+
+    private static IEnumerable<object[]> GetTestCases64()
     {
         var bitPermutationService = new BitPermutationService();
 
