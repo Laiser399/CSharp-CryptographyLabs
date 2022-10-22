@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CryptographyLabs.GUI.AbstractViewModels;
-using IRijndaelCryptoTransformFactory = Module.Core.Factories.Abstract.ICryptoTransformFactory<
-    Module.Rijndael.Entities.Abstract.IRijndaelParameters
->;
+using Module.Core.Factories.Abstract;
+using Module.Rijndael.Entities.Abstract;
 
 namespace CryptographyLabs.GUI
 {
@@ -99,7 +98,7 @@ namespace CryptographyLabs.GUI
             IRSAKeyGenerationVM rsaKeyGenerationVM,
             IRSATransformationVM rsaTransformation,
             IRSAAttackVM rsaAttackVM,
-            IRijndaelCryptoTransformFactory rijndaelCryptoTransformFactory)
+            ICryptoTransformFactory<IRijndaelParameters> rijndaelCryptoTransformFactory)
         {
             PrimesGeneration = primesGenerationVM;
             RSAKeyGeneration = rsaKeyGenerationVM;

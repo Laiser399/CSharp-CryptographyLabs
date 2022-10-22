@@ -1,13 +1,12 @@
 ﻿using System.Security.Cryptography;
 using Autofac;
 using Module.Core.Enums;
+using Module.Core.Factories.Abstract;
 using Module.Rijndael.Entities;
+using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Enums;
 using Module.Rijndael.UnitTests.Modules;
 using NUnit.Framework;
-using IRijndaelCryptoTransformFactory = Module.Core.Factories.Abstract.ICryptoTransformFactory<
-    Module.Rijndael.Entities.Abstract.IRijndaelParameters
->;
 
 namespace Module.Rijndael.UnitTests.Tests;
 
@@ -49,13 +48,13 @@ public class RijndaelTransformsTests
         75, 28, 217, 208, 125, 192
     };
 
-    private readonly IRijndaelCryptoTransformFactory _rijndaelCryptoTransformFactory;
+    private readonly ICryptoTransformFactory<IRijndaelParameters> _rijndaelCryptoTransformFactory;
     private Random _random = new(0);
 
     public RijndaelTransformsTests()
     {
         var container = BuildContainer();
-        _rijndaelCryptoTransformFactory = container.Resolve<IRijndaelCryptoTransformFactory>();
+        _rijndaelCryptoTransformFactory = container.Resolve<ICryptoTransformFactory<IRijndaelParameters>>();
     }
 
     [SetUp]

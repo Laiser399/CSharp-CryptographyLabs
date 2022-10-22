@@ -3,21 +3,20 @@ using CryptographyLabs.Crypto;
 using CryptographyLabs.Helpers;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Module.Core.Enums;
+using Module.Core.Factories.Abstract;
 using Module.Rijndael.Entities;
-using IRijndaelCryptoTransformFactory = Module.Core.Factories.Abstract.ICryptoTransformFactory<
-    Module.Rijndael.Entities.Abstract.IRijndaelParameters
->;
+using Module.Rijndael.Entities.Abstract;
 
 namespace CryptographyLabs.GUI
 {
     class RijndaelEncryptVM : RijndaelVM
     {
         private readonly MainWindowVM _owner;
-        private readonly IRijndaelCryptoTransformFactory _rijndaelCryptoTransformFactory;
+        private readonly ICryptoTransformFactory<IRijndaelParameters> _rijndaelCryptoTransformFactory;
 
         public RijndaelEncryptVM(
             MainWindowVM owner,
-            IRijndaelCryptoTransformFactory rijndaelCryptoTransformFactory)
+            ICryptoTransformFactory<IRijndaelParameters> rijndaelCryptoTransformFactory)
         {
             _owner = owner;
             _rijndaelCryptoTransformFactory = rijndaelCryptoTransformFactory;
