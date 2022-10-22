@@ -4,9 +4,9 @@ using CryptographyLabs;
 
 namespace ConsoleTests
 {
-    class Swapper : PermutationNetwork64
+    class Swapper64 : PermutationNetwork64
     {
-        internal Swapper(byte[] permutation, int phase)
+        internal Swapper64(byte[] permutation, int phase)
         {
             Masks.Add((permutation[0] == 1) ? 1ul << phase : 0);
         }
@@ -71,8 +71,8 @@ namespace ConsoleTests
             if (size == 4)
             {
                 // The recursion ends here by creating two swappers rather than normal permutation networks
-                permutationNetworkEven = new Swapper(permutationsInner[0], phase);
-                permutationNetworkOdd = new Swapper(permutationsInner[1], phase + delta);
+                permutationNetworkEven = new Swapper64(permutationsInner[0], phase);
+                permutationNetworkOdd = new Swapper64(permutationsInner[1], phase + delta);
             }
             else
             {
