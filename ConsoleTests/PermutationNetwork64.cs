@@ -4,7 +4,7 @@ using CryptographyLabs;
 
 namespace ConsoleTests
 {
-    class Swapper : PermutationNetwork
+    class Swapper : PermutationNetwork64
     {
         internal Swapper(byte[] permutation, int phase)
         {
@@ -12,17 +12,17 @@ namespace ConsoleTests
         }
     }
 
-    public class PermutationNetwork
+    public class PermutationNetwork64
     {
         // The list of masks for the final permutation
         public List<ulong> Masks { get; set; }
 
-        protected PermutationNetwork()
+        protected PermutationNetwork64()
         {
             Masks = new List<ulong>();
         }
 
-        public PermutationNetwork(byte[] permutation) : this()
+        public PermutationNetwork64(byte[] permutation) : this()
         {
             if (!CheckPermutation(permutation))
             {
@@ -50,15 +50,15 @@ namespace ConsoleTests
             return check == -1;
         }
 
-        private PermutationNetwork(byte[] permutation, int phaseParm) : this()
+        private PermutationNetwork64(byte[] permutation, int phaseParm) : this()
         {
             Initialize(permutation, phaseParm);
         }
 
         private void Initialize(byte[] permutation, int phase)
         {
-            PermutationNetwork permutationNetworkEven;
-            PermutationNetwork permutationNetworkOdd;
+            PermutationNetwork64 permutationNetworkEven;
+            PermutationNetwork64 permutationNetworkOdd;
             int size = permutation.Length;
             int delta = 64 / size;
             ulong inputMask;
@@ -77,8 +77,8 @@ namespace ConsoleTests
             else
             {
                 // For larger sizes, the inner networks are standard permutation networks
-                permutationNetworkEven = new PermutationNetwork(permutationsInner[0], phase);
-                permutationNetworkOdd = new PermutationNetwork(permutationsInner[1], phase + delta);
+                permutationNetworkEven = new PermutationNetwork64(permutationsInner[0], phase);
+                permutationNetworkOdd = new PermutationNetwork64(permutationsInner[1], phase + delta);
             }
 
             // Extract the masks from our inner permutation networks into our list of masks
@@ -206,7 +206,7 @@ namespace ConsoleTests
             return maskCur | (1ul << (2 * switcher * delta + phase));
         }
 
-        private void ExtractMasks(PermutationNetwork even, PermutationNetwork odd, ulong inputMask, ulong outputMask)
+        private void ExtractMasks(PermutationNetwork64 even, PermutationNetwork64 odd, ulong inputMask, ulong outputMask)
         {
             List<ulong> masksEven = even.Masks;
             List<ulong> masksOdd = odd.Masks;

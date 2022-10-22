@@ -107,7 +107,7 @@ namespace ConsoleTests
                 inversedPermutation[permutation[i]] = (byte)i;
             }
 
-            var network = new PermutationNetwork(inversedPermutation);
+            var network = new PermutationNetwork64(inversedPermutation);
 
             if (network.Masks.Count != 11)
             {

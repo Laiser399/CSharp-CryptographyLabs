@@ -32,7 +32,7 @@ namespace UnitTests
             byte[] _IPTransposeInversedReversed = new byte[64];
             for (int i = 0; i < 64; ++i)
                 _IPTransposeInversedReversed[_IPTranspose[63 - i]] = (byte)i;
-            var network = new PermutationNetwork(_IPTransposeInversedReversed);
+            var network = new PermutationNetwork64(_IPTransposeInversedReversed);
 
 
             Random random = new Random(123);
