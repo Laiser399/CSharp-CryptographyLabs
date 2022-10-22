@@ -93,7 +93,7 @@ public class PermutationServicesTests
         };
         yield return new object[]
         {
-            new KeyInitialPermutationService(),
+            new KeyInitialPermutationService(bitPermutationService),
             keyInitialPermutationService
         };
     }
