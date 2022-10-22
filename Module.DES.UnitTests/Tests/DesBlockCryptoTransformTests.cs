@@ -3,6 +3,7 @@ using Module.Core.Factories.Abstract;
 using Module.Core.UnitTests.Tests;
 using Module.DES.Entities;
 using Module.DES.Entities.Abstract;
+using Module.PermutationNetwork;
 using NUnit.Framework;
 
 namespace Module.DES.UnitTests.Tests;
@@ -38,6 +39,7 @@ public class DesBlockCryptoTransformTests : BlockCryptoTransformBaseTests<IDesPa
         var builder = new ContainerBuilder();
 
         builder.RegisterModule<DesModule>();
+        builder.RegisterModule<PermutationNetworkModule>();
 
         return builder.Build();
     }

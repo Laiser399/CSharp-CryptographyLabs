@@ -6,6 +6,7 @@ using CryptographyLabs.GUI.ViewModels;
 using FluentValidation;
 using Module.Core;
 using Module.DES;
+using Module.PermutationNetwork;
 using Module.Rijndael;
 using Module.RSA;
 
@@ -87,6 +88,8 @@ public static class AppContainer
         });
 
         builder.RegisterModule<DesModule>();
+
+        builder.RegisterModule<PermutationNetworkModule>();
 
         builder.RegisterModule<CoreModule>();
 
