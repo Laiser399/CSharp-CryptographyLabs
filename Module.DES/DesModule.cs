@@ -5,6 +5,8 @@ using Module.DES.Entities.Abstract;
 using Module.DES.Enums;
 using Module.DES.Factories;
 using Module.DES.Factories.Abstract;
+using Module.DES.Permutations;
+using Module.DES.Permutations.Abstract;
 using Module.DES.Services;
 using Module.DES.Services.Abstract;
 
@@ -20,7 +22,7 @@ public class DesModule : Autofac.Module
         builder
             .RegisterType<DesBlockDecryptTransform>()
             .AsSelf();
-        
+
         RegisterFactories(builder);
         RegisterServices(builder);
         RegisterPermutationServices(builder);

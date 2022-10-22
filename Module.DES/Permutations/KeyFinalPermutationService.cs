@@ -1,6 +1,7 @@
-﻿using Module.DES.Services.Abstract;
+﻿using Module.DES.Permutations.Abstract;
+using Module.DES.Services.Abstract;
 
-namespace Module.DES.Services;
+namespace Module.DES.Permutations;
 
 public class KeyFinalPermutationService : IUInt64BitPermutationService
 {

@@ -1,4 +1,4 @@
-﻿namespace Module.DES.Services.Abstract;
+﻿namespace Module.DES.Permutations.Abstract;
 
 public interface IUInt32BitPermutationService
 {

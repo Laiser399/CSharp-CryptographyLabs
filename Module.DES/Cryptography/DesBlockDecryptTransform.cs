@@ -2,6 +2,7 @@
 using Module.Core.Cryptography.Abstract;
 using Module.DES.Entities.Abstract;
 using Module.DES.Enums;
+using Module.DES.Permutations.Abstract;
 using Module.DES.Services.Abstract;
 
 namespace Module.DES.Cryptography;

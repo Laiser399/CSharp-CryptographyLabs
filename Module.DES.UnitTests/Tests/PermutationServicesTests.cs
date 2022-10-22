@@ -1,5 +1,6 @@
-﻿using Module.DES.Services;
-using Module.DES.Services.Abstract;
+﻿using Module.DES.Permutations;
+using Module.DES.Permutations.Abstract;
+using Module.DES.Services;
 using Module.DES.UnitTests.Helpers;
 using NUnit.Framework;
 

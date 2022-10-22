@@ -1,5 +1,6 @@
 ﻿using Autofac.Features.Indexed;
 using Module.DES.Enums;
+using Module.DES.Permutations.Abstract;
 using Module.DES.Services.Abstract;
 
 namespace Module.DES.Services;
