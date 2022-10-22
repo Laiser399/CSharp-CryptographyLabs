@@ -33,6 +33,12 @@ namespace CryptographyLabs
             return x ^ y ^ (y << delta);
         }
 
+        public static uint SwapBitsMask(uint x, int delta, uint mask)
+        {
+            var y = (x ^ (x >> delta)) & mask;
+            return x ^ y ^ (y << delta);
+        }
+
         // simple tasks
         // Task11
         public static byte GetKthBit(uint a, int k)
