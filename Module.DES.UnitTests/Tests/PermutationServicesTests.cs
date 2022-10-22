@@ -84,7 +84,7 @@ public class PermutationServicesTests
             finalPermutationTable
         };
 
-        var keyInitialPermutationService = new byte[]
+        var keyInitialPermutationTable = new byte[]
         {
             56, 48, 40, 32, 24, 16, 8, 0, 57, 49, 41, 33, 25, 17,
             9, 1, 58, 50, 42, 34, 26, 18, 10, 2, 59, 51, 43, 35,
@@ -94,7 +94,19 @@ public class PermutationServicesTests
         yield return new object[]
         {
             new KeyInitialPermutationService(bitPermutationService),
-            keyInitialPermutationService
+            keyInitialPermutationTable
+        };
+
+        var keyFinalPermutationTable = new byte[]
+        {
+            13, 16, 10, 23, 0, 4, 2, 27, 14, 5, 20, 9, 22, 18, 11, 3,
+            25, 7, 15, 6, 26, 19, 12, 1, 40, 51, 30, 36, 46, 54, 29, 39,
+            50, 44, 32, 47, 43, 48, 38, 55, 33, 52, 45, 41, 49, 35, 28, 31,
+        };
+        yield return new object[]
+        {
+            new KeyFinalPermutationService(),
+            keyFinalPermutationTable
         };
     }
 }
