@@ -1,7 +1,7 @@
 ﻿using Module.DES.Permutations;
 using Module.DES.Permutations.Abstract;
-using Module.DES.Services;
 using Module.DES.UnitTests.Helpers;
+using Module.PermutationNetwork.Services;
 using NUnit.Framework;
 
 namespace Module.DES.UnitTests.Tests;

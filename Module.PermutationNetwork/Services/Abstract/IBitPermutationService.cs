@@ -1,4 +1,4 @@
-﻿namespace Module.DES.Services.Abstract;
+﻿namespace Module.PermutationNetwork.Services.Abstract;
 
 public interface IBitPermutationService
 {

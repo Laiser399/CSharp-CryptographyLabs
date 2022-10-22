@@ -51,10 +51,6 @@ public class DesModule : Autofac.Module
             .As<IBitOperationsService>()
             .SingleInstance();
         builder
-            .RegisterType<BitPermutationService>()
-            .As<IBitPermutationService>()
-            .SingleInstance();
-        builder
             .RegisterType<FeistelFunctionService>()
             .As<IFeistelFunctionService>()
             .SingleInstance();

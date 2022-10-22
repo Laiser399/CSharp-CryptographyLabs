@@ -1,6 +1,6 @@
-﻿using Module.DES.Services.Abstract;
+﻿using Module.PermutationNetwork.Services.Abstract;
 
-namespace Module.DES.Services;
+namespace Module.PermutationNetwork.Services;
 
 public class BitPermutationService : IBitPermutationService
 {

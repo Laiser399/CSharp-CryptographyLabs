@@ -1,5 +1,5 @@
 ﻿using Module.DES.Permutations.Abstract;
-using Module.DES.Services.Abstract;
+using Module.PermutationNetwork.Services.Abstract;
 
 namespace Module.DES.Permutations;
 
