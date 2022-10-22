@@ -4,9 +4,9 @@ using Module.DES.Entities.Abstract;
 using Module.DES.Enums;
 using Module.DES.Services.Abstract;
 
-namespace Module.DES.Services;
+namespace Module.DES.Cryptography;
 
-public class DesBlockEncryptTransform : IBlockCryptoTransform
+public class DesBlockDecryptTransform : IBlockCryptoTransform
 {
     public int InputBlockSize => 8;
     public int OutputBlockSize => 8;
@@ -16,7 +16,7 @@ public class DesBlockEncryptTransform : IBlockCryptoTransform
     private readonly IUInt64BitPermutationService _initialPermutationService;
     private readonly IUInt64BitPermutationService _finalPermutationService;
 
-    public DesBlockEncryptTransform(
+    public DesBlockDecryptTransform(
         IDesKey key,
         IFeistelFunctionService feistelFunctionService,
         IIndex<PermutationType, IUInt64BitPermutationService> permutationServices)
@@ -36,9 +36,9 @@ public class DesBlockEncryptTransform : IBlockCryptoTransform
         var left = (uint)(initialPermutationResult >> 32);
         var right = (uint)(initialPermutationResult & 0xffffffff);
 
-        for (var i = 0; i < 16; ++i)
+        for (var i = 15; i > -1; --i)
         {
-            (left, right) = (right, left ^ _feistelFunctionService.Calculate(right, _key.RoundKeys48[i]));
+            (left, right) = (right ^ _feistelFunctionService.Calculate(left, _key.RoundKeys48[i]), left);
         }
 
         var concatenated = ((ulong)left << 32) | right;

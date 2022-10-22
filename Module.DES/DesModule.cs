@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Module.Core.Factories.Abstract;
+using Module.DES.Cryptography;
 using Module.DES.Entities.Abstract;
 using Module.DES.Enums;
 using Module.DES.Factories;

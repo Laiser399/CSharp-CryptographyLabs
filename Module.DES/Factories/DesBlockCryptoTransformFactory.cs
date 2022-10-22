@@ -2,9 +2,9 @@
 using Module.Core.Cryptography.Abstract;
 using Module.Core.Enums;
 using Module.Core.Factories.Abstract;
+using Module.DES.Cryptography;
 using Module.DES.Entities.Abstract;
 using Module.DES.Factories.Abstract;
-using Module.DES.Services;
 
 namespace Module.DES.Factories;
 
