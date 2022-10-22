@@ -7,6 +7,7 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Module.Core.UnitTests\Module.Core.UnitTests.csproj" />
     <ProjectReference Include="..\Module.Rijndael\Module.Rijndael.csproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
