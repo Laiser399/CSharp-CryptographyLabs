@@ -4,7 +4,5 @@ public interface IGaloisFieldCalculationService
 {
     byte Multiply(byte a, byte b);
 
-    byte Divide(byte a, byte b);
-
     byte Inverse(byte a);
 }

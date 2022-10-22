@@ -32,15 +32,6 @@ public class GaloisFieldCalculationServiceTests
         Assert.AreEqual(expected, actual);
     }
 
-    // todo add cases later
-    [Test]
-    [TestCase(0, 0, 0)]
-    public void Divide_Test(byte a, byte b, byte expected)
-    {
-        var actual = _galoisFieldCalculationService!.Divide(a, b);
-        Assert.AreEqual(expected, actual);
-    }
-
     [Test]
     public void Inverse_FullTest()
     {

@@ -34,11 +34,6 @@ public class GaloisFieldCalculationService : IGaloisFieldCalculationService
         return (byte)result;
     }
 
-    public byte Divide(byte a, byte b)
-    {
-        throw new NotImplementedException();
-    }
-
     public byte Inverse(byte a)
     {
         return Pow(a, 254);
