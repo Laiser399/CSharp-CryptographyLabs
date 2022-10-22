@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Module.Core.Factories.Abstract;
 using Module.Rijndael.Cryptography;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Factories;
@@ -28,8 +29,8 @@ public class RijndaelModule : Autofac.Module
     private void RegisterFactories(ContainerBuilder builder)
     {
         builder
-            .RegisterType<RijndaelCryptoTransformFactory>()
-            .As<IRijndaelCryptoTransformFactory>()
+            .RegisterType<RijndaelBlockCryptoTransformFactory>()
+            .As<IBlockCryptoTransformFactory<IRijndaelBlockCryptoTransformParameters>>()
             .SingleInstance();
         builder
             .RegisterType<RijndaelKeyFactory>()

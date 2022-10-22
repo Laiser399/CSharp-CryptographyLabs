@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using CryptographyLabs.GUI.AbstractViewModels;
-using Module.Rijndael.Factories.Abstract;
+using IRijndaelCryptoTransformFactory = Module.Core.Factories.Abstract.ICryptoTransformFactory<
+    Module.Rijndael.Entities.Abstract.IRijndaelBlockCryptoTransformParameters
+>;
 
 namespace CryptographyLabs.GUI
 {
@@ -133,6 +135,4 @@ namespace CryptographyLabs.GUI
                 DesVM = _desDecryptVM;
         }
     }
-
-
 }

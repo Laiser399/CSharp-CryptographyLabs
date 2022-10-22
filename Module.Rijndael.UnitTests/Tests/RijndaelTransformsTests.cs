@@ -1,10 +1,13 @@
 ﻿using System.Security.Cryptography;
 using Autofac;
 using Module.Core.Enums;
+using Module.Rijndael.Entities;
 using Module.Rijndael.Enums;
-using Module.Rijndael.Factories.Abstract;
 using Module.Rijndael.UnitTests.Modules;
 using NUnit.Framework;
+using IRijndaelCryptoTransformFactory = Module.Core.Factories.Abstract.ICryptoTransformFactory<
+    Module.Rijndael.Entities.Abstract.IRijndaelBlockCryptoTransformParameters
+>;
 
 namespace Module.Rijndael.UnitTests.Tests;
 
@@ -91,10 +94,9 @@ public class RijndaelTransformsTests
 
     private ICryptoTransform GetEcbCryptoTransform(TransformDirection direction, bool withParallelism)
     {
-        return _rijndaelCryptoTransformFactory.CreateECB(
+        return _rijndaelCryptoTransformFactory.CreateEcb(
             direction,
-            KeyBytes,
-            BlockSize,
+            new RijndaelBlockCryptoTransformParameters(KeyBytes, BlockSize),
             withParallelism
         );
     }
@@ -102,11 +104,10 @@ public class RijndaelTransformsTests
     private ICryptoTransform GetCryptoTransform(BlockCipherMode mode, TransformDirection direction)
     {
         return _rijndaelCryptoTransformFactory.Create(
-            mode,
             direction,
-            InitialVector,
-            KeyBytes,
-            BlockSize
+            new RijndaelBlockCryptoTransformParameters(KeyBytes, BlockSize),
+            mode,
+            InitialVector
         );
     }
 

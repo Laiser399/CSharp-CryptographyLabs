@@ -2,6 +2,7 @@
 using Module.Core;
 using Module.Core.Cryptography.Abstract;
 using Module.Core.Enums;
+using Module.Core.Factories.Abstract;
 using Module.Rijndael.Cryptography;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Factories;
@@ -18,8 +19,8 @@ public class RijndaelModuleForTests : Autofac.Module
         builder.RegisterModule<CoreModule>();
 
         builder
-            .RegisterType<RijndaelCryptoTransformFactory>()
-            .As<IRijndaelCryptoTransformFactory>()
+            .RegisterType<RijndaelBlockCryptoTransformFactory>()
+            .As<IBlockCryptoTransformFactory<IRijndaelBlockCryptoTransformParameters>>()
             .SingleInstance();
         builder
             .RegisterType<RijndaelKeyFactory>()
