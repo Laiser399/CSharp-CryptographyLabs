@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.DES", "Module.DES\Mo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.DES.UnitTests", "Module.DES.UnitTests\Module.DES.UnitTests.csproj", "{F5134FCA-D660-4F98-8440-80DCF781CCAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.PermutationNetwork", "Module.PermutationNetwork\Module.PermutationNetwork.csproj", "{96A3CFC8-F239-423C-A150-204D46D639FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{F5134FCA-D660-4F98-8440-80DCF781CCAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5134FCA-D660-4F98-8440-80DCF781CCAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5134FCA-D660-4F98-8440-80DCF781CCAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96A3CFC8-F239-423C-A150-204D46D639FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96A3CFC8-F239-423C-A150-204D46D639FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96A3CFC8-F239-423C-A150-204D46D639FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96A3CFC8-F239-423C-A150-204D46D639FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
