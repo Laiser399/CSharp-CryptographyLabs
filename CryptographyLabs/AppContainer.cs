@@ -5,6 +5,7 @@ using CryptographyLabs.GUI.Validators;
 using CryptographyLabs.GUI.ViewModels;
 using FluentValidation;
 using Module.Core;
+using Module.DES;
 using Module.Rijndael;
 using Module.RSA;
 
@@ -84,6 +85,8 @@ public static class AppContainer
         {
             UseDefaultGaloisFieldConfiguration = true
         });
+
+        builder.RegisterModule<DesModule>();
 
         builder.RegisterModule<CoreModule>();
 

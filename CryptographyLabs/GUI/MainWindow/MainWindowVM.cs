@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CryptographyLabs.GUI.AbstractViewModels;
 using Module.Core.Factories.Abstract;
+using Module.DES.Entities.Abstract;
 using Module.Rijndael.Entities.Abstract;
 
 namespace CryptographyLabs.GUI
@@ -98,7 +99,8 @@ namespace CryptographyLabs.GUI
             IRSAKeyGenerationVM rsaKeyGenerationVM,
             IRSATransformationVM rsaTransformation,
             IRSAAttackVM rsaAttackVM,
-            ICryptoTransformFactory<IRijndaelParameters> rijndaelCryptoTransformFactory)
+            ICryptoTransformFactory<IRijndaelParameters> rijndaelCryptoTransformFactory,
+            ICryptoTransformFactory<IDesParameters> desCryptoTransformFactory)
         {
             PrimesGeneration = primesGenerationVM;
             RSAKeyGeneration = rsaKeyGenerationVM;
@@ -109,8 +111,8 @@ namespace CryptographyLabs.GUI
             _rijndaelDecryptVM = new RijndaelDecryptVM(this, rijndaelCryptoTransformFactory);
 
             var desVM = new DesVM();
-            _desEncryptVM = new DesEncryptVM(desVM, this);
-            _desDecryptVM = new DesDecryptVM(desVM, this);
+            _desEncryptVM = new DesEncryptVM(desVM, this, desCryptoTransformFactory);
+            _desDecryptVM = new DesDecryptVM(desVM, this, desCryptoTransformFactory);
 
             _frogVM = new FrogVM(this);
 
