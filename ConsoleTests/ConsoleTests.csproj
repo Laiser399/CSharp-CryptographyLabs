@@ -5,9 +5,12 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CryptographyLabs\CryptographyLabs.csproj" />
+    <ProjectReference Include="..\Module.PermutationNetwork\Module.PermutationNetwork.csproj" />
+    <ProjectReference Include="..\Module.Rijndael\Module.Rijndael.csproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
