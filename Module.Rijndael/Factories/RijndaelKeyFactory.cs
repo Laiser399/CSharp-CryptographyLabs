@@ -6,9 +6,9 @@ namespace Module.Rijndael.Factories;
 
 public class RijndaelKeyFactory : IRijndaelKeyFactory
 {
-    public IRijndaelKey Create(byte[] key)
+    public IRijndaelKey Create(IReadOnlyList<byte> key)
     {
-        return key.Length switch
+        return key.Count switch
         {
             16 => new RijndaelKey(RijndaelSize.S128, key),
             24 => new RijndaelKey(RijndaelSize.S192, key),
@@ -24,10 +24,10 @@ public class RijndaelKeyFactory : IRijndaelKeyFactory
 
         private readonly byte[] _key;
 
-        public RijndaelKey(RijndaelSize size, byte[] key)
+        public RijndaelKey(RijndaelSize size, IReadOnlyList<byte> key)
         {
             Size = size;
-            _key = key;
+            _key = key.ToArray();
         }
     }
 }
