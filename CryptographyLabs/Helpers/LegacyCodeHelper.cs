@@ -18,6 +18,18 @@ public static class LegacyCodeHelper
         };
     }
 
+    public static BlockCipherMode Fix(DES_.Mode mode)
+    {
+        return mode switch
+        {
+            DES_.Mode.CBC => BlockCipherMode.CBC,
+            DES_.Mode.CFB => BlockCipherMode.CFB,
+            DES_.Mode.OFB => BlockCipherMode.OFB,
+            DES_.Mode.ECB or _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
+        };
+    }
+
+
     public static RijndaelSize Fix(Rijndael_.Size size)
     {
         return size switch

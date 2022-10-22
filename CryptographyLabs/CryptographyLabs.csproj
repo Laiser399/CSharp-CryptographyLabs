@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Module.DES\Module.DES.csproj" />
     <ProjectReference Include="..\Module.Rijndael\Module.Rijndael.csproj" />
     <ProjectReference Include="..\Module.RSA\Module.RSA.csproj" />
   </ItemGroup>
