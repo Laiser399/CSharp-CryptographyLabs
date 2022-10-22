@@ -1,8 +1,8 @@
-﻿using System.Security.Cryptography;
-using Autofac;
+﻿using Autofac;
 using Module.Core;
 using Module.Core.Enums;
 using Module.Core.Factories.Abstract;
+using Module.Core.UnitTests.Tests;
 using Module.Rijndael.Entities;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Enums;
@@ -11,34 +11,18 @@ using NUnit.Framework;
 namespace Module.Rijndael.UnitTests.Tests;
 
 [TestFixture]
-public class RijndaelTransformsTests
+public class RijndaelTransformsTests : CryptoTransformsBaseTests<IRijndaelParameters>
 {
-    private static readonly IReadOnlyCollection<BlockCipherMode> ModeCases = new[]
-    {
-        BlockCipherMode.CBC,
-        BlockCipherMode.CFB,
-        BlockCipherMode.OFB
-    };
-
-    private static readonly IReadOnlyCollection<int> BlockCountCases = new[]
-    {
-        0, 10, 999
-    };
-
-    private static readonly IReadOnlyCollection<int> HangingByteCountCases = new[]
-    {
-        0, 1, 2, -1, 7
-    };
-
-    private static readonly byte[] KeyBytes =
-    {
-        93, 230, 245, 204, 216, 129,
-        66, 132, 92, 63, 19, 244,
-        227, 157, 177, 22, 49, 56,
-        50, 142, 121, 181, 247, 18
-    };
-
-    private static readonly RijndaelSize BlockSize = RijndaelSize.S192;
+    private static readonly IRijndaelParameters RijndaelParameters = new RijndaelParameters(
+        new byte[]
+        {
+            93, 230, 245, 204, 216, 129,
+            66, 132, 92, 63, 19, 244,
+            227, 157, 177, 22, 49, 56,
+            50, 142, 121, 181, 247, 18
+        },
+        RijndaelSize.S192
+    );
 
     private static readonly byte[] InitialVector =
     {
@@ -48,65 +32,49 @@ public class RijndaelTransformsTests
         75, 28, 217, 208, 125, 192
     };
 
-    private readonly ICryptoTransformFactory<IRijndaelParameters> _rijndaelCryptoTransformFactory;
-    private Random _random = new(0);
+    private readonly IContainer _container;
 
     public RijndaelTransformsTests()
     {
-        var container = BuildContainer();
-        _rijndaelCryptoTransformFactory = container.Resolve<ICryptoTransformFactory<IRijndaelParameters>>();
+        _container = BuildContainer();
     }
 
-    [SetUp]
-    public void SetUp()
+    protected override ICryptoTransformFactory<IRijndaelParameters> GetCryptoTransformFactory()
     {
-        _random = new Random(123);
+        return _container.Resolve<ICryptoTransformFactory<IRijndaelParameters>>();
     }
 
     [Test]
     [TestCaseSource(nameof(GetEcbTestCases))]
-    public void Transform_EcbTest(int blockCount, int hangingByteCount, bool withParallelism)
+    public void Transform_EcbTest(
+        IRijndaelParameters parameters,
+        bool withParallelism,
+        int blockCount,
+        int hangingByteCount)
     {
-        var encryptTransform = GetEcbCryptoTransform(TransformDirection.Encrypt, withParallelism);
-        var decryptTransform = GetEcbCryptoTransform(TransformDirection.Decrypt, withParallelism);
-
-        TestTransform(
-            encryptTransform.InputBlockSize * blockCount + hangingByteCount,
-            encryptTransform,
-            decryptTransform
+        TestEcbTransform(
+            parameters,
+            withParallelism,
+            blockCount,
+            hangingByteCount
         );
     }
 
     [Test]
     [TestCaseSource(nameof(GetTestCases))]
-    public void Transform_Test(BlockCipherMode mode, int blockCount, int hangingByteCount)
+    public void Transform_Test(
+        IRijndaelParameters parameters,
+        BlockCipherMode mode,
+        byte[] initialVector,
+        int blockCount,
+        int hangingByteCount)
     {
-        var encryptTransform = GetCryptoTransform(mode, TransformDirection.Encrypt);
-        var decryptTransform = GetCryptoTransform(mode, TransformDirection.Decrypt);
-
         TestTransform(
-            encryptTransform.InputBlockSize * blockCount + hangingByteCount,
-            encryptTransform,
-            decryptTransform
-        );
-    }
-
-    private ICryptoTransform GetEcbCryptoTransform(TransformDirection direction, bool withParallelism)
-    {
-        return _rijndaelCryptoTransformFactory.CreateEcb(
-            direction,
-            new RijndaelParameters(KeyBytes, BlockSize),
-            withParallelism
-        );
-    }
-
-    private ICryptoTransform GetCryptoTransform(BlockCipherMode mode, TransformDirection direction)
-    {
-        return _rijndaelCryptoTransformFactory.Create(
-            direction,
-            new RijndaelParameters(KeyBytes, BlockSize),
+            parameters,
             mode,
-            InitialVector
+            initialVector,
+            blockCount,
+            hangingByteCount
         );
     }
 
@@ -117,7 +85,13 @@ public class RijndaelTransformsTests
             from hangingByteCount in HangingByteCountCases
             from withParallelism in new[] { true, false }
             where blockCount != 0 || hangingByteCount >= 0
-            select new object[] { blockCount, hangingByteCount, withParallelism };
+            select new object[]
+            {
+                RijndaelParameters,
+                withParallelism,
+                blockCount,
+                hangingByteCount
+            };
 
         return testCases.ToList();
     }
@@ -129,31 +103,16 @@ public class RijndaelTransformsTests
             from blockCount in BlockCountCases
             from hangingByteCount in HangingByteCountCases
             where blockCount != 0 || hangingByteCount >= 0
-            select new object[] { mode, blockCount, hangingByteCount };
+            select new object[]
+            {
+                RijndaelParameters,
+                mode,
+                InitialVector,
+                blockCount,
+                hangingByteCount
+            };
 
         return testCases.ToList();
-    }
-
-    private void TestTransform(int byteCount, ICryptoTransform encryptTransform, ICryptoTransform decryptTransform)
-    {
-        var data = new byte[byteCount];
-        _random.NextBytes(data);
-
-        var encrypted = Transform(data, encryptTransform);
-        var decrypted = Transform(encrypted, decryptTransform);
-
-        CollectionAssert.AreNotEqual(data, encrypted);
-        CollectionAssert.AreEqual(data, decrypted);
-    }
-
-    private static byte[] Transform(byte[] data, ICryptoTransform cryptoTransform)
-    {
-        using var output = new MemoryStream();
-        using var input = new MemoryStream(data);
-        using var transformStream = new CryptoStream(input, cryptoTransform, CryptoStreamMode.Read);
-
-        transformStream.CopyTo(output);
-        return output.ToArray();
     }
 
     private static IContainer BuildContainer()
