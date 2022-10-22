@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Module.Core.UnitTests\Module.Core.UnitTests.csproj" />
     <ProjectReference Include="..\Module.DES\Module.DES.csproj" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
