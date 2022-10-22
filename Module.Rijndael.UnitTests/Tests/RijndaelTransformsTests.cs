@@ -6,7 +6,7 @@ using Module.Rijndael.Enums;
 using Module.Rijndael.UnitTests.Modules;
 using NUnit.Framework;
 using IRijndaelCryptoTransformFactory = Module.Core.Factories.Abstract.ICryptoTransformFactory<
-    Module.Rijndael.Entities.Abstract.IRijndaelBlockCryptoTransformParameters
+    Module.Rijndael.Entities.Abstract.IRijndaelParameters
 >;
 
 namespace Module.Rijndael.UnitTests.Tests;
@@ -96,7 +96,7 @@ public class RijndaelTransformsTests
     {
         return _rijndaelCryptoTransformFactory.CreateEcb(
             direction,
-            new RijndaelBlockCryptoTransformParameters(KeyBytes, BlockSize),
+            new RijndaelParameters(KeyBytes, BlockSize),
             withParallelism
         );
     }
@@ -105,7 +105,7 @@ public class RijndaelTransformsTests
     {
         return _rijndaelCryptoTransformFactory.Create(
             direction,
-            new RijndaelBlockCryptoTransformParameters(KeyBytes, BlockSize),
+            new RijndaelParameters(KeyBytes, BlockSize),
             mode,
             InitialVector
         );

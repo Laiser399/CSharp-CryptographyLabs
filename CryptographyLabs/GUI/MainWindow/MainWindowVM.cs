@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CryptographyLabs.GUI.AbstractViewModels;
 using IRijndaelCryptoTransformFactory = Module.Core.Factories.Abstract.ICryptoTransformFactory<
-    Module.Rijndael.Entities.Abstract.IRijndaelBlockCryptoTransformParameters
+    Module.Rijndael.Entities.Abstract.IRijndaelParameters
 >;
 
 namespace CryptographyLabs.GUI

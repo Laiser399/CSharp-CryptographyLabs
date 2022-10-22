@@ -7,23 +7,23 @@ namespace Module.Rijndael.Cryptography;
 
 public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
 {
-    public int InputBlockSize => _rijndaelParameters.BlockSize;
-    public int OutputBlockSize => _rijndaelParameters.BlockSize;
+    public int InputBlockSize => _parameters.BlockSize;
+    public int OutputBlockSize => _parameters.BlockSize;
 
-    private readonly IRijndaelParameters _rijndaelParameters;
+    private readonly IRijndaelBlockCryptoTransformParameters _parameters;
     private readonly IXorService _xorService;
     private readonly IRijndaelSubstitutionService _rijndaelSubstitutionService;
     private readonly IRijndaelShiftRowsService _rijndaelShiftRowsService;
     private readonly IRijndaelMixColumnsService _rijndaelMixColumnsService;
 
     public RijndaelBlockEncryptTransform(
-        IRijndaelParameters rijndaelParameters,
+        IRijndaelBlockCryptoTransformParameters parameters,
         IXorService xorService,
         IRijndaelSubstitutionService rijndaelSubstitutionService,
         IRijndaelShiftRowsService rijndaelShiftRowsService,
         IRijndaelMixColumnsService rijndaelMixColumnsService)
     {
-        _rijndaelParameters = rijndaelParameters;
+        _parameters = parameters;
         _xorService = xorService;
         _rijndaelSubstitutionService = rijndaelSubstitutionService;
         _rijndaelShiftRowsService = rijndaelShiftRowsService;
@@ -36,30 +36,30 @@ public class RijndaelBlockEncryptTransform : IBlockCryptoTransform
 
         input.CopyTo(output);
 
-        AddKey(output, _rijndaelParameters.InitialKey);
+        AddKey(output, _parameters.InitialKey);
 
-        for (var i = 0; i < _rijndaelParameters.RoundCount; i++)
+        for (var i = 0; i < _parameters.RoundCount; i++)
         {
             _rijndaelSubstitutionService.SubstituteBytes(output);
             _rijndaelShiftRowsService.ShiftRows(output);
 
-            if (i < _rijndaelParameters.RoundCount - 1)
+            if (i < _parameters.RoundCount - 1)
             {
                 _rijndaelMixColumnsService.MixColumns(output);
             }
 
-            AddKey(output, _rijndaelParameters.GetRoundKey(i));
+            AddKey(output, _parameters.GetRoundKey(i));
         }
     }
 
     private void ValidateArguments(ReadOnlySpan<byte> input, Span<byte> output)
     {
-        if (input.Length != _rijndaelParameters.BlockSize)
+        if (input.Length != _parameters.BlockSize)
         {
             throw new ArgumentException("Invalid length of input span size.", nameof(input));
         }
 
-        if (output.Length != _rijndaelParameters.BlockSize)
+        if (output.Length != _parameters.BlockSize)
         {
             throw new ArgumentException("Invalid length of output span size.", nameof(output));
         }

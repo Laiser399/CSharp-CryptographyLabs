@@ -7,23 +7,23 @@ namespace Module.Rijndael.Cryptography;
 
 public class RijndaelBlockDecryptTransform : IBlockCryptoTransform
 {
-    public int InputBlockSize => _rijndaelParameters.BlockSize;
-    public int OutputBlockSize => _rijndaelParameters.BlockSize;
+    public int InputBlockSize => _parameters.BlockSize;
+    public int OutputBlockSize => _parameters.BlockSize;
 
-    private readonly IRijndaelParameters _rijndaelParameters;
+    private readonly IRijndaelBlockCryptoTransformParameters _parameters;
     private readonly IXorService _xorService;
     private readonly IRijndaelSubstitutionService _rijndaelSubstitutionService;
     private readonly IRijndaelShiftRowsService _rijndaelShiftRowsService;
     private readonly IRijndaelMixColumnsService _rijndaelMixColumnsService;
 
     public RijndaelBlockDecryptTransform(
-        IRijndaelParameters rijndaelParameters,
+        IRijndaelBlockCryptoTransformParameters parameters,
         IXorService xorService,
         IRijndaelSubstitutionService rijndaelSubstitutionService,
         IRijndaelShiftRowsService rijndaelShiftRowsService,
         IRijndaelMixColumnsService rijndaelMixColumnsService)
     {
-        _rijndaelParameters = rijndaelParameters;
+        _parameters = parameters;
         _xorService = xorService;
         _rijndaelSubstitutionService = rijndaelSubstitutionService;
         _rijndaelShiftRowsService = rijndaelShiftRowsService;
@@ -36,11 +36,11 @@ public class RijndaelBlockDecryptTransform : IBlockCryptoTransform
 
         input.CopyTo(output);
 
-        for (var i = _rijndaelParameters.RoundCount - 1; i >= 0; i--)
+        for (var i = _parameters.RoundCount - 1; i >= 0; i--)
         {
-            AddKey(output, _rijndaelParameters.GetRoundKey(i));
+            AddKey(output, _parameters.GetRoundKey(i));
 
-            if (i < _rijndaelParameters.RoundCount - 1)
+            if (i < _parameters.RoundCount - 1)
             {
                 _rijndaelMixColumnsService.ReverseColumnsMixing(output);
             }
@@ -49,17 +49,17 @@ public class RijndaelBlockDecryptTransform : IBlockCryptoTransform
             _rijndaelSubstitutionService.SubstituteBytesInversed(output);
         }
 
-        AddKey(output, _rijndaelParameters.InitialKey);
+        AddKey(output, _parameters.InitialKey);
     }
 
     private void ValidateArguments(ReadOnlySpan<byte> input, Span<byte> output)
     {
-        if (input.Length != _rijndaelParameters.BlockSize)
+        if (input.Length != _parameters.BlockSize)
         {
             throw new ArgumentException("Invalid length of input span size.", nameof(input));
         }
 
-        if (output.Length != _rijndaelParameters.BlockSize)
+        if (output.Length != _parameters.BlockSize)
         {
             throw new ArgumentException("Invalid length of output span size.", nameof(output));
         }

@@ -5,7 +5,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Module.Core.Enums;
 using Module.Rijndael.Entities;
 using IRijndaelCryptoTransformFactory = Module.Core.Factories.Abstract.ICryptoTransformFactory<
-    Module.Rijndael.Entities.Abstract.IRijndaelBlockCryptoTransformParameters
+    Module.Rijndael.Entities.Abstract.IRijndaelParameters
 >;
 
 namespace CryptographyLabs.GUI
@@ -97,7 +97,7 @@ namespace CryptographyLabs.GUI
 
             var cryptoTransform = _rijndaelCryptoTransformFactory.CreateEcb(
                 TransformDirection.Encrypt,
-                new RijndaelBlockCryptoTransformParameters(keyBytes, LegacyCodeHelper.Fix(BlockSize)),
+                new RijndaelParameters(keyBytes, LegacyCodeHelper.Fix(BlockSize)),
                 Multithread
             );
 
@@ -112,7 +112,7 @@ namespace CryptographyLabs.GUI
 
             var cryptoTransform = _rijndaelCryptoTransformFactory.Create(
                 TransformDirection.Encrypt,
-                new RijndaelBlockCryptoTransformParameters(keyBytes, LegacyCodeHelper.Fix(BlockSize)),
+                new RijndaelParameters(keyBytes, LegacyCodeHelper.Fix(BlockSize)),
                 LegacyCodeHelper.Fix(Mode),
                 initialVector
             );

@@ -3,12 +3,12 @@ using Module.Rijndael.Enums;
 
 namespace Module.Rijndael.Entities;
 
-public class RijndaelBlockCryptoTransformParameters : IRijndaelBlockCryptoTransformParameters
+public class RijndaelParameters : IRijndaelParameters
 {
     public IReadOnlyList<byte> Key { get; }
     public RijndaelSize BlockSize { get; }
 
-    public RijndaelBlockCryptoTransformParameters(IReadOnlyList<byte> key, RijndaelSize blockSize)
+    public RijndaelParameters(IReadOnlyList<byte> key, RijndaelSize blockSize)
     {
         Key = key;
         BlockSize = blockSize;

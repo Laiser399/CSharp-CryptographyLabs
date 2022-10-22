@@ -20,15 +20,15 @@ public class RijndaelModuleForTests : Autofac.Module
 
         builder
             .RegisterType<RijndaelBlockCryptoTransformFactory>()
-            .As<IBlockCryptoTransformFactory<IRijndaelBlockCryptoTransformParameters>>()
+            .As<IBlockCryptoTransformFactory<IRijndaelParameters>>()
             .SingleInstance();
         builder
             .RegisterType<RijndaelKeyFactory>()
             .As<IRijndaelKeyFactory>()
             .SingleInstance();
         builder
-            .RegisterType<RijndaelParametersFactory>()
-            .As<IRijndaelParametersFactory>()
+            .RegisterType<RijndaelBlockCryptoTransformParametersFactory>()
+            .As<IRijndaelBlockCryptoTransformParametersFactory>()
             .SingleInstance();
         builder
             .RegisterType<RijndaelExtendedKeyGenerator>()

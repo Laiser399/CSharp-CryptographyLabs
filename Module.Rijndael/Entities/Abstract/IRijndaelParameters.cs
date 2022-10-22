@@ -1,12 +1,9 @@
-﻿namespace Module.Rijndael.Entities.Abstract;
+﻿using Module.Rijndael.Enums;
+
+namespace Module.Rijndael.Entities.Abstract;
 
 public interface IRijndaelParameters
 {
-    int BlockSize { get; }
-    int RoundCount { get; }
-
-
-    ReadOnlySpan<byte> InitialKey { get; }
-
-    ReadOnlySpan<byte> GetRoundKey(int round);
+    IReadOnlyList<byte> Key { get; }
+    RijndaelSize BlockSize { get; }
 }

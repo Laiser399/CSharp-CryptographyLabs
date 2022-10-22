@@ -5,12 +5,12 @@ using Module.Rijndael.Services.Abstract;
 
 namespace Module.Rijndael.Factories;
 
-public class RijndaelParametersFactory : IRijndaelParametersFactory
+public class RijndaelBlockCryptoTransformParametersFactory : IRijndaelBlockCryptoTransformParametersFactory
 {
     private readonly IRijndaelExtendedKeyGenerator _rijndaelExtendedKeyGenerator;
     private readonly IRijndaelRoundCountCalculator _rijndaelRoundCountCalculator;
 
-    public RijndaelParametersFactory(
+    public RijndaelBlockCryptoTransformParametersFactory(
         IRijndaelExtendedKeyGenerator rijndaelExtendedKeyGenerator,
         IRijndaelRoundCountCalculator rijndaelRoundCountCalculator)
     {
@@ -18,18 +18,18 @@ public class RijndaelParametersFactory : IRijndaelParametersFactory
         _rijndaelRoundCountCalculator = rijndaelRoundCountCalculator;
     }
 
-    public IRijndaelParameters Create(IRijndaelKey key, RijndaelSize blockSize)
+    public IRijndaelBlockCryptoTransformParameters Create(IRijndaelKey key, RijndaelSize blockSize)
     {
         var extendedKey = _rijndaelExtendedKeyGenerator.Generate(key, blockSize);
 
-        return new RijndaelParameters(
+        return new RijndaelBlockCryptoTransformParameters(
             extendedKey,
             blockSize.ByteCount,
             _rijndaelRoundCountCalculator.GetRoundCount(blockSize, key.Size)
         );
     }
 
-    private class RijndaelParameters : IRijndaelParameters
+    private class RijndaelBlockCryptoTransformParameters : IRijndaelBlockCryptoTransformParameters
     {
         public int BlockSize { get; }
         public int RoundCount { get; }
@@ -38,7 +38,7 @@ public class RijndaelParametersFactory : IRijndaelParametersFactory
 
         private readonly byte[] _extendedKey;
 
-        public RijndaelParameters(byte[] extendedKey, int blockSize, int roundCount)
+        public RijndaelBlockCryptoTransformParameters(byte[] extendedKey, int blockSize, int roundCount)
         {
             _extendedKey = extendedKey;
             BlockSize = blockSize;

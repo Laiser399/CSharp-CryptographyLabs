@@ -20,20 +20,24 @@ public class RijndaelBlockTransformServiceTests
     };
 
     private IRijndaelKeyFactory? _rijndaelKeyFactory;
-    private IRijndaelParametersFactory? _rijndaelParametersFactory;
-    private Func<IRijndaelParameters, IBlockCryptoTransform>? _blockEncryptTransformFactory;
-    private Func<IRijndaelParameters, IBlockCryptoTransform>? _blockDecryptTransformFactory;
+    private IRijndaelBlockCryptoTransformParametersFactory? _rijndaelParametersFactory;
+    private Func<IRijndaelBlockCryptoTransformParameters, IBlockCryptoTransform>? _blockEncryptTransformFactory;
+    private Func<IRijndaelBlockCryptoTransformParameters, IBlockCryptoTransform>? _blockDecryptTransformFactory;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         var container = BuildContainer();
         _rijndaelKeyFactory = container.Resolve<IRijndaelKeyFactory>();
-        _rijndaelParametersFactory = container.Resolve<IRijndaelParametersFactory>();
+        _rijndaelParametersFactory = container.Resolve<IRijndaelBlockCryptoTransformParametersFactory>();
         _blockEncryptTransformFactory =
-            container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>(TransformDirection.Encrypt);
+            container.ResolveKeyed<Func<IRijndaelBlockCryptoTransformParameters, IBlockCryptoTransform>>(
+                TransformDirection.Encrypt
+            );
         _blockDecryptTransformFactory =
-            container.ResolveKeyed<Func<IRijndaelParameters, IBlockCryptoTransform>>(TransformDirection.Decrypt);
+            container.ResolveKeyed<Func<IRijndaelBlockCryptoTransformParameters, IBlockCryptoTransform>>(
+                TransformDirection.Decrypt
+            );
     }
 
     [Test]
