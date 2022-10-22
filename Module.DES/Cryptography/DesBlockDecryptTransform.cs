@@ -63,7 +63,7 @@ public class DesBlockDecryptTransform : IBlockCryptoTransform
             throw new ArgumentException("Invalid length of input.", nameof(input));
         }
 
-        if (input.Length != sizeof(ulong))
+        if (output.Length != sizeof(ulong))
         {
             throw new ArgumentException("Invalid length of output.", nameof(input));
         }
