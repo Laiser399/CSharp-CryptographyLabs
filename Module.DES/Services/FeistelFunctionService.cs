@@ -1,4 +1,6 @@
-﻿using Module.DES.Services.Abstract;
+﻿using Autofac.Features.Indexed;
+using Module.DES.Enums;
+using Module.DES.Services.Abstract;
 
 namespace Module.DES.Services;
 
@@ -10,11 +12,11 @@ public class FeistelFunctionService : IFeistelFunctionService
 
     public FeistelFunctionService(
         IDesExpandFunction desExpandFunction,
-        IUInt32BitPermutationService feistelPermutationService,
+        IIndex<PermutationType, IUInt32BitPermutationService> permutationServices,
         IDesSubstitutionService desSubstitutionService)
     {
         _desExpandFunction = desExpandFunction;
-        _feistelPermutationService = feistelPermutationService;
+        _feistelPermutationService = permutationServices[PermutationType.Feistel];
         _desSubstitutionService = desSubstitutionService;
     }
 

@@ -1,5 +1,7 @@
-﻿using Module.Core.Cryptography.Abstract;
+﻿using Autofac.Features.Indexed;
+using Module.Core.Cryptography.Abstract;
 using Module.DES.Entities.Abstract;
+using Module.DES.Enums;
 using Module.DES.Services.Abstract;
 
 namespace Module.DES.Services;
@@ -17,13 +19,12 @@ public class DesBlockDecryptTransform : IBlockCryptoTransform
     public DesBlockDecryptTransform(
         IDesKey key,
         IFeistelFunctionService feistelFunctionService,
-        IUInt64BitPermutationService initialPermutationService,
-        IUInt64BitPermutationService finalPermutationService)
+        IIndex<PermutationType, IUInt64BitPermutationService> permutationServices)
     {
         _key = key;
         _feistelFunctionService = feistelFunctionService;
-        _initialPermutationService = initialPermutationService;
-        _finalPermutationService = finalPermutationService;
+        _initialPermutationService = permutationServices[PermutationType.Initial];
+        _finalPermutationService = permutationServices[PermutationType.Final];
     }
 
     public void Transform(ReadOnlySpan<byte> input, Span<byte> output)

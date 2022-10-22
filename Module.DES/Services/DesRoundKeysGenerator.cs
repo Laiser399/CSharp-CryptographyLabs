@@ -1,4 +1,6 @@
-﻿using Module.DES.Services.Abstract;
+﻿using Autofac.Features.Indexed;
+using Module.DES.Enums;
+using Module.DES.Services.Abstract;
 
 namespace Module.DES.Services;
 
@@ -16,12 +18,11 @@ public class DesRoundKeysGenerator : IDesRoundKeysGenerator
 
     public DesRoundKeysGenerator(
         IBitOperationsService bitOperationsService,
-        IUInt64BitPermutationService keyInitialPermutationService,
-        IUInt64BitPermutationService keyFinalPermutationService)
+        IIndex<PermutationType, IUInt64BitPermutationService> permutationServices)
     {
         _bitOperationsService = bitOperationsService;
-        _keyInitialPermutationService = keyInitialPermutationService;
-        _keyFinalPermutationService = keyFinalPermutationService;
+        _keyInitialPermutationService = permutationServices[PermutationType.KeyInitial];
+        _keyFinalPermutationService = permutationServices[PermutationType.KeyFinal];
     }
 
     public ulong[] Generate(ulong key56)
