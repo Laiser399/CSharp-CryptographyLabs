@@ -1,28 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Windows;
+﻿using System.Windows;
 using CryptographyLabs.Crypto;
+using CryptographyLabs.Helpers;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using Module.Core.Enums;
+using Module.Core.Factories.Abstract;
+using Module.DES.Entities;
+using Module.DES.Entities.Abstract;
 
 namespace CryptographyLabs.GUI
 {
     public class DesEncryptVM : BaseViewModel
     {
-        private MainWindowVM _owner;
+        public DesVM DesVM { get; }
 
-        private DesVM _desVM;
-        public DesVM DesVM => _desVM;
+        private readonly MainWindowVM _owner;
+        private readonly ICryptoTransformFactory<IDesParameters> _desCryptoTransformFactory;
 
-        public DesEncryptVM(DesVM desVM, MainWindowVM owner)
+        public DesEncryptVM(
+            DesVM desVM,
+            MainWindowVM owner,
+            ICryptoTransformFactory<IDesParameters> desCryptoTransformFactory)
         {
-            _desVM = desVM;
+            DesVM = desVM;
             _owner = owner;
+            _desCryptoTransformFactory = desCryptoTransformFactory;
         }
 
         #region Bindings
 
         private string _filenameToEncrypt = "";
+
         public string FilenameToEncrypt
         {
             get => _filenameToEncrypt;
@@ -34,10 +41,12 @@ namespace CryptographyLabs.GUI
         }
 
         private RelayCommand _changeFilenameCmd;
+
         public RelayCommand ChangeFilenameCmd =>
             _changeFilenameCmd ?? (_changeFilenameCmd = new RelayCommand(_ => ChangeFilename()));
 
         private RelayCommand _goEncryptCmd;
+
         public RelayCommand GoEncryptCmd
             => _goEncryptCmd ?? (_goEncryptCmd = new RelayCommand(_ => GoEncrypt()));
 
@@ -55,39 +64,97 @@ namespace CryptographyLabs.GUI
 
         private void GoEncrypt()
         {
-            ulong key56;
-            if (!StringEx.TryParse(DesVM.Key, out key56))
+            if (!TryGetKey(out var key56))
             {
-                MessageBox.Show("Wrong key format.", "Error");
                 return;
             }
 
-            string filePath = FilenameToEncrypt;
-            string encryptPath = filePath + ".des399";
+            var sourceFilePath = FilenameToEncrypt;
+            var targetFilePath = sourceFilePath + ".des399";
 
-            TransformVM vm;
             if (DesVM.Mode == DES_.Mode.ECB)
             {
-                vm = new DESEncryptTransformVM(filePath, encryptPath, key56, DesVM.IsDeleteFileAfter, 
-                    DesVM.Multithreading);
+                StartEcbTransform(sourceFilePath, targetFilePath, key56);
             }
             else
             {
-                if (!StringEx.TryParse(DesVM.IV, out byte[] IV))
+                if (!TryGetInitialVector(out var initialVector))
                 {
-                    MessageBox.Show("Wrong IV format.");
-                    return;
-                }
-                if (IV.Length != DES_.BlockSize)
-                {
-                    MessageBox.Show($"Wrong IV bytes count. Must be {DES_.BlockSize}.");
                     return;
                 }
 
-                vm = new DESEncryptTransformVM(filePath, encryptPath, key56, IV, DesVM.Mode, DesVM.IsDeleteFileAfter);
+                StartTransform(sourceFilePath, targetFilePath, key56, initialVector);
+            }
+        }
+
+
+        private bool TryGetKey(out ulong key56)
+        {
+            if (!StringEx.TryParse(DesVM.Key, out key56))
+            {
+                MessageBox.Show("Wrong key format.", "Error");
+                return false;
             }
 
-            _owner.ProgressViewModels.Add(vm);
+            return true;
+        }
+
+        private bool TryGetInitialVector(out byte[] initialVector)
+        {
+            if (!StringEx.TryParse(DesVM.IV, out initialVector))
+            {
+                MessageBox.Show("Wrong IV format.");
+                return false;
+            }
+
+            if (initialVector.Length != DES_.BlockSize)
+            {
+                MessageBox.Show($"Wrong IV bytes count. Must be {DES_.BlockSize}.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void StartEcbTransform(string sourceFilePath, string targetFilePath, ulong key56)
+        {
+            var transformVM = CrateTransformVM(sourceFilePath, targetFilePath);
+
+            var cryptoTransform = _desCryptoTransformFactory.CreateEcb(
+                TransformDirection.Encrypt,
+                new DesParameters(key56),
+                DesVM.Multithreading
+            );
+
+            transformVM.Start(cryptoTransform);
+
+            _owner.ProgressViewModels.Add(transformVM);
+        }
+
+        private void StartTransform(string sourceFilePath, string targetFilePath, ulong key56, byte[] initialVector)
+        {
+            var transformVM = CrateTransformVM(sourceFilePath, targetFilePath);
+
+            var cryptoTransform = _desCryptoTransformFactory.Create(
+                TransformDirection.Encrypt,
+                new DesParameters(key56),
+                LegacyCodeHelper.Fix(DesVM.Mode),
+                initialVector
+            );
+
+            transformVM.Start(cryptoTransform);
+
+            _owner.ProgressViewModels.Add(transformVM);
+        }
+
+        private TransformVM CrateTransformVM(string sourceFilePath, string targetFilePath)
+        {
+            return new TransformVM(DesVM.IsDeleteFileAfter, CryptoDirection.Encrypt)
+            {
+                CryptoName = "DES",
+                SourceFilePath = sourceFilePath,
+                DestFilePath = targetFilePath,
+            };
         }
     }
 }
