@@ -105,7 +105,7 @@ public class PermutationServicesTests
         };
         yield return new object[]
         {
-            new KeyFinalPermutationService(),
+            new KeyFinalPermutationService(bitPermutationService),
             keyFinalPermutationTable
         };
     }
