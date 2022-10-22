@@ -1,5 +1,6 @@
 ﻿using Module.DES.Services;
 using Module.DES.Services.Abstract;
+using Module.DES.UnitTests.Helpers;
 using NUnit.Framework;
 
 namespace Module.DES.UnitTests.Tests;
@@ -16,7 +17,7 @@ public class PermutationServicesTests
         for (var i = 0; i < permutationTable.Count; i++)
         {
             var value = 1u << i;
-            var expected = PermuteWithTable(value, permutationTable);
+            var expected = PermutationHelper.PermuteWithTable(value, permutationTable);
             var actual = permutationService.Permute(value);
             Assert.AreEqual(expected, actual);
         }
@@ -31,32 +32,10 @@ public class PermutationServicesTests
         for (var i = 0; i < permutationTable.Count; i++)
         {
             var value = 1ul << i;
-            var expected = PermuteWithTable(value, permutationTable);
+            var expected = PermutationHelper.PermuteWithTable(value, permutationTable);
             var actual = permutationService.Permute(value);
             Assert.AreEqual(expected, actual);
         }
-    }
-
-    private static uint PermuteWithTable(uint value, IReadOnlyList<byte> permutationTable)
-    {
-        var result = 0u;
-        for (var i = 0; i < permutationTable.Count; i++)
-        {
-            result |= ((value >> permutationTable[i]) & 1) << i;
-        }
-
-        return result;
-    }
-
-    private static ulong PermuteWithTable(ulong value, IReadOnlyList<byte> permutationTable)
-    {
-        var result = 0ul;
-        for (var i = 0; i < permutationTable.Count; i++)
-        {
-            result |= ((value >> permutationTable[i]) & 1) << i;
-        }
-
-        return result;
     }
 
     private static IEnumerable<object[]> GetTestCases32()
