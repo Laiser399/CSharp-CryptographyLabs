@@ -70,7 +70,7 @@ public class PermutationServicesTests
         };
         yield return new object[]
         {
-            new FeistelFunctionPermutationService(),
+            new FeistelFunctionPermutationService(new BitPermutationService()),
             feistelFunctionPermutationTable
         };
     }
