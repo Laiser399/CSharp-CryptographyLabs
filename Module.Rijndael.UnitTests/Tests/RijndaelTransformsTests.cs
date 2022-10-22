@@ -1,11 +1,11 @@
 ﻿using System.Security.Cryptography;
 using Autofac;
+using Module.Core;
 using Module.Core.Enums;
 using Module.Core.Factories.Abstract;
 using Module.Rijndael.Entities;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Enums;
-using Module.Rijndael.UnitTests.Modules;
 using NUnit.Framework;
 
 namespace Module.Rijndael.UnitTests.Tests;
@@ -160,7 +160,11 @@ public class RijndaelTransformsTests
     {
         var builder = new ContainerBuilder();
 
-        builder.RegisterModule<RijndaelModuleForTests>();
+        builder.RegisterModule<CoreModule>();
+        builder.RegisterModule(new RijndaelModule
+        {
+            UseDefaultGaloisFieldConfiguration = true
+        });
 
         return builder.Build();
     }

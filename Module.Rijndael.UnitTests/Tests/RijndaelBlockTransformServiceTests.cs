@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using Module.Core.Cryptography.Abstract;
+using Module.Core;
 using Module.Core.Enums;
+using Module.Core.Factories.Abstract;
+using Module.Rijndael.Entities;
 using Module.Rijndael.Entities.Abstract;
 using Module.Rijndael.Enums;
-using Module.Rijndael.Factories.Abstract;
-using Module.Rijndael.UnitTests.Modules;
 using NUnit.Framework;
 
 namespace Module.Rijndael.UnitTests.Tests;
@@ -19,25 +19,13 @@ public class RijndaelBlockTransformServiceTests
         RijndaelSize.S256
     };
 
-    private IRijndaelKeyFactory? _rijndaelKeyFactory;
-    private IRijndaelBlockCryptoTransformParametersFactory? _rijndaelParametersFactory;
-    private Func<IRijndaelBlockCryptoTransformParameters, IBlockCryptoTransform>? _blockEncryptTransformFactory;
-    private Func<IRijndaelBlockCryptoTransformParameters, IBlockCryptoTransform>? _blockDecryptTransformFactory;
+    private IBlockCryptoTransformFactory<IRijndaelParameters>? _rijndaelBlockCryptoTransformFactory;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         var container = BuildContainer();
-        _rijndaelKeyFactory = container.Resolve<IRijndaelKeyFactory>();
-        _rijndaelParametersFactory = container.Resolve<IRijndaelBlockCryptoTransformParametersFactory>();
-        _blockEncryptTransformFactory =
-            container.ResolveKeyed<Func<IRijndaelBlockCryptoTransformParameters, IBlockCryptoTransform>>(
-                TransformDirection.Encrypt
-            );
-        _blockDecryptTransformFactory =
-            container.ResolveKeyed<Func<IRijndaelBlockCryptoTransformParameters, IBlockCryptoTransform>>(
-                TransformDirection.Decrypt
-            );
+        _rijndaelBlockCryptoTransformFactory = container.Resolve<IBlockCryptoTransformFactory<IRijndaelParameters>>();
     }
 
     [Test]
@@ -74,10 +62,14 @@ public class RijndaelBlockTransformServiceTests
 
         foreach (var blockSize in BlockSizes)
         {
-            var key = _rijndaelKeyFactory!.Create(keyBytes);
-            var parameters = _rijndaelParametersFactory!.Create(key, blockSize);
-            var blockEncryptTransform = _blockEncryptTransformFactory!(parameters);
-            var blockDecryptTransform = _blockDecryptTransformFactory!(parameters);
+            var blockEncryptTransform = _rijndaelBlockCryptoTransformFactory!.Create(
+                TransformDirection.Encrypt,
+                new RijndaelParameters(keyBytes, blockSize)
+            );
+            var blockDecryptTransform = _rijndaelBlockCryptoTransformFactory!.Create(
+                TransformDirection.Decrypt,
+                new RijndaelParameters(keyBytes, blockSize)
+            );
 
             var text = new byte[blockSize.ByteCount];
             var encrypted = new byte[blockSize.ByteCount];
@@ -107,10 +99,14 @@ public class RijndaelBlockTransformServiceTests
         };
         var blockSize = RijndaelSize.S128;
 
-        var key = _rijndaelKeyFactory!.Create(keyBytes);
-        var parameters = _rijndaelParametersFactory!.Create(key, blockSize);
-        var blockEncryptTransform = _blockEncryptTransformFactory!(parameters);
-        var blockDecryptTransform = _blockDecryptTransformFactory!(parameters);
+        var blockEncryptTransform = _rijndaelBlockCryptoTransformFactory!.Create(
+            TransformDirection.Encrypt,
+            new RijndaelParameters(keyBytes, blockSize)
+        );
+        var blockDecryptTransform = _rijndaelBlockCryptoTransformFactory!.Create(
+            TransformDirection.Decrypt,
+            new RijndaelParameters(keyBytes, blockSize)
+        );
 
         Assert.Throws<ArgumentException>(
             () => blockEncryptTransform.Transform(new byte[15], new byte[16])
@@ -130,7 +126,11 @@ public class RijndaelBlockTransformServiceTests
     {
         var builder = new ContainerBuilder();
 
-        builder.RegisterModule<RijndaelModuleForTests>();
+        builder.RegisterModule<CoreModule>();
+        builder.RegisterModule(new RijndaelModule
+        {
+            UseDefaultGaloisFieldConfiguration = true
+        });
 
         return builder.Build();
     }
