@@ -11,17 +11,20 @@ public class WienerAttackService : IRSAAttackService
     private readonly IBigIntegerCalculationService _bigIntegerCalculationService;
     private readonly IContinuedFractionService _continuedFractionService;
     private readonly IConvergingFractionsService _convergingFractionsService;
+    private readonly IWienerAttackStatisticsCollector? _wienerAttackStatisticsCollector;
 
     public WienerAttackService(
         IRandomProvider randomProvider,
         IBigIntegerCalculationService bigIntegerCalculationService,
         IContinuedFractionService continuedFractionService,
-        IConvergingFractionsService convergingFractionsService)
+        IConvergingFractionsService convergingFractionsService,
+        IWienerAttackStatisticsCollector? wienerAttackStatisticsCollector = null)
     {
         _randomProvider = randomProvider;
         _bigIntegerCalculationService = bigIntegerCalculationService;
         _continuedFractionService = continuedFractionService;
         _convergingFractionsService = convergingFractionsService;
+        _wienerAttackStatisticsCollector = wienerAttackStatisticsCollector;
     }
 
     public async Task<BigInteger> AttackAsync(
@@ -39,6 +42,8 @@ public class WienerAttackService : IRSAAttackService
         foreach (var potentialPrivateExponent in potentialPrivateExponents)
         {
             cancellationToken?.ThrowIfCancellationRequested();
+
+            _wienerAttackStatisticsCollector?.IncreaseExponentsCheckedCount();
 
             if (await IsHitAsync(message, encrypted, potentialPrivateExponent, modulus, cancellationToken))
             {
