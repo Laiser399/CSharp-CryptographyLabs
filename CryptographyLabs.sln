@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.DES.UnitTests", "Mod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.PermutationNetwork", "Module.PermutationNetwork\Module.PermutationNetwork.csproj", "{96A3CFC8-F239-423C-A150-204D46D639FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.RSA.WienerAttackTest", "Util.RSA.WienerAttackTest\Util.RSA.WienerAttackTest.csproj", "{D861B569-69BF-4ACC-92B4-807FD7F4575C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{96A3CFC8-F239-423C-A150-204D46D639FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96A3CFC8-F239-423C-A150-204D46D639FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96A3CFC8-F239-423C-A150-204D46D639FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D861B569-69BF-4ACC-92B4-807FD7F4575C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D861B569-69BF-4ACC-92B4-807FD7F4575C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D861B569-69BF-4ACC-92B4-807FD7F4575C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D861B569-69BF-4ACC-92B4-807FD7F4575C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
