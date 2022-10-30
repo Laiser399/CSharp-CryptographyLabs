@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		paket.dependencies = paket.dependencies
 		.gitignore = .gitignore
 		.dockerignore = .dockerignore
+		paket.lock = paket.lock
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.RSA.UnitTests", "Module.RSA.UnitTests\Module.RSA.UnitTests.csproj", "{52C1C836-49BA-4F53-9CA6-F7A2E550EEBC}"
