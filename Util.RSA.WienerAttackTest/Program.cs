@@ -1,10 +1,12 @@
-﻿using Autofac;
+﻿using System.Text.Json;
+using Autofac;
 using Module.RSA.Entities;
 using Module.RSA.Entities.Abstract;
 using Util.RSA.WienerAttackTest;
-using Util.RSA.WienerAttackTest.Entities;
-using Util.RSA.WienerAttackTest.Entities.Abstract;
 using Util.RSA.WienerAttackTest.Services.Abstract;
+
+const int attackCount = 1000;
+const string saveDirectory = "out";
 
 var container = AppContainer.Build();
 
@@ -18,13 +20,25 @@ var scope = container.BeginLifetimeScope(builder =>
         .As<IPrimalityTesterParameters>();
 });
 
-var parameters = new WienerAttackTestServiceParameters(
-    Enumerable.Range(1, 8).Select(x => x * 16),
-    10
-);
+var wienerAttackTestService = scope.Resolve<IWienerAttackTestService>();
 
-var wienerAttackTestService = scope.Resolve<IWienerAttackTestService>(
-    new TypedParameter(typeof(IWienerAttackTestServiceParameters), parameters)
-);
+var byteCounts = Enumerable.Range(1, 2)
+    .Select(x => x * 16)
+    .ToList();
 
-var results = await wienerAttackTestService.PerformComplexTestAsync();
+var tasks = byteCounts
+    .Select(x => wienerAttackTestService.PerformTestAsync(x, attackCount))
+    .ToList();
+
+Console.WriteLine("Tasks started.");
+Console.WriteLine($"Byte counts: {string.Join(", ", byteCounts)}.");
+
+foreach (var task in tasks)
+{
+    var result = await task;
+    var filePath = Path.Combine(saveDirectory, $"result_{result.ByteCount}_{result.AttackCount}.json");
+    var serialized = JsonSerializer.Serialize(result);
+    File.WriteAllText(filePath, serialized);
+
+    Console.WriteLine($"Task with ByteCount={result.ByteCount} done. Result saved to \"{filePath}\".");
+}
