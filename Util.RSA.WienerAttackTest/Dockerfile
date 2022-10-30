@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:6.0 AS publish
 WORKDIR /src
 COPY ["Util.RSA.WienerAttackTest/Util.RSA.WienerAttackTest.csproj", "Util.RSA.WienerAttackTest/"]
 COPY ["Module.RSA/Module.RSA.csproj", "Module.RSA/"]
@@ -8,9 +8,6 @@ COPY . .
 RUN dotnet tool restore
 RUN dotnet paket restore
 WORKDIR "/src/Util.RSA.WienerAttackTest"
-RUN dotnet build "Util.RSA.WienerAttackTest.csproj" -c Release -o /app/build
-
-FROM build AS publish
 RUN dotnet publish "Util.RSA.WienerAttackTest.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/runtime:6.0
