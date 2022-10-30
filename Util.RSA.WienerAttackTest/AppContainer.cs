@@ -13,6 +13,9 @@ public static class AppContainer
         var builder = new ContainerBuilder();
 
         builder
+            .RegisterType<WienerAttackComplexTestService>()
+            .As<IWienerAttackComplexTestService>();
+        builder
             .RegisterType<WienerAttackTestService>()
             .As<IWienerAttackTestService>()
             .WithAttributeFiltering();

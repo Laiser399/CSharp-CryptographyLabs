@@ -14,52 +14,37 @@ namespace Util.RSA.WienerAttackTest.Services;
 
 public class WienerAttackTestService : IWienerAttackTestService
 {
-    private readonly IWienerAttackTestServiceParameters _parameters;
     private readonly IRSAKeyPairGenerator _rsaKeyPairGenerator;
     private readonly Func<IPrimesPairGeneratorParameters, IPrimesPairGenerator> _primesPairGeneratorFactory;
     private readonly Func<IWienerAttackStatisticsCollector, IRSAAttackService> _attackServiceFactory;
 
     public WienerAttackTestService(
-        IWienerAttackTestServiceParameters parameters,
         [KeyFilter(RSAKeyPairGenerationType.WithWienerAttackVulnerability)]
         IRSAKeyPairGenerator rsaKeyPairGenerator,
         Func<IPrimesPairGeneratorParameters, IPrimesPairGenerator> primesPairGeneratorFactory,
         [KeyFilter(RSAAttackType.Wiener)]
         Func<IWienerAttackStatisticsCollector, IRSAAttackService> attackServiceFactory)
     {
-        _parameters = parameters;
         _rsaKeyPairGenerator = rsaKeyPairGenerator;
         _primesPairGeneratorFactory = primesPairGeneratorFactory;
         _attackServiceFactory = attackServiceFactory;
     }
 
-    public async Task<IWienerAttackComplexTestResult> PerformComplexTestAsync()
-    {
-        var results = new List<IWienerAttackTestResult>();
-        foreach (var byteCount in _parameters.ByteCounts)
-        {
-            var result = await PerformTestAsync(byteCount);
-            results.Add(result);
-        }
-
-        return new WienerAttackComplexTestResult(results);
-    }
-
-    private async Task<IWienerAttackTestResult> PerformTestAsync(int byteCount)
+    public async Task<IWienerAttackTestResult> PerformTestAsync(int byteCount, int attackCount)
     {
         var primesPairGenerator = GetPrimesPairGenerator(byteCount);
 
         var result = new WienerAttackTestResult
         {
             ByteCount = byteCount,
-            AttackCount = _parameters.AttackCount,
+            AttackCount = attackCount,
             MinExponentsCheckCount = int.MaxValue,
             MaxExponentsCheckCount = int.MinValue
         };
 
         var totalExponentsCheckCount = 0;
 
-        for (var i = 0; i < _parameters.AttackCount; i++)
+        for (var i = 0; i < attackCount; i++)
         {
             primesPairGenerator.Generate(out var p, out var q);
             var keyPair = _rsaKeyPairGenerator.Generate(p, q);
@@ -93,7 +78,7 @@ public class WienerAttackTestService : IWienerAttackTestService
             }
         }
 
-        result.AverageExponentsCheckCount = (double)totalExponentsCheckCount / _parameters.AttackCount;
+        result.AverageExponentsCheckCount = (double)totalExponentsCheckCount / attackCount;
 
         return result;
     }
