@@ -64,8 +64,7 @@ public class RSAModule : Autofac.Module
             builder
                 .RegisterType<WienerAttackService>()
                 .Keyed<IRSAAttackService>(RSAAttackType.Wiener)
-                .WithParameter(new TypedParameter(typeof(IRandomProvider), new RandomProvider(new Random())))
-                .SingleInstance();
+                .WithParameter(new TypedParameter(typeof(IRandomProvider), new RandomProvider(new Random())));
             builder
                 .RegisterType<ContinuedFractionService>()
                 .As<IContinuedFractionService>()

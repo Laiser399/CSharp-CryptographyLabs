@@ -6,6 +6,7 @@ framework: net6.0, net6.0-windows, netstandard2.1
     nuget Fody
     nuget Microsoft.NET.Test.Sdk
     nuget NUnit
+    nuget NUnit3TestAdapter
     nuget Newtonsoft.Json
     nuget PropertyChanged.Fody
     nuget WindowsAPICodePack

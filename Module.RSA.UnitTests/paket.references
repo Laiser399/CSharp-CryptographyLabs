@@ -1,4 +1,5 @@
 ﻿group Main
     NUnit
+    NUnit3TestAdapter
     Microsoft.NET.Test.Sdk
     Autofac

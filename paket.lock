@@ -22,6 +22,7 @@ NUGET
     NuGet.Frameworks (6.3) - restriction: || (== net6.0) (== net6.0-windows7.0) (&& (== netstandard2.1) (>= netcoreapp1.0)) (&& (== netstandard2.1) (>= netcoreapp2.1))
     NUnit (3.13.3)
       NETStandard.Library (>= 2.0)
+    NUnit3TestAdapter (4.3)
     PropertyChanged.Fody (4.0.3)
       Fody (>= 6.6.3)
     System.Buffers (4.5.1) - restriction: || (&& (== net6.0) (>= monotouch)) (&& (== net6.0) (>= net461)) (&& (== net6.0) (< net5.0) (>= xamarinios)) (&& (== net6.0) (< net5.0) (>= xamarinmac)) (&& (== net6.0) (< net5.0) (>= xamarintvos)) (&& (== net6.0) (< net5.0) (>= xamarinwatchos)) (&& (== net6.0) (< netcoreapp2.0)) (&& (== net6.0) (< netstandard1.1)) (&& (== net6.0) (< netstandard2.0)) (&& (== net6.0-windows7.0) (>= monotouch)) (&& (== net6.0-windows7.0) (>= net461)) (&& (== net6.0-windows7.0) (< net5.0) (>= xamarinios)) (&& (== net6.0-windows7.0) (< net5.0) (>= xamarinmac)) (&& (== net6.0-windows7.0) (< net5.0) (>= xamarintvos)) (&& (== net6.0-windows7.0) (< net5.0) (>= xamarinwatchos)) (&& (== net6.0-windows7.0) (< netcoreapp2.0)) (&& (== net6.0-windows7.0) (< netstandard1.1)) (&& (== net6.0-windows7.0) (< netstandard2.0)) (== netstandard2.1)

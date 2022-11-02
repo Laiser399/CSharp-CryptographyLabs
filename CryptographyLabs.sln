@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	ProjectSection(SolutionItems) = preProject
 		paket.dependencies = paket.dependencies
 		.gitignore = .gitignore
+		.dockerignore = .dockerignore
+		paket.lock = paket.lock
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.RSA.UnitTests", "Module.RSA.UnitTests\Module.RSA.UnitTests.csproj", "{52C1C836-49BA-4F53-9CA6-F7A2E550EEBC}"
@@ -32,6 +34,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.DES.UnitTests", "Module.DES.UnitTests\Module.DES.UnitTests.csproj", "{F5134FCA-D660-4F98-8440-80DCF781CCAF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.PermutationNetwork", "Module.PermutationNetwork\Module.PermutationNetwork.csproj", "{96A3CFC8-F239-423C-A150-204D46D639FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util.RSA.WienerAttackTest", "Util.RSA.WienerAttackTest\Util.RSA.WienerAttackTest.csproj", "{D861B569-69BF-4ACC-92B4-807FD7F4575C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GithubWorkflows", "GithubWorkflows", "{35E23B43-4FCD-4982-B279-6B1CCFD36779}"
 	ProjectSection(SolutionItems) = preProject
@@ -92,6 +96,10 @@ Global
 		{96A3CFC8-F239-423C-A150-204D46D639FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96A3CFC8-F239-423C-A150-204D46D639FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96A3CFC8-F239-423C-A150-204D46D639FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D861B569-69BF-4ACC-92B4-807FD7F4575C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D861B569-69BF-4ACC-92B4-807FD7F4575C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D861B569-69BF-4ACC-92B4-807FD7F4575C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D861B569-69BF-4ACC-92B4-807FD7F4575C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
