@@ -1,5 +1,4 @@
 ﻿using System;
-using CryptographyLabs;
 
 namespace ConsoleTests
 {
@@ -29,7 +28,8 @@ namespace ConsoleTests
                     byte tm = 0;
                     for (int i = 0; i < mtx1.Length; i++)
                     {
-                        tm ^= GF.Multiply(mtx1[row][i], mtx2[i][col]);
+                        // todo use IGaloisFieldCalculationService instead
+                        // tm ^= GF.Multiply(mtx1[row][i], mtx2[i][col]);
                     }
 
                     res[row][col] = tm;
@@ -46,7 +46,10 @@ namespace ConsoleTests
             {
                 res[row] = 0;
                 for (int i = 0; i < mtx[row].Length; i++)
-                    res[row] ^= GF.Multiply(mtx[row][i], vector[i]);
+                {
+                    // todo use IGaloisFieldCalculationService instead
+                    // res[row] ^= GF.Multiply(mtx[row][i], vector[i]);
+                }
             }
 
             return res;
