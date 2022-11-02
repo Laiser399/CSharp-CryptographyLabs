@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.PermutationNetwork",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GithubWorkflows", "GithubWorkflows", "{35E23B43-4FCD-4982-B279-6B1CCFD36779}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		.github\workflows\build.yml = .github\workflows\build.yml
 	EndProjectSection
 EndProject
 Global
