@@ -83,6 +83,8 @@ public class BigIntegerCalculationService : IBigIntegerCalculationService
             throw new ArgumentOutOfRangeException(nameof(b), "Value must be >= 0.");
         }
 
+        // (Далее за a0, b0 обозначены начальные значения a и b, которые были поданы аргументами в текущий метод)
+
         // Считаем их предыдущими. На каждом шаге принимают такие значения, что a = x * a0 + y * b0.
         (x, y) = (1, 0);
         // Считаем их текущими. На каждом шаге принимают такие значения, что b = xCurrent * a0 + yCurrent * b0.
