@@ -12,3 +12,4 @@ framework: net6.0, net6.0-windows, netstandard2.1
     nuget WindowsAPICodePack
     nuget Microsoft.Extensions.Configuration
     nuget Microsoft.Extensions.Configuration.Json
+    nuget Microsoft.Extensions.Configuration.Binder
