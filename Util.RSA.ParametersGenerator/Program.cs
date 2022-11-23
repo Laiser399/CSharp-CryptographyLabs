@@ -6,7 +6,7 @@ using Autofac;
 using Module.RSA.Entities;
 using Module.RSA.Entities.Abstract;
 using Module.RSA.Services.Abstract;
-using Util.RSA.PrimesPairGenerator;
+using Util.RSA.ParametersGenerator;
 
 var lifetimeScope = Bootstrapper.BuildLifetimeScope();
 

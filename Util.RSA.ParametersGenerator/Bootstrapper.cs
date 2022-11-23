@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Module.RSA;
 
-namespace Util.RSA.PrimesPairGenerator;
+namespace Util.RSA.ParametersGenerator;
 
 public static class Bootstrapper
 {
