@@ -10,5 +10,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Module.RSA\Module.RSA.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="AppSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

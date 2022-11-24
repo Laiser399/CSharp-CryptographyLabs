@@ -1,1 +1,6 @@
-﻿Autofac
+﻿group Main
+    Autofac
+    Newtonsoft.Json
+    Microsoft.Extensions.Configuration
+    Microsoft.Extensions.Configuration.Json
+    Microsoft.Extensions.Configuration.Binder
