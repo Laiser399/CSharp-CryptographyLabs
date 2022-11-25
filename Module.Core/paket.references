@@ -1,1 +1,3 @@
-﻿Autofac
+﻿group Main
+    Autofac
+    Newtonsoft.Json

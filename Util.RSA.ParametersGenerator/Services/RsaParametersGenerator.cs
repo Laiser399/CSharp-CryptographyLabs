@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Features.Indexed;
+using Module.Core.Converters;
 using Module.RSA;
 using Module.RSA.Entities;
 using Module.RSA.Entities.Abstract;
@@ -107,7 +108,7 @@ public class RsaParametersGenerator : IRsaParametersGenerator
 
     private static void SaveRsaParameters(string outputFilePath, RsaParameters rsaParameters)
     {
-        var serialized = JsonConvert.SerializeObject(rsaParameters);
+        var serialized = JsonConvert.SerializeObject(rsaParameters, new BigIntegerConverter());
 
         var directoryName = Path.GetDirectoryName(outputFilePath) ?? string.Empty;
         Directory.CreateDirectory(directoryName);
