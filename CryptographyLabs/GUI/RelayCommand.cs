@@ -5,6 +5,8 @@ namespace CryptographyLabs.GUI
 {
     public class RelayCommand : ICommand
     {
+        public static readonly ICommand Empty = new RelayCommand(_ => { });
+
         public event EventHandler? CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
