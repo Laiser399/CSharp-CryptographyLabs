@@ -10,6 +10,8 @@ namespace CryptographyLabs.GUI
     {
         #region Bindings
 
+        public IGaloisFieldElementRepresentationVM GaloisFieldElementRepresentation { get; }
+
         // Vernam
         private VernamVM _vernamVM;
         public VernamVM VernamVM => 
@@ -95,6 +97,7 @@ namespace CryptographyLabs.GUI
         #endregion
 
         public MainWindowVM(
+            IGaloisFieldElementRepresentationVM galoisFieldElementRepresentationVM,
             IPrimesGenerationVM primesGenerationVM,
             IRSAKeyGenerationVM rsaKeyGenerationVM,
             IRSATransformationVM rsaTransformation,
@@ -102,6 +105,7 @@ namespace CryptographyLabs.GUI
             ICryptoTransformFactory<IRijndaelParameters> rijndaelCryptoTransformFactory,
             ICryptoTransformFactory<IDesParameters> desCryptoTransformFactory)
         {
+            GaloisFieldElementRepresentation = galoisFieldElementRepresentationVM;
             PrimesGeneration = primesGenerationVM;
             RSAKeyGeneration = rsaKeyGenerationVM;
             RSATransformation = rsaTransformation;

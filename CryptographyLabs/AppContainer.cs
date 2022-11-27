@@ -22,6 +22,9 @@ public static class AppContainer
             .RegisterType<MainWindowVM>()
             .AsSelf();
         builder
+            .RegisterType<GaloisFieldElementRepresentationVM>()
+            .As<IGaloisFieldElementRepresentationVM>();
+        builder
             .RegisterType<PrimesGenerationVM>()
             .As<IPrimesGenerationVM>();
         builder
