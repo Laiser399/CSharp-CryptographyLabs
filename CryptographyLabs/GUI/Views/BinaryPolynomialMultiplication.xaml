@@ -4,9 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
     mc:Ignorable="d"
     d:DesignHeight="Auto" d:DesignWidth="400"
-    Background="White">
+    d:DataContext="{d:DesignInstance dtvm:BinaryPolynomialMultiplicationDTVM}">
 
     <StackPanel>
 
@@ -30,20 +31,27 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="First: " />
-            <TextBox Grid.Row="0" Grid.Column="1" />
+            <TextBox
+                Grid.Row="0" Grid.Column="1"
+                Text="{Binding FirstPolynomial}"
+                ToolTip="Example input: x^3 + 1" />
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Second: " />
-            <TextBox Grid.Row="1" Grid.Column="1" />
+            <TextBox
+                Grid.Row="1" Grid.Column="1"
+                Text="{Binding SecondPolynomial}" />
 
             <Button
                 Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                 HorizontalAlignment="Center"
-                Content="Multiply" />
+                Content="Multiply"
+                Command="{Binding Multiply}" />
 
             <TextBlock Grid.Row="3" Grid.Column="0" Text="Result: " />
             <TextBox
                 Grid.Row="3" Grid.Column="1"
-                IsReadOnly="True" />
+                IsReadOnly="True"
+                Text="{Binding MultiplicationResult, Mode=OneWay}" />
         </Grid>
 
     </StackPanel>
