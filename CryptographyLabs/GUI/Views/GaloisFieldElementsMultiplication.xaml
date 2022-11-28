@@ -4,8 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
     mc:Ignorable="d"
-    d:DesignHeight="Auto" d:DesignWidth="500">
+    d:DesignHeight="Auto" d:DesignWidth="500"
+    d:DataContext="{d:DesignInstance dtvm:GaloisFieldElementsMultiplicationDTVM}">
 
     <StackPanel Orientation="Vertical">
         <TextBlock Margin="0 0 0 6">
@@ -38,7 +40,7 @@
                     Text="Generating element: " />
                 <TextBox
                     Grid.Row="0" Grid.Column="1"
-                    Text="sample" />
+                    Text="{Binding GeneratingElement}" />
 
                 <TextBlock
                     Grid.Row="1" Grid.Column="0"
@@ -46,7 +48,7 @@
                     Text="First: " />
                 <TextBox
                     Grid.Row="1" Grid.Column="1"
-                    Text="sample" />
+                    Text="{Binding First}" />
 
                 <TextBlock
                     Grid.Row="2" Grid.Column="0"
@@ -54,12 +56,13 @@
                     Text="Second: " />
                 <TextBox
                     Grid.Row="2" Grid.Column="1"
-                    Text="sample" />
+                    Text="{Binding Second}" />
 
                 <Button
                     Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                     Margin="0 6" HorizontalAlignment="Center"
-                    Content="Multiply" />
+                    Content="Multiply"
+                    Command="{Binding Multiply}" />
 
                 <TextBlock
                     Grid.Row="4" Grid.Column="0"
@@ -67,7 +70,7 @@
                     Text="Result: " />
                 <TextBox
                     Grid.Row="4" Grid.Column="1"
-                    Text="sample" />
+                    Text="{Binding MultiplicationResult, Mode=OneWay}" />
 
             </Grid>
         </GroupBox>
@@ -85,13 +88,15 @@
                 <Button
                     Grid.Row="0"
                     Margin="0 0 0 6" HorizontalAlignment="Center"
-                    Content="Calculate" />
+                    Content="Calculate"
+                    Command="{Binding CalculateGeneratingElements}" />
 
                 <TextBox
                     Grid.Row="1"
                     Height="170"
                     VerticalScrollBarVisibility="Visible"
-                    AcceptsReturn="True" IsReadOnly="True" />
+                    AcceptsReturn="True" IsReadOnly="True"
+                    Text="{Binding CalculatedGeneratingElements, Mode=OneWay}" />
             </Grid>
         </GroupBox>
 
