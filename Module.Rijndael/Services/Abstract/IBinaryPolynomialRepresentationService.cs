@@ -2,7 +2,7 @@
 
 public interface IBinaryPolynomialRepresentationService
 {
-    string ToStringAsPolynomial(uint value);
+    string ToStringAsPolynomial(ulong value);
 
     bool TryParseAsPolynomial(string polynomial, out uint value);
 }
