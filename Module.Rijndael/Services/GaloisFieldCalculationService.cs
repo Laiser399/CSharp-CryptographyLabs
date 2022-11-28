@@ -1,4 +1,5 @@
 ﻿using Module.Rijndael.Entities.Abstract;
+using Module.Rijndael.Factories;
 using Module.Rijndael.Services.Abstract;
 
 namespace Module.Rijndael.Services;
@@ -7,9 +8,9 @@ public class GaloisFieldCalculationService : IGaloisFieldCalculationService
 {
     private readonly IGaloisFieldConfiguration _configuration;
 
-    public GaloisFieldCalculationService(IGaloisFieldConfiguration configuration)
+    public GaloisFieldCalculationService(IGaloisFieldConfiguration? configuration = null)
     {
-        _configuration = configuration;
+        _configuration = configuration ?? GaloisFieldConfigurationFactory.DefaultConfiguration;
     }
 
     public byte Multiply(byte a, byte b)
