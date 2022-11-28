@@ -97,5 +97,10 @@ public class RijndaelModule : Autofac.Module
             .RegisterType<GaloisFieldService>()
             .As<IGaloisFieldService>()
             .SingleInstance();
+
+        builder
+            .RegisterType<BinaryPolynomialRepresentationService>()
+            .As<IBinaryPolynomialRepresentationService>()
+            .SingleInstance();
     }
 }
