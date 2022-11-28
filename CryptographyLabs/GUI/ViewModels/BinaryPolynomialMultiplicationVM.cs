@@ -2,9 +2,11 @@
 using System.Windows.Input;
 using CryptographyLabs.GUI.AbstractViewModels;
 using Module.Rijndael.Services.Abstract;
+using PropertyChanged;
 
 namespace CryptographyLabs.GUI.ViewModels;
 
+[AddINotifyPropertyChangedInterface]
 public class BinaryPolynomialMultiplicationVM : IBinaryPolynomialMultiplicationVM
 {
     public string FirstPolynomial { get; set; } = string.Empty;

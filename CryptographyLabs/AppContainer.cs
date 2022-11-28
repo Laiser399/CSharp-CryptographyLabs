@@ -25,6 +25,9 @@ public static class AppContainer
             .RegisterType<GaloisFieldElementRepresentationVM>()
             .As<IGaloisFieldElementRepresentationVM>();
         builder
+            .RegisterType<BinaryPolynomialMultiplicationVM>()
+            .As<IBinaryPolynomialMultiplicationVM>();
+        builder
             .RegisterType<PrimesGenerationVM>()
             .As<IPrimesGenerationVM>();
         builder

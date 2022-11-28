@@ -107,8 +107,16 @@
             </ScrollViewer>
         </TabItem>
         <TabItem Header="Tasks 4 (new)">
-            <views:GaloisFieldElementRepresentation
-                DataContext="{Binding GaloisFieldElementRepresentation}" />
+            <ScrollViewer>
+                <StackPanel Orientation="Vertical">
+                    <views:GaloisFieldElementRepresentation
+                        Margin="6"
+                        DataContext="{Binding GaloisFieldElementRepresentation}" />
+                    <views:BinaryPolynomialMultiplication
+                        Margin="6"
+                        DataContext="{Binding BinaryPolynomialMultiplication}" />
+                </StackPanel>
+            </ScrollViewer>
         </TabItem>
         <TabItem Header="Encrypt\Decrypt">
             <Grid>

@@ -102,5 +102,10 @@ public class RijndaelModule : Autofac.Module
             .RegisterType<BinaryPolynomialRepresentationService>()
             .As<IBinaryPolynomialRepresentationService>()
             .SingleInstance();
+
+        builder
+            .RegisterType<BinaryPolynomialsCalculationService>()
+            .As<IBinaryPolynomialsCalculationService>()
+            .SingleInstance();
     }
 }
