@@ -30,7 +30,7 @@ public class GaloisFieldRepresentationServiceTests
     [Test]
     [TestCase(0u, ExpectedResult = "0")]
     [TestCase(0b1u, ExpectedResult = "1")]
-    [TestCase(0b10000000_00000000_00000001_10000000u, ExpectedResult = "x^63 + x^8 + x^7")]
+    [TestCase(0b10000000_00000000_00000001_10000000u, ExpectedResult = "x^31 + x^8 + x^7")]
     public string ToString_Test(uint value)
     {
         return _galoisFieldRepresentationService!.ToString(value);
@@ -38,7 +38,9 @@ public class GaloisFieldRepresentationServiceTests
 
     [Test]
     [TestCase("0", ExpectedResult = 0)]
+    [TestCase("1 + 1", ExpectedResult = 0)]
     [TestCase(" 1 ", ExpectedResult = 0b1)]
+    [TestCase("x^0", ExpectedResult = 0b1)]
     [TestCase("x", ExpectedResult = 0b10)]
     [TestCase("x^1", ExpectedResult = 0b10)]
     [TestCase("x^7", ExpectedResult = 0b10000000)]
@@ -60,7 +62,7 @@ public class GaloisFieldRepresentationServiceTests
     }
 
     [Test]
-    [TestCase("x^60 + x^63", ExpectedResult = 0b10010000_00000000_00000000_00000000u)]
+    [TestCase("x^28 + x^31", ExpectedResult = 0b10010000_00000000_00000000_00000000u)]
     public uint TryParse_UintTest(string polynomial)
     {
         var parsed = _galoisFieldRepresentationService!.TryParse(polynomial, out uint value);
@@ -73,12 +75,9 @@ public class GaloisFieldRepresentationServiceTests
     [TestCase("     ")]
     [TestCase("y")]
     [TestCase("3")]
-    [TestCase("x^8")]
+    [TestCase("x^32")]
     [TestCase("x^2 - x")]
-    [TestCase("x^0")]
     [TestCase("x^2 + -x")]
-    [TestCase("1 + 1")]
-    [TestCase("x^2 + x^2")]
     public void TryParse_InvalidArgumentTest(string polynomial)
     {
         var byteParsed = _galoisFieldRepresentationService!.TryParse(polynomial, out byte _);

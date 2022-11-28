@@ -1,12 +1,21 @@
-﻿using System.Collections;
-using System.Text;
+﻿using System.Text;
 using Module.Rijndael.Services.Abstract;
 
 namespace Module.Rijndael.Services;
 
-public class GaloisFieldRepresentationService : IGaloisFieldRepresentationService
+public class BinaryPolynomialRepresentationService : IBinaryPolynomialRepresentationService
 {
-    public string ToStringAsPolynomial(byte value)
+    public string ToString(byte value)
+    {
+        return ToString(value, sizeof(byte) * 8);
+    }
+
+    public string ToString(ulong value)
+    {
+        return ToString(value, sizeof(ulong) * 8);
+    }
+
+    private static string ToString(ulong value, int bitSize)
     {
         if (value == 0)
         {
@@ -16,7 +25,7 @@ public class GaloisFieldRepresentationService : IGaloisFieldRepresentationServic
         var builder = new StringBuilder();
 
         var isFirst = true;
-        for (var i = 7; i >= 0; i--)
+        for (var i = bitSize - 1; i >= 0; i--)
         {
             var bit = (value >> i) & 1;
             if (bit == 1)
@@ -47,62 +56,85 @@ public class GaloisFieldRepresentationService : IGaloisFieldRepresentationServic
         return builder.ToString();
     }
 
-    public bool TryParseAsPolynomial(string polynomial, out byte value)
+    public bool TryParse(string polynomial, out byte value)
+    {
+        if (!TryParse(polynomial, out var tempValue, sizeof(byte) * 8))
+        {
+            value = 0;
+            return false;
+        }
+
+        value = (byte)tempValue;
+        return true;
+    }
+
+    public bool TryParse(string polynomial, out uint value)
+    {
+        if (!TryParse(polynomial, out var tempValue, sizeof(uint) * 8))
+        {
+            value = 0;
+            return false;
+        }
+
+        value = (uint)tempValue;
+        return true;
+    }
+
+    private static bool TryParse(string polynomial, out ulong value, int bitSize)
     {
         var monomials = polynomial
             .Split("+")
             .Select(x => x.Trim());
 
-        var checkedBits = new BitArray(8);
-
         value = 0;
 
         foreach (var monomial in monomials)
         {
-            var parts = monomial
+            var monomialParts = monomial
                 .Split('^')
                 .Select(x => x.Trim())
                 .ToArray();
 
-            if (parts.Length == 1)
+            if (monomialParts.Length == 1)
             {
-                if (parts[0] == "x")
+                if (monomialParts[0] == "x")
                 {
-                    if (!TrySetBit(checkedBits, ref value, 1))
-                    {
-                        return false;
-                    }
-                }
-                else if (parts[0] == "0")
-                {
-                    if (checkedBits[0])
+                    if (bitSize < 2)
                     {
                         return false;
                     }
 
-                    checkedBits[0] = true;
+                    value ^= 0b10;
                 }
-                else if (parts[0] == "1")
+                else if (monomialParts[0] == "0")
                 {
-                    if (!TrySetBit(checkedBits, ref value, 0))
+                    // Do nothing
+                }
+                else if (monomialParts[0] == "1")
+                {
+                    if (bitSize < 1)
                     {
                         return false;
                     }
+
+                    value ^= 1;
                 }
                 else
                 {
                     return false;
                 }
             }
-            else if (parts.Length == 2)
+            else if (monomialParts.Length == 2)
             {
-                if (parts[0] != "x"
-                    || !int.TryParse(parts[1], out var exponent)
-                    || exponent is < 1 or > 7
-                    || !TrySetBit(checkedBits, ref value, exponent))
+                if (monomialParts[0] != "x"
+                    || !int.TryParse(monomialParts[1], out var exponent)
+                    || exponent < 0
+                    || exponent > bitSize - 1)
                 {
                     return false;
                 }
+
+                value ^= 1ul << exponent;
             }
             else
             {
@@ -110,19 +142,6 @@ public class GaloisFieldRepresentationService : IGaloisFieldRepresentationServic
             }
         }
 
-        return true;
-    }
-
-    private static bool TrySetBit(BitArray checkedBits, ref byte value, int exponent)
-    {
-        if (checkedBits[exponent])
-        {
-            return false;
-        }
-
-        value |= (byte)(1 << exponent);
-
-        checkedBits[exponent] = true;
         return true;
     }
 }
