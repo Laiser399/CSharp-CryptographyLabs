@@ -29,13 +29,13 @@ public class BinaryPolynomialMultiplicationVM : IBinaryPolynomialMultiplicationV
 
     private void Multiply_Internal()
     {
-        if (!_binaryPolynomialRepresentationService.TryParseAsPolynomial(FirstPolynomial, out var first))
+        if (!_binaryPolynomialRepresentationService.TryParse(FirstPolynomial, out uint first))
         {
             MessageBox.Show("Could not parse first polynomial.");
             return;
         }
 
-        if (!_binaryPolynomialRepresentationService.TryParseAsPolynomial(SecondPolynomial, out var second))
+        if (!_binaryPolynomialRepresentationService.TryParse(SecondPolynomial, out uint second))
         {
             MessageBox.Show("Could not parse second polynomial.");
             return;
@@ -43,6 +43,6 @@ public class BinaryPolynomialMultiplicationVM : IBinaryPolynomialMultiplicationV
 
         var result = _binaryPolynomialsCalculationService.Multiply(first, second);
 
-        MultiplicationResult = _binaryPolynomialRepresentationService.ToStringAsPolynomial(result);
+        MultiplicationResult = _binaryPolynomialRepresentationService.ToString(result);
     }
 }

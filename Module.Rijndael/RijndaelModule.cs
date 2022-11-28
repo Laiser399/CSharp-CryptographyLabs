@@ -97,10 +97,5 @@ public class RijndaelModule : Autofac.Module
             .RegisterType<GaloisFieldService>()
             .As<IGaloisFieldService>()
             .SingleInstance();
-
-        builder
-            .RegisterType<GaloisFieldRepresentationService>()
-            .As<IGaloisFieldRepresentationService>()
-            .SingleInstance();
     }
 }

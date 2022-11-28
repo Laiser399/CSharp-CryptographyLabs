@@ -7,12 +7,12 @@ namespace Module.Rijndael.UnitTests.Tests;
 [TestFixture]
 public class GaloisFieldRepresentationServiceTests
 {
-    private IGaloisFieldRepresentationService? _galoisFieldRepresentationService;
+    private IBinaryPolynomialRepresentationService? _galoisFieldRepresentationService;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        _galoisFieldRepresentationService = new GaloisFieldRepresentationService();
+        _galoisFieldRepresentationService = new BinaryPolynomialRepresentationService();
     }
 
     [Test]
@@ -22,9 +22,18 @@ public class GaloisFieldRepresentationServiceTests
     [TestCase(0b10, ExpectedResult = "x")]
     [TestCase(0b1001, ExpectedResult = "x^3 + 1")]
     [TestCase(0b110001, ExpectedResult = "x^5 + x^4 + 1")]
-    public string ToStringAsPolynomial_Test(byte value)
+    public string ToString_Test(byte value)
     {
-        return _galoisFieldRepresentationService!.ToStringAsPolynomial(value);
+        return _galoisFieldRepresentationService!.ToString(value);
+    }
+
+    [Test]
+    [TestCase(0u, ExpectedResult = "0")]
+    [TestCase(0b1u, ExpectedResult = "1")]
+    [TestCase(0b10000000_00000000_00000001_10000000u, ExpectedResult = "x^63 + x^8 + x^7")]
+    public string ToString_Test(uint value)
+    {
+        return _galoisFieldRepresentationService!.ToString(value);
     }
 
     [Test]
@@ -41,9 +50,20 @@ public class GaloisFieldRepresentationServiceTests
     [TestCase("x^1 + x^2", ExpectedResult = 0b110)]
     [TestCase("x ^2", ExpectedResult = 0b100)]
     [TestCase("x^ 2", ExpectedResult = 0b100)]
-    public byte TryParseAsPolynomial_Test(string polynomial)
+    [TestCase("x^6 + x^6", ExpectedResult = 0)]
+    [TestCase("x^6 + x^6 + x^1", ExpectedResult = 0b10)]
+    public byte TryParse_ByteTest(string polynomial)
     {
-        var parsed = _galoisFieldRepresentationService!.TryParseAsPolynomial(polynomial, out var value);
+        var parsed = _galoisFieldRepresentationService!.TryParse(polynomial, out byte value);
+        Assert.IsTrue(parsed);
+        return value;
+    }
+
+    [Test]
+    [TestCase("x^60 + x^63", ExpectedResult = 0b10010000_00000000_00000000_00000000u)]
+    public uint TryParse_UintTest(string polynomial)
+    {
+        var parsed = _galoisFieldRepresentationService!.TryParse(polynomial, out uint value);
         Assert.IsTrue(parsed);
         return value;
     }
@@ -59,9 +79,11 @@ public class GaloisFieldRepresentationServiceTests
     [TestCase("x^2 + -x")]
     [TestCase("1 + 1")]
     [TestCase("x^2 + x^2")]
-    public void TryParseAsPolynomial_InvalidArgumentTest(string polynomial)
+    public void TryParse_InvalidArgumentTest(string polynomial)
     {
-        var parsed = _galoisFieldRepresentationService!.TryParseAsPolynomial(polynomial, out _);
-        Assert.IsFalse(parsed);
+        var byteParsed = _galoisFieldRepresentationService!.TryParse(polynomial, out byte _);
+        var uintParsed = _galoisFieldRepresentationService!.TryParse(polynomial, out uint _);
+        Assert.IsFalse(byteParsed);
+        Assert.IsFalse(uintParsed);
     }
 }

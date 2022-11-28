@@ -25,11 +25,11 @@ public class GaloisFieldElementRepresentationVM : IGaloisFieldElementRepresentat
     private ICommand? _representAsPolynomial;
     private ICommand? _parseToGaloisFieldElement;
 
-    private readonly IGaloisFieldRepresentationService _galoisFieldRepresentationService;
+    private readonly IBinaryPolynomialRepresentationService _binaryPolynomialRepresentationService;
 
-    public GaloisFieldElementRepresentationVM(IGaloisFieldRepresentationService galoisFieldRepresentationService)
+    public GaloisFieldElementRepresentationVM(IBinaryPolynomialRepresentationService binaryPolynomialRepresentationService)
     {
-        _galoisFieldRepresentationService = galoisFieldRepresentationService;
+        _binaryPolynomialRepresentationService = binaryPolynomialRepresentationService;
     }
 
     private void RepresentAsPolynomial_Internal()
@@ -40,12 +40,12 @@ public class GaloisFieldElementRepresentationVM : IGaloisFieldElementRepresentat
             return;
         }
 
-        PolynomialRepresentation = _galoisFieldRepresentationService.ToStringAsPolynomial(value);
+        PolynomialRepresentation = _binaryPolynomialRepresentationService.ToString(value);
     }
 
     private void ParseToGaloisFieldElement_Internal()
     {
-        if (!_galoisFieldRepresentationService.TryParseAsPolynomial(InputPolynomial, out var value))
+        if (!_binaryPolynomialRepresentationService.TryParse(InputPolynomial, out byte value))
         {
             MessageBox.Show("Could not parse input polynomial.");
             return;
