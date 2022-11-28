@@ -4,6 +4,21 @@ namespace Module.Rijndael.Services;
 
 public class GaloisFieldService : IGaloisFieldService
 {
+    public IReadOnlyCollection<ushort> CalculateGeneratingElements()
+    {
+        var result = new List<ushort>();
+
+        for (ushort x = 0b1_00000001; x <= 0b1_11111111; x += 2)
+        {
+            if (IsGeneratingElement(x))
+            {
+                result.Add(x);
+            }
+        }
+
+        return result;
+    }
+
     public bool IsGeneratingElement(ushort value)
     {
         return value is >= 0b1_0000_0000 and <= 0b1_1111_1111
