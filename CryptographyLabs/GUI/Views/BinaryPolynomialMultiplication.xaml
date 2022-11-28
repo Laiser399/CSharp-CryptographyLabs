@@ -1,0 +1,51 @@
+﻿<Grid
+    x:Class="CryptographyLabs.GUI.Views.BinaryPolynomialMultiplication"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    mc:Ignorable="d"
+    d:DesignHeight="Auto" d:DesignWidth="400"
+    Background="White">
+
+    <StackPanel>
+
+        <TextBlock Margin="0 0 0 6">
+            <TextBlock.Inlines>
+                <TextBlock Text="Task 4. " FontWeight="Bold" />
+                <TextBlock Text="Binary polynomials multiplication." />
+            </TextBlock.Inlines>
+        </TextBlock>
+
+        <Grid Margin="12 0 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="First: " />
+            <TextBox Grid.Row="0" Grid.Column="1" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Second: " />
+            <TextBox Grid.Row="1" Grid.Column="1" />
+
+            <Button
+                Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                HorizontalAlignment="Center"
+                Content="Multiply" />
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Result: " />
+            <TextBox
+                Grid.Row="3" Grid.Column="1"
+                IsReadOnly="True" />
+        </Grid>
+
+    </StackPanel>
+
+</Grid>
