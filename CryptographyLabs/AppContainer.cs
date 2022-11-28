@@ -28,6 +28,9 @@ public static class AppContainer
             .RegisterType<BinaryPolynomialMultiplicationVM>()
             .As<IBinaryPolynomialMultiplicationVM>();
         builder
+            .RegisterType<GaloisFieldElementsMultiplicationVM>()
+            .As<IGaloisFieldElementsMultiplicationVM>();
+        builder
             .RegisterType<PrimesGenerationVM>()
             .As<IPrimesGenerationVM>();
         builder
@@ -90,7 +93,7 @@ public static class AppContainer
 
         builder.RegisterModule(new RijndaelModule
         {
-            UseDefaultGaloisFieldConfiguration = true
+            UseDefaultGaloisFieldConfiguration = false
         });
 
         builder.RegisterModule<DesModule>();
