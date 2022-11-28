@@ -10,7 +10,7 @@ public class GaloisFieldElementsMultiplicationDTVM : IGaloisFieldElementsMultipl
     public string Second { get; set; } = "0b1100110";
     public string MultiplicationResult => "0b10000";
 
-    public string CalculatedGeneratingElements => "First generating element\nSecond generating element";
+    public string CalculatedGeneratingElements => "0: 0b100011011\n1: 0b100011101";
 
     public ICommand Multiply => RelayCommand.Empty;
     public ICommand CalculateGeneratingElements => RelayCommand.Empty;
