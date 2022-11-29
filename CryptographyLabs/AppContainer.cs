@@ -31,6 +31,10 @@ public static class AppContainer
             .RegisterType<GaloisFieldElementsMultiplicationVM>()
             .As<IGaloisFieldElementsMultiplicationVM>();
         builder
+            .RegisterType<GaloisFieldElementInversionVM>()
+            .As<IGaloisFieldElementInversionVM>();
+
+        builder
             .RegisterType<PrimesGenerationVM>()
             .As<IPrimesGenerationVM>();
         builder

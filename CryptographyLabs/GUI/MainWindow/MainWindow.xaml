@@ -118,6 +118,9 @@
                     <views:GaloisFieldElementsMultiplication
                         Margin="6"
                         DataContext="{Binding GaloisFieldElementsMultiplication}" />
+                    <views:GaloisFieldElementInversion
+                        Margin="6"
+                        DataContext="{Binding GaloisFieldElementInversion}" />
                 </StackPanel>
             </ScrollViewer>
         </TabItem>

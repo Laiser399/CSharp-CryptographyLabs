@@ -16,6 +16,8 @@ namespace CryptographyLabs.GUI
 
         public IGaloisFieldElementsMultiplicationVM GaloisFieldElementsMultiplication { get; }
 
+        public IGaloisFieldElementInversionVM GaloisFieldElementInversion { get; }
+
         // Vernam
         private VernamVM _vernamVM;
         public VernamVM VernamVM => 
@@ -104,6 +106,7 @@ namespace CryptographyLabs.GUI
             IGaloisFieldElementRepresentationVM galoisFieldElementRepresentationVM,
             IBinaryPolynomialMultiplicationVM binaryPolynomialMultiplicationVM,
             IGaloisFieldElementsMultiplicationVM galoisFieldElementsMultiplicationVM,
+            IGaloisFieldElementInversionVM galoisFieldElementInversionVM,
             IPrimesGenerationVM primesGenerationVM,
             IRSAKeyGenerationVM rsaKeyGenerationVM,
             IRSATransformationVM rsaTransformation,
@@ -114,6 +117,7 @@ namespace CryptographyLabs.GUI
             GaloisFieldElementRepresentation = galoisFieldElementRepresentationVM;
             BinaryPolynomialMultiplication = binaryPolynomialMultiplicationVM;
             GaloisFieldElementsMultiplication = galoisFieldElementsMultiplicationVM;
+            GaloisFieldElementInversion = galoisFieldElementInversionVM;
             PrimesGeneration = primesGenerationVM;
             RSAKeyGeneration = rsaKeyGenerationVM;
             RSATransformation = rsaTransformation;
