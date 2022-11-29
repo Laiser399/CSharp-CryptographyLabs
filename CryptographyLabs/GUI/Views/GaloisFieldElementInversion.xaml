@@ -4,8 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
     mc:Ignorable="d"
-    d:DesignHeight="Auto" d:DesignWidth="300">
+    d:DesignHeight="Auto" d:DesignWidth="300"
+    d:DataContext="{d:DesignInstance dtvm:GaloisFieldElementInversionDTVM}">
 
     <StackPanel Orientation="Vertical">
 
@@ -23,9 +25,17 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0" Text="" />
-            <Button Grid.Column="1" Content=">Inverse>" />
-            <TextBox Grid.Column="2" Text="" />
+            <TextBox
+                Grid.Column="0"
+                Text="{Binding InputValue}" />
+            <Button
+                Grid.Column="1"
+                Content=">Inverse>"
+                Command="{Binding Inverse}" />
+            <TextBox
+                Grid.Column="2"
+                IsReadOnly="True"
+                Text="{Binding InversedValue, Mode=OneWay}" />
         </Grid>
 
     </StackPanel>
