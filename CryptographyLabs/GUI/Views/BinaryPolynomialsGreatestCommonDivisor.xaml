@@ -4,8 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dtvm="clr-namespace:CryptographyLabs.GUI.DesignTimeViewModel"
     mc:Ignorable="d"
-    d:DesignHeight="Auto" d:DesignWidth="600">
+    d:DesignHeight="Auto" d:DesignWidth="600"
+    d:DataContext="{d:DesignInstance dtvm:BinaryPolynomialsGreatestCommonDivisorDTVM}">
 
     <StackPanel Orientation="Vertical">
 
@@ -35,19 +37,22 @@
                 HorizontalAlignment="Right"
                 Text="a: " />
             <TextBox
-                Grid.Row="0" Grid.Column="1" />
+                Grid.Row="0" Grid.Column="1"
+                Text="{Binding A}" />
 
             <TextBlock
                 Grid.Row="1" Grid.Column="0"
                 HorizontalAlignment="Right"
                 Text="b: " />
             <TextBox
-                Grid.Row="1" Grid.Column="1" />
+                Grid.Row="1" Grid.Column="1"
+                Text="{Binding B}" />
 
             <Button
                 Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                 Margin="6" HorizontalAlignment="Center"
-                Content="Calculate" />
+                Content="Calculate"
+                Command="{Binding Calculate}" />
 
             <TextBlock
                 Grid.Row="3" Grid.Column="0"
@@ -55,7 +60,8 @@
                 Text="x: " />
             <TextBox
                 Grid.Row="3" Grid.Column="1"
-                IsReadOnly="True" />
+                IsReadOnly="True"
+                Text="{Binding X, Mode=OneWay}" />
 
             <TextBlock
                 Grid.Row="4" Grid.Column="0"
@@ -63,7 +69,8 @@
                 Text="y: " />
             <TextBox
                 Grid.Row="4" Grid.Column="1"
-                IsReadOnly="True" />
+                IsReadOnly="True"
+                Text="{Binding Y, Mode=OneWay}" />
 
             <TextBlock
                 Grid.Row="5" Grid.Column="0"
@@ -71,7 +78,8 @@
                 Text="GCD: " />
             <TextBox
                 Grid.Row="5" Grid.Column="1"
-                IsReadOnly="True" />
+                IsReadOnly="True"
+                Text="{Binding GreatestCommonDivisor, Mode=OneWay}" />
         </Grid>
     </StackPanel>
 </Grid>
