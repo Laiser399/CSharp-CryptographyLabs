@@ -79,7 +79,7 @@ public class GaloisFieldElementsMultiplicationVM : IGaloisFieldElementsMultiplic
         var galoisFieldCalculationService = _galoisFieldCalculationServiceFactory(galoisFieldConfiguration);
 
         var result = galoisFieldCalculationService.Multiply(first, second);
-        MultiplicationResult = "0b" + Convert.ToString(result, 2);
+        MultiplicationResult = $"0b{Convert.ToString(result, 2)}; {result}.";
     }
 
     private void CalculateGeneratingElements_Internal()
