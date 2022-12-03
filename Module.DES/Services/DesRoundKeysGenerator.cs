@@ -32,8 +32,8 @@ public class DesRoundKeysGenerator : IDesRoundKeysGenerator
 
         var permuted = _keyInitialPermutationService.Permute(key64);
 
-        var c = (uint)permuted & 0x0fffffff;
-        var d = (uint)permuted >> 28;
+        var c = (uint)(permuted & 0x0fffffff);
+        var d = (uint)(permuted >> 28);
 
         var roundKeys48 = new ulong[16];
         for (var i = 0; i < 16; i++)
