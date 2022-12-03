@@ -1,4 +1,5 @@
-﻿using Module.Rijndael.Services.Abstract;
+﻿using Module.Core.Extensions;
+using Module.Rijndael.Services.Abstract;
 
 namespace Module.Rijndael.Services;
 
@@ -45,11 +46,11 @@ public class GaloisFieldService : IGaloisFieldService
 
     private static ushort Mod(ushort dividend, ushort divisor)
     {
-        var divisorBitLength = GetBitLength(divisor);
+        var divisorBitLength = divisor.GetBitLength();
 
         while (true)
         {
-            var dividendBitLength = GetBitLength(dividend);
+            var dividendBitLength = dividend.GetBitLength();
             if (dividendBitLength < divisorBitLength)
             {
                 break;
@@ -59,17 +60,5 @@ public class GaloisFieldService : IGaloisFieldService
         }
 
         return dividend;
-    }
-
-    private static int GetBitLength(ushort value)
-    {
-        var result = 0;
-        while (value > 0)
-        {
-            result++;
-            value >>= 1;
-        }
-
-        return result;
     }
 }
