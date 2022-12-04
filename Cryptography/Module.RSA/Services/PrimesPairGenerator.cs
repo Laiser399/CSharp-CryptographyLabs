@@ -38,6 +38,7 @@ public class PrimesPairGenerator : IPrimesPairGenerator
         return new BigInteger(bytes);
     }
 
+    // todo cancellation token везде где есть Async
     public Task<(BigInteger p, BigInteger q)> GenerateAsync()
     {
         return Task.Run(() =>

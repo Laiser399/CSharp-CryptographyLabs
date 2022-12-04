@@ -56,6 +56,7 @@ public class DesSubstitutionService : IDesSubstitutionService
         },
     };
 
+    // todo можно сделать параллельно
     public uint Substitute(ulong value48)
     {
         uint substitutionResult = 0;

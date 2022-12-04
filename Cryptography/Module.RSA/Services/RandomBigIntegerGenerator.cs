@@ -4,7 +4,7 @@ using Module.RSA.Services.Abstract;
 namespace Module.RSA.Services;
 
 // https://stackoverflow.com/a/48855115/12158229
-public class RandomBigIntegerGenerator : IRandomBigIntegerGenerator
+public sealed class RandomBigIntegerGenerator : IRandomBigIntegerGenerator
 {
     public BigInteger Generate(BigInteger min, BigInteger max, Random random)
     {
