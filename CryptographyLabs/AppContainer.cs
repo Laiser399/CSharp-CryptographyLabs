@@ -33,6 +33,9 @@ public static class AppContainer
         builder
             .RegisterType<GaloisFieldElementInversionVM>()
             .As<IGaloisFieldElementInversionVM>();
+        builder
+            .RegisterType<BinaryPolynomialsGreatestCommonDivisorVM>()
+            .As<IBinaryPolynomialsGreatestCommonDivisorVM>();
 
         builder
             .RegisterType<PrimesGenerationVM>()

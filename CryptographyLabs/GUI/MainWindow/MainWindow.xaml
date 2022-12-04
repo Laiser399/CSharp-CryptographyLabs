@@ -118,6 +118,9 @@
                     <views:GaloisFieldElementsMultiplication
                         Margin="6"
                         DataContext="{Binding GaloisFieldElementsMultiplication}" />
+                    <views:BinaryPolynomialsGreatestCommonDivisor
+                        Margin="6"
+                        DataContext="{Binding BinaryPolynomialsGreatestCommonDivisor}" />
                     <views:GaloisFieldElementInversion
                         Margin="6"
                         DataContext="{Binding GaloisFieldElementInversion}" />
